@@ -20,15 +20,10 @@ public class Register {
     private String hcid = null;
     
     private Endpoint PDEndpoint = null;
-
-    private String DQEndpoint = null;
-    private SpecVersion DQVersion;
-    private String DREndpoint = null;
-    private SpecVersion DRVersion;
-    private String DSEndpoint = null;
-    private SpecVersion DSVersion;
-    private String ADEndpoint = null;
-    private SpecVersion ADVersion;
+    private Endpoint DQEndpoint = null;
+    private Endpoint DREndpoint = null;
+    private Endpoint DSEndpoint = null;
+    private Endpoint ADEndpoint = null;
     
     private CertificateType certType;
     private String certPath = null;
@@ -59,7 +54,7 @@ public class Register {
         this.hcid = hcid;
     }
     /**
-     * @return the pDEndpoint
+     * @return the PDEndpoint
      */
     public Endpoint getPDEndpoint() {
         return PDEndpoint;
@@ -67,104 +62,56 @@ public class Register {
     /**
      * @param pDEndpoint the pDEndpoint to set
      */
-    public void setPDEndpoint(Endpoint pDEndpoint) {
-        PDEndpoint = pDEndpoint;
+    public void setPDEndpoint(Endpoint PDEndpoint) {
+        this.PDEndpoint = PDEndpoint;
     }
     /**
-     * @return the dQEndpoint
+     * @return the DQEndpoint
      */
-    public String getDQEndpoint() {
+    public Endpoint getDQEndpoint() {
         return DQEndpoint;
     }
     /**
-     * @param dQEndpoint the dQEndpoint to set
+     * @param DQEndpoint the DQEndpoint to set
      */
-    public void setDQEndpoint(String dQEndpoint) {
-        DQEndpoint = dQEndpoint;
+    public void setDQEndpoint(Endpoint DQEndpoint) {
+        this.DQEndpoint = DQEndpoint;
     }
     /**
-     * @return the dQVersion
+     * @return the DREndpoint
      */
-    public SpecVersion getDQVersion() {
-        return DQVersion;
-    }
-    /**
-     * @param dQVersion the dQVersion to set
-     */
-    public void setDQVersion(SpecVersion dQVersion) {
-        DQVersion = dQVersion;
-    }
-    /**
-     * @return the dREndpoint
-     */
-    public String getDREndpoint() {
+    public Endpoint getDREndpoint() {
         return DREndpoint;
     }
     /**
-     * @param dREndpoint the dREndpoint to set
+     * @param DREndpoint the DREndpoint to set
      */
-    public void setDREndpoint(String dREndpoint) {
-        DREndpoint = dREndpoint;
+    public void setDREndpoint(Endpoint DREndpoint) {
+        this.DREndpoint = DREndpoint;
     }
     /**
-     * @return the dRVersion
+     * @return the DSEndpoint
      */
-    public SpecVersion getDRVersion() {
-        return DRVersion;
-    }
-    /**
-     * @param dRVersion the dRVersion to set
-     */
-    public void setDRVersion(SpecVersion dRVersion) {
-        DRVersion = dRVersion;
-    }
-    /**
-     * @return the dSEndpoint
-     */
-    public String getDSEndpoint() {
+    public Endpoint getDSEndpoint() {
         return DSEndpoint;
     }
     /**
-     * @param dSEndpoint the dSEndpoint to set
+     * @param DSEndpoint the DSEndpoint to set
      */
-    public void setDSEndpoint(String dSEndpoint) {
-        DSEndpoint = dSEndpoint;
+    public void setDSEndpoint(Endpoint DSEndpoint) {
+        this.DSEndpoint = DSEndpoint;
     }
     /**
-     * @return the dSVersion
+     * @return the ADEndpoint
      */
-    public SpecVersion getDSVersion() {
-        return DSVersion;
-    }
-    /**
-     * @param dSVersion the dSVersion to set
-     */
-    public void setDSVersion(SpecVersion dSVersion) {
-        DSVersion = dSVersion;
-    }
-    /**
-     * @return the aDEndpoint
-     */
-    public String getADEndpoint() {
+    public Endpoint getADEndpoint() {
         return ADEndpoint;
     }
     /**
-     * @param aDEndpoint the aDEndpoint to set
+     * @param ADEndpoint the ADEndpoint to set
      */
-    public void setADEndpoint(String aDEndpoint) {
-        ADEndpoint = aDEndpoint;
-    }
-    /**
-     * @return the aDVersion
-     */
-    public SpecVersion getADVersion() {
-        return ADVersion;
-    }
-    /**
-     * @param aDVersion the aDVersion to set
-     */
-    public void setADVersion(SpecVersion aDVersion) {
-        ADVersion = aDVersion;
+    public void setADEndpoint(Endpoint ADEndpoint) {
+        PDEndpoint = ADEndpoint;
     }
     /**
      * @return the certType
@@ -276,6 +223,9 @@ public class Register {
     }
     
     public String saveInfo() {
+        System.out.println("saveInfo, hcid: " + hcid);
+        System.out.println("saveInfo, pd version: " + PDEndpoint.getSpecVersion());
+        System.out.println("saveInfo, pd endpoint: " + PDEndpoint.getEndpoint());
         return "";
     }
 }
