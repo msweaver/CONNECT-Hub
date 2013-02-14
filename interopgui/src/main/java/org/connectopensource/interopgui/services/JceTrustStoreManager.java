@@ -29,28 +29,30 @@ package org.connectopensource.interopgui.services;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.KeyStore;
+import java.security.KeyStore.ProtectionParameter;
 import java.security.cert.X509Certificate;
+import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.connectopensource.interopgui.PropertiesHolder;
 
 /**
  * Thread Safe Trust Store Manager provides synchronized read/write operations against a JCE Keystore.
  */
 public class JceTrustStoreManager {
     
-    private KeyStore trustStore = null;
-//    private KeyStore pks = null;
-
-    private static final String TRUSTSTORE_PATH = "cacerts.jks";
-    private static final String TRUSTSTORE_PASS = "changeit";
-    private static final String KEYSTORE_TYPE_JKS = "JKS";
-
-    private char[] trustStorePass = TRUSTSTORE_PASS.toCharArray();    
+    private final Properties props = PropertiesHolder.getProps();
+    private final char[] trustStorePass = props.getProperty("truststore.pass").toCharArray();    
+    private final String trustStorePath = props.getProperty("truststore.path");
+    private final String trustStorePathTmp = props.getProperty("truststore.path") + ".tmp";
+    private final String trustStorePathBak= props.getProperty("truststore.path") + ".bak";
     
     // Private constructor prevents instantiation from other classes
     private JceTrustStoreManager() {
-        load();
+        // private singleton.
     }
 
     private static class SingletonHolder { 
@@ -61,65 +63,90 @@ public class JceTrustStoreManager {
         return SingletonHolder.INSTANCE;
     }    
 
-    private synchronized void load() {
+    /**
+     * Load the trust store - not thread-safe.
+     * @return loaded trust store.
+     */
+    private KeyStore loadTrustStore() {
 
+        KeyStore trustStore = null;
         FileInputStream inputStream = null;
         try {
-            File file = new File(TRUSTSTORE_PATH);
+            File file = new File(trustStorePath);
             if (file.exists()) {
-                inputStream = new FileInputStream(TRUSTSTORE_PATH);
+                inputStream = new FileInputStream(trustStorePath);
             }
-            trustStore = KeyStore.getInstance(KEYSTORE_TYPE_JKS);
-//            pks = KeyStore.getInstance(KEYSTORE_TYPE_JKS);
-//            pks.load(fis, null);
-//            if (file.exists()) {
-//                fis.close();
-//                fis = new FileInputStream(TRUSTSTORE_PATH);
-//            }
+            trustStore = KeyStore.getInstance(props.getProperty("truststore.type"));
             trustStore.load(inputStream, null);
         } catch (Exception e) {
-            throw new CertificateServiceException("Unable to load trust store.", e);
+            throw new CertificateServiceException("Unable to load trust store, path = ["
+                    + props.getProperty("truststore.path") + "], type = [" + props.getProperty("truststore.type")
+                    + "].", e);
         } finally {
             IOUtils.closeQuietly(inputStream);
         }
+        
+        return trustStore;
     }
 
     /**
      * Disclaimer: This private method is not thread-safe. Caller beware (...or be synchronized).
      */
-    private void store() {
+    private void store(KeyStore trustStore) {
+
         FileOutputStream outputStream = null;
+        
+        // back up before we start...
         try {
-            outputStream = new FileOutputStream(TRUSTSTORE_PATH);
+            FileUtils.copyFile(new File(trustStorePath),
+                    new File(trustStorePathBak + "." + new Long(System.currentTimeMillis()).toString()));
+        } catch (IOException e) {
+            throw new CertificateServiceException("Unable to backup trust store [" + trustStorePath + "].", e);
+        }
+
+        try {            
+            outputStream = new FileOutputStream(trustStorePathTmp);
             trustStore.store(outputStream, trustStorePass);
-//            pks.store(fos, trustStorePass);
         } catch (Exception e) {
-            throw new CertificateServiceException("Unable to save trust store to file.", e);
+            throw new CertificateServiceException("Unable to save trust store to file [" + trustStorePathTmp + "].", e);
         } finally {
             IOUtils.closeQuietly(outputStream);
         }
-    }
-
-    public synchronized KeyStore getKeyStore() {
-        return trustStore;
+        
+        // install new trust store
+        try {
+            FileUtils.deleteQuietly(new File(trustStorePath));            
+            FileUtils.moveFile(new File(trustStorePathTmp), new File(trustStorePath));
+        } catch (IOException e) {
+            throw new CertificateServiceException("Unable to install trust store [" + trustStorePath + "].", e);
+        }
     }
 
     /**
+     * Add an unprotected certificate to the trust store.
      * @param cert X509 certificate to be added to the trust store.
      * @param alias linked to the certificate and included in the keystore entry.
      */
     public synchronized void addTrustedCert(X509Certificate cert, String alias) {
-
+        addTrustedCert(cert, alias, null);
+    }
+    
+    /**
+     * Add a certificate to the trust store. (load + add + store in one transaction.)
+     * @param cert X509 certificate to be added to the trust store.
+     * @param alias linked to the certificate and included in the keystore entry.
+     * @param protectionParam used to protect the entry (may be null)
+     */
+    public synchronized void addTrustedCert(X509Certificate cert, String alias, ProtectionParameter protectionParam) {
+        
         try {
-            KeyStore.PasswordProtection kspp = new KeyStore.PasswordProtection(trustStorePass);
+            final KeyStore trustStore = loadTrustStore();
             KeyStore.TrustedCertificateEntry trust = new KeyStore.TrustedCertificateEntry(cert);
-            trustStore.setEntry(alias, trust, null);
-//            pks.setEntry(alias, trust, null);
-            store();
-        }        
-        catch (Exception e) {
+            trustStore.setEntry(alias, trust, protectionParam);
+            store(trustStore);
+        } catch (Exception e) {
             throw new CertificateServiceException("Unable to save trust store to file.", e);
         }
-
     }
+
 }

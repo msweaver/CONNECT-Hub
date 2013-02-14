@@ -26,11 +26,19 @@
  */
 package org.connectopensource.interopgui.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.util.Properties;
 
-import java.security.KeyStore;
-
+import org.apache.commons.io.IOUtils;
+import org.connectopensource.interopgui.PropertiesHolder;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -38,12 +46,53 @@ import org.junit.Test;
  */
 public class JceTrustStoreManagerTest {
     
-    @Test
-    public void canLoadTrustStore() {
-        JceTrustStoreManager trustStoreManager = JceTrustStoreManager.getInstance();        
-        KeyStore keyStore = trustStoreManager.getKeyStore();
-        assertNotNull(keyStore);
-        assertEquals("JKS", keyStore.getType());
+    @Before
+    public void setUp() throws URISyntaxException {
+        Properties props = new Properties();
+        props.setProperty("truststore.path", getClassPath() + "/truststore.jks");
+        props.setProperty("truststore.pass", "changeit");
+        props.setProperty("truststore.type", "JKS");
+        PropertiesHolder.setProps(props);
     }
+    
+    @Test
+    public void canAdd() throws CertificateException, URISyntaxException, IOException {
+        JceTrustStoreManager trustStoreManager = JceTrustStoreManager.getInstance();  
+        X509Certificate cert = getTestCert();
+        trustStoreManager.addTrustedCert(cert, "testalias");
+    }
+
+    
+    private X509Certificate getTestCert() throws URISyntaxException, IOException, CertificateException {
+
+        FileInputStream inputStream = null;
+        ByteArrayInputStream bais = null;
+        try {
+            // use FileInputStream to read the file
+            inputStream = new FileInputStream(getClassPath() + "/provider-cert.pem");
+
+            // read the bytes
+            byte value[] = new byte[inputStream.available()];
+            inputStream.read(value);
+            bais = new ByteArrayInputStream(value);
+
+            // get X509 certificate factory
+            CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+
+            // certificate factory can now create the certificate
+            return (X509Certificate) certFactory.generateCertificate(bais);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+            IOUtils.closeQuietly(bais);
+        }
+    }
+
+    /**
+     * Used when calling code requires absolute paths to test resources.
+     * @return absolute classpath.
+     */
+    private File getClassPath() throws URISyntaxException {
+        return new File(JceTrustStoreManagerTest.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+    }   
 
 }
