@@ -26,29 +26,23 @@
  */
 package org.connectopensource.interopgui.services;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyStoreException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.util.Properties;
 
-import org.apache.commons.io.IOUtils;
 import org.connectopensource.interopgui.PropertiesHolder;
+import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test {@link JceTrustStoreManager}.
+ * Test {@link JceCertificateService}.
  */
-public class JceTrustStoreManagerTest {
-    
+public class JceCertificateServiceTest {
+
     @Before
     public void setUp() throws URISyntaxException {
         Properties props = new Properties();
@@ -59,45 +53,28 @@ public class JceTrustStoreManagerTest {
     }
     
     @Test
-    public void canAdd() throws CertificateException, URISyntaxException, IOException, KeyStoreException {
-        JceTrustStoreManager trustStoreManager = JceTrustStoreManager.getInstance();  
-        X509Certificate cert = getTestCert();
-        trustStoreManager.addTrustedCert(cert, JceTrustStoreManagerTest.class.getName());
+    public void canAddCertToTrustStore() throws URISyntaxException, KeyStoreException {
+        CertificateService certService = new JceCertificateService();
+        certService.trustCertificate(getCertInfo());
         assertTrue(JceTrustStoreManager.getInstance().loadTrustStore()
-                .containsAlias(JceTrustStoreManagerTest.class.getName()));
+                .containsAlias(JceCertificateServiceTest.class.getName()));
+    }
 
+    private CertificateInfo getCertInfo() throws URISyntaxException {
+        
+        CertificateInfo certInfo = new CertificateInfo();
+        certInfo.setAlias(JceCertificateServiceTest.class.getName());
+        certInfo.setPathToCert(new File(getClassPath() + "/provider-cert.pem").toURI());
+        
+        return certInfo;
     }
     
-    private X509Certificate getTestCert() throws URISyntaxException, IOException, CertificateException {
-
-        FileInputStream inputStream = null;
-        ByteArrayInputStream bais = null;
-        try {
-            // use FileInputStream to read the file
-            inputStream = new FileInputStream(getClassPath() + "/provider-cert.pem");
-
-            // read the bytes
-            byte value[] = new byte[inputStream.available()];
-            inputStream.read(value);
-            bais = new ByteArrayInputStream(value);
-
-            // get X509 certificate factory
-            CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-
-            // certificate factory can now create the certificate
-            return (X509Certificate) certFactory.generateCertificate(bais);
-        } finally {
-            IOUtils.closeQuietly(inputStream);
-            IOUtils.closeQuietly(bais);
-        }
-    }
-
     /**
      * Used when calling code requires absolute paths to test resources.
      * @return absolute classpath.
      */
     private File getClassPath() throws URISyntaxException {
-        return new File(JceTrustStoreManagerTest.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        return new File(JceCertificateServiceTest.class.getProtectionDomain().getCodeSource().getLocation().toURI());
     }   
 
 }

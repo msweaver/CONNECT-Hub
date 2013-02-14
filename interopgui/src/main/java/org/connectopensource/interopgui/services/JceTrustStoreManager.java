@@ -64,10 +64,10 @@ public class JceTrustStoreManager {
     }    
 
     /**
-     * Load the trust store - not thread-safe.
+     * Load the trust store.
      * @return loaded trust store.
      */
-    private KeyStore loadTrustStore() {
+    protected synchronized KeyStore loadTrustStore() {
 
         KeyStore trustStore = null;
         FileInputStream inputStream = null;
@@ -92,7 +92,7 @@ public class JceTrustStoreManager {
     /**
      * Disclaimer: This private method is not thread-safe. Caller beware (...or be synchronized).
      */
-    private void store(KeyStore trustStore) {
+    private synchronized void store(KeyStore trustStore) {
 
         FileOutputStream outputStream = null;
         

@@ -9,16 +9,16 @@ import org.connectopensource.interopgui.dataobject.CertificateInfo;
 public interface CertificateService {
     
     /**
-     * Add certificate to the configured truststore for the connect gateway.
+     * Add certInfo to the configured truststore for the connect gateway.
      * @param certificateInfo to be trusted.
      */
-    public void trustCertificate(CertificateInfo certificateInfo);
+    public void trustCertificate(CertificateInfo certInfo);
 
     /**
      * Sign a certificate programmatically.
-     * @param certificateInfo to be signed by the CONNECT Gateway CA 
+     * @param certInfo to be signed by the CONNECT Gateway CA 
      * @return signed certificate
      */
-    public CertificateInfo signCertificate(CertificateInfo certificateInfo);
+    public CertificateInfo signCertificate(CertificateInfo certInfo);
     
 }
