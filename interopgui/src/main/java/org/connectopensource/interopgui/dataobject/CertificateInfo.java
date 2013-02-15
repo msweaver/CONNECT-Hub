@@ -2,14 +2,25 @@ package org.connectopensource.interopgui.dataobject;
 
 import java.net.URI;
 
+import org.apache.myfaces.custom.fileupload.UploadedFile;
+import org.connectopensource.interopgui.view.Certificate;
+
 /**
  * @author msw
  *
  */
-public final class CertificateInfo {
+public class CertificateInfo implements Certificate {
     
     private URI pathToCert;
+    private URI pathToResult;
+    private CertificateType certType;
+    private UploadedFile file;
     private String alias;
+    
+    public CertificateType[] getCertificateTypes()
+    {
+        return CertificateType.values();
+    }
     
     /**
      * Default constructor specifies a timestamp for an alias.
@@ -46,5 +57,52 @@ public final class CertificateInfo {
     public void setAlias(String alias) {
         this.alias = alias;
     }
-    
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Certificate#getFile()
+     */
+    @Override
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Certificate#setFile(org.apache.myfaces.custom.fileupload.UploadedFile)
+     */
+    @Override
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Certificate#getPathToResult()
+     */
+    @Override
+    public URI getPathToResult() {
+        return pathToResult;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Certificate#setPathToResult(java.net.URI)
+     */
+    @Override
+    public void setPathToResult(URI pathToResult) {
+        this.pathToResult = pathToResult;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Certificate#getCertType()
+     */
+    @Override
+    public CertificateType getCertType() {
+        return certType;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Certificate#setCertType(org.connectopensource.interopgui.view.Certificate.CertificateType)
+     */
+    @Override
+    public void setCertType(CertificateType certType) {
+        this.certType = certType;
+    }
 }

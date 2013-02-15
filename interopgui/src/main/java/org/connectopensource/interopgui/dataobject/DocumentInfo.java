@@ -3,13 +3,16 @@
  */
 package org.connectopensource.interopgui.dataobject;
 
+import org.connectopensource.interopgui.view.Document;
+
 /**
  * @author msw
  *
  */
-public class DocumentInfo {
+public class DocumentInfo implements Document {
     
     private String documentId;
+    private String documentType;
     private String comment;
     
     /**
@@ -25,6 +28,18 @@ public class DocumentInfo {
         this.documentId = documentId;
     }
     /**
+     * @return the document type
+     */
+    public String getDocumentType() {
+        return documentType;
+    }
+    /**
+     * @see documentType the documentType to set
+     */
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
+    /**
      * @return the comment
      */
     public String getComment() {
@@ -36,5 +51,4 @@ public class DocumentInfo {
     public void setComment(String comment) {
         this.comment = comment;
     }
-
 }

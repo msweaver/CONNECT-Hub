@@ -3,15 +3,17 @@
  */
 package org.connectopensource.interopgui.view;
 
-import org.connectopensource.interopergui.managedbean.Register;
-
 /**
  * @author msw
  *
  */
 public interface Endpoint {
-    public Register.SpecVersion getSpecVersion();
-    public void setSpecVersion(Register.SpecVersion version);
+    
+    public enum SpecVersion { JAN_2010, SUMMER_2011 }
+    public SpecVersion[] getSpecVersions();
+    
+    public SpecVersion getSpecVersion();
+    public void setSpecVersion(SpecVersion version);
     
     public String getEndpoint();
     public void setEndpoint(String endpoint);

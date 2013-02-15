@@ -5,11 +5,13 @@ package org.connectopensource.interopgui.dataobject;
 
 import java.util.Date;
 
+import org.connectopensource.interopgui.view.Patient;
+
 /**
  * @author msw
  *
  */
-public class PatientInfo {
+public class PatientInfo implements Patient {
     
     public enum Gender { MALE, FEMALE, UNKNOWN }
     
@@ -17,6 +19,10 @@ public class PatientInfo {
     private String lastName;
     private Date dateOfBirth;
     private Gender gender;
+    
+    public Gender[] getGenders() {
+        return Gender.values();
+    }
     
     /**
      * @return the firstName
@@ -66,7 +72,4 @@ public class PatientInfo {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
-    
-    
-
 }
