@@ -12,6 +12,7 @@
             type="org.connectopensource.interopgui.view.Endpoint" />
         <comp:attribute name="specVersionPrompt" required="true" />
         <comp:attribute name="endpointPrompt" required="true" />
+        <comp:attribute name="spec" required="true" />
         <comp:attribute name="required" required="false" default="false"/>
         <comp:attribute name="requiredMessage" required="false" default="Required!" />
     </comp:interface>
@@ -27,6 +28,7 @@
             <h:inputText value="#{cc.attrs.value.endpoint}" id="endpoint" required="#{cc.attrs.required}"
                 requiredMessage="#{cc.attrs.requiredMessage}" />
         </div>
+        <h:inputHidden value="#{cc.attrs.value.spec}"/>
     </comp:implementation>
 </body>
 </html>

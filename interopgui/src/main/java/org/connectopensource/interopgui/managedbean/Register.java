@@ -3,8 +3,12 @@
  */
 package org.connectopensource.interopgui.managedbean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 
+import org.connectopensource.interopgui.controller.RegisterImpl;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.EndpointInfo;
@@ -24,11 +28,7 @@ public class Register {
     public enum CertificateType { CERT_REQ, CERT_TO_TRUST }
     private String hcid = null;
     
-    private Endpoint PDEndpoint = null;
-    private Endpoint DQEndpoint = null;
-    private Endpoint DREndpoint = null;
-    private Endpoint DSEndpoint = null;
-    private Endpoint ADEndpoint = null;
+    private List<Endpoint> endpoints = null;
     
     private Certificate certificate = null;
 
@@ -36,12 +36,8 @@ public class Register {
     
     private Document doc = null;
     
-    public Register() {
-        PDEndpoint = new EndpointInfo();
-        DQEndpoint = new EndpointInfo();
-        DREndpoint = new EndpointInfo();
-        DSEndpoint = new EndpointInfo();
-        ADEndpoint = new EndpointInfo();
+    public Register() {        
+        endpoints = new ArrayList<Endpoint>();
         
         certificate = new CertificateInfo();
         
@@ -63,64 +59,16 @@ public class Register {
         this.hcid = hcid;
     }
     /**
-     * @return the PDEndpoint
+     * 
      */
-    public Endpoint getPDEndpoint() {
-        return PDEndpoint;
+    public Endpoint getEndpoint() {
+        return new EndpointInfo();
     }
     /**
-     * @param pDEndpoint the pDEndpoint to set
+     * 
      */
-    public void setPDEndpoint(Endpoint PDEndpoint) {
-        this.PDEndpoint = PDEndpoint;
-    }
-    /**
-     * @return the DQEndpoint
-     */
-    public Endpoint getDQEndpoint() {
-        return DQEndpoint;
-    }
-    /**
-     * @param DQEndpoint the DQEndpoint to set
-     */
-    public void setDQEndpoint(Endpoint DQEndpoint) {
-        this.DQEndpoint = DQEndpoint;
-    }
-    /**
-     * @return the DREndpoint
-     */
-    public Endpoint getDREndpoint() {
-        return DREndpoint;
-    }
-    /**
-     * @param DREndpoint the DREndpoint to set
-     */
-    public void setDREndpoint(Endpoint DREndpoint) {
-        this.DREndpoint = DREndpoint;
-    }
-    /**
-     * @return the DSEndpoint
-     */
-    public Endpoint getDSEndpoint() {
-        return DSEndpoint;
-    }
-    /**
-     * @param DSEndpoint the DSEndpoint to set
-     */
-    public void setDSEndpoint(Endpoint DSEndpoint) {
-        this.DSEndpoint = DSEndpoint;
-    }
-    /**
-     * @return the ADEndpoint
-     */
-    public Endpoint getADEndpoint() {
-        return ADEndpoint;
-    }
-    /**
-     * @param ADEndpoint the ADEndpoint to set
-     */
-    public void setADEndpoint(Endpoint ADEndpoint) {
-        PDEndpoint = ADEndpoint;
+    public void setEndpoint(Endpoint endpoint) {
+        endpoints.add(endpoint);
     }
     /**
      * @return the certificate
@@ -161,16 +109,6 @@ public class Register {
     
     public String saveInfo() {
         System.out.println("saveInfo, hcid: " + hcid);
-        System.out.println("saveInfo, pd version: " + PDEndpoint.getSpecVersion());
-        System.out.println("saveInfo, pd endpoint: " + PDEndpoint.getEndpoint());
-        System.out.println("saveInfo, dq version: " + DQEndpoint.getSpecVersion());
-        System.out.println("saveInfo, dq endpoint: " + DQEndpoint.getEndpoint());
-        System.out.println("saveInfo, dr version: " + DREndpoint.getSpecVersion());
-        System.out.println("saveInfo, dr endpoint: " + DREndpoint.getEndpoint());
-        System.out.println("saveInfo, ds version: " + DSEndpoint.getSpecVersion());
-        System.out.println("saveInfo, ds endpoint: " + DSEndpoint.getEndpoint());
-        System.out.println("saveInfo, ad version: " + ADEndpoint.getSpecVersion());
-        System.out.println("saveInfo, ad endpoint: " + ADEndpoint.getEndpoint());
         
         System.out.println("saveInfo, cert type:" + certificate.getCertType());
         System.out.println("saveInfo, cert path:" + certificate.getPathToCert());
@@ -183,6 +121,9 @@ public class Register {
         System.out.println("saveInfo, doc id:" + doc.getDocumentId());
         System.out.println("saveInfo, doc type:" + doc.getDocumentType());
         System.out.println("saveInfo, doc comment:" + doc.getComment());
+        
+        RegisterImpl impl = new RegisterImpl();
+        impl.saveInfo(hcid, certificate, doc, endpoints, demographics);
         return "";
     }
 }

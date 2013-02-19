@@ -6,6 +6,10 @@ package org.connectopensource.interopgui.dataobject;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.connectopensource.interopgui.view.Certificate;
+import org.connectopensource.interopgui.view.Document;
+import org.connectopensource.interopgui.view.Patient;
+
 /**
  * @author msw
  *
@@ -13,13 +17,24 @@ import java.util.List;
 public class OrganizationInfo {
     
     String homeCommunityId;
-    List<PatientInfo> patients;
-    List<DocumentInfo> documents;
-    CertificateInfo cert;
+    List<Patient> patients;
+    List<Document> documents;
+    Certificate cert;
     
     public OrganizationInfo() {
-        patients = new ArrayList<PatientInfo>();
-        documents = new ArrayList<DocumentInfo>();
+        patients = new ArrayList<Patient>();
+        documents = new ArrayList<Document>();
+    }
+    
+    public OrganizationInfo(String homeCommunityId, Certificate cert, List<Patient> patients, List<Document> doc) {
+        this.homeCommunityId = homeCommunityId;
+        this.cert = cert;
+        
+        this.patients = new ArrayList<Patient>();
+        this.patients.addAll(patients);
+        
+        this.documents = new ArrayList<Document>();
+        this.documents.addAll(documents);
     }
 
     /**
@@ -39,28 +54,28 @@ public class OrganizationInfo {
     /**
      * @return the cert
      */
-    public CertificateInfo getCert() {
+    public Certificate getCert() {
         return cert;
     }
 
     /**
      * @param cert the cert to set
      */
-    public void setCert(CertificateInfo cert) {
+    public void setCert(Certificate cert) {
         this.cert = cert;
     }
 
     /**
      * @return the patients
      */
-    public List<PatientInfo> getPatients() {
+    public List<Patient> getPatients() {
         return patients;
     }
 
     /**
      * @return the documents
      */
-    public List<DocumentInfo> getDocuments() {
+    public List<Document> getDocuments() {
         return documents;
     }
     

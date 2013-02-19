@@ -13,6 +13,7 @@ public class EndpointInfo implements Endpoint {
     
     private SpecVersion specVersion;
     private String endpoint;
+    private Specification spec;
     
     public SpecVersion[] getSpecVersions() {
         return SpecVersion.values();
@@ -48,5 +49,21 @@ public class EndpointInfo implements Endpoint {
     @Override
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Endpoint#getSpecification()
+     */
+    @Override
+    public Specification getSpecification() {
+        return spec;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Endpoint#setSpecification(org.connectopensource.interopgui.view.Endpoint.Specification)
+     */
+    @Override
+    public void setSpecification(Specification spec) {
+        this.spec = spec;
     }
 }

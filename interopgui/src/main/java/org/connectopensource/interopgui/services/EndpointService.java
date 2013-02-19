@@ -14,6 +14,7 @@ import org.connectopensource.interopgui.view.Endpoint;
 public interface EndpointService {
     
     public void saveEndpoint(Endpoint endpoint);
+    public void saveEndpoints(List<Endpoint> endpoints);
     public List<Endpoint> getEndpoints(String homeCommunityId);
     public List<Endpoint> getAllEndpoints();
 

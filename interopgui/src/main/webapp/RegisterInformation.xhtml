@@ -10,11 +10,11 @@
 
     <h:form>
 HCID:<h:inputText id="hcid" value="#{register.hcid}" />
-        <v:Endpoint specVersionPrompt="PD Version:" endpointPrompt="PD Endpoint:" value="#{register.PDEndpoint}" />
-        <v:Endpoint specVersionPrompt="DQ Version:" endpointPrompt="DQ Endpoint:" value="#{register.DQEndpoint}" />
-        <v:Endpoint specVersionPrompt="DR Version:" endpointPrompt="DR Endpoint:" value="#{register.DREndpoint}" />
-        <v:Endpoint specVersionPrompt="DS Version:" endpointPrompt="DS Endpoint:" value="#{register.DSEndpoint}" />
-        <v:Endpoint specVersionPrompt="AD Version:" endpointPrompt="AD Endpoint:" value="#{register.ADEndpoint}" />
+        <v:Endpoint specVersionPrompt="PD Version:" endpointPrompt="PD Endpoint:" value="#{register.endpoint}" spec="PATIENT_DISCOVERY" />
+        <v:Endpoint specVersionPrompt="DQ Version:" endpointPrompt="DQ Endpoint:" value="#{register.endpoint}" spec="DOCUMENT_QUERY" />
+        <v:Endpoint specVersionPrompt="DR Version:" endpointPrompt="DR Endpoint:" value="#{register.endpoint}" spec="DOCUMENT_RETRIEVE" />
+        <v:Endpoint specVersionPrompt="DS Version:" endpointPrompt="DS Endpoint:" value="#{register.endpoint}" spec="DOCUMENT_SUBMISSION" />
+        <v:Endpoint specVersionPrompt="AD Version:" endpointPrompt="AD Endpoint:" value="#{register.endpoint}" spec="ADMINISTRATIVE_DISTRIBUTION" />
         <v:Certificate value="#{register.certificate}" />
         <v:Patient firstNamePrompt="First Name:" lastNamePrompt="Last Name:" dobPrompt="Date of Birth (MM-DD-YYYY):"
             genderPrompt="Gender:" value="#{register.demographics}" />
