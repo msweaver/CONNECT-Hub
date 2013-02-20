@@ -53,8 +53,9 @@ public class JceCertificateServiceTest {
         props.setProperty("truststore.path", getClassPath() + "/truststore.jks");
         props.setProperty("truststore.pass", "changeit");
         props.setProperty("truststore.type", "JKS");
-        props.setProperty("privkeypem.path", getClassPath() + "/cakey-nopass.pem");
         props.setProperty("file.extension.signed.pem", ".signedcert.pem");
+        props.setProperty("privkeypem.path", getClassPath() + "/cakey-nopass.pem");
+        props.setProperty("cacertpem.path", getClassPath() + "/cacert.pem");
         PropertiesHolder.setProps(props);
     }
     

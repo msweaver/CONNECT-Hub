@@ -26,34 +26,23 @@
  */
 package org.connectopensource.interopgui.services;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
-import java.security.SignatureException;
 import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
 import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.bouncycastle.asn1.x509.X509CertificateStructure;
-import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
-import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
-import org.bouncycastle.crypto.util.PrivateKeyFactory;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.jce.PrincipalUtil;
+import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.operator.ContentSigner;
-import org.bouncycastle.operator.DefaultDigestAlgorithmIdentifierFinder;
-import org.bouncycastle.operator.DefaultSignatureAlgorithmIdentifierFinder;
 import org.bouncycastle.operator.OperatorCreationException;
-import org.bouncycastle.operator.bc.BcRSAContentSignerBuilder;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequestHolder;
 
 
@@ -65,52 +54,27 @@ public class JceCsrSignedCertGenerator {
     private static final long ONE_YEAR_IN_MILLIS = 365 * 24 * 60 * 60 * 1000;
     
     /**
-     * Create a signed cert from a CSR.
-     * 
-     * @param inputCSR to create the signed cert.
-     * @param caPrivate private key from the ca
-     * @return x509 certificate
-     * @throws InvalidKeyException invalid key
-     * @throws NoSuchAlgorithmException no such algorithm
-     * @throws NoSuchProviderException no such provider
-     * @throws SignatureException signature 
-     * @throws IOException io
-     * @throws OperatorCreationException operator creation
+     * @param inputCSR certificate signing request (pkcs10)
+     * @param caCert root ca certificate
+     * @param caPrivate private key used in ca generation (no password protection)
+     * @return signed x509 certificate
+     * @throws OperatorCreationException operation creation
      * @throws CertificateException certificate exception
      */
-    public static X509Certificate sign(PKCS10CertificationRequest inputCSR, PrivateKey caPrivate)
-            throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException,
-            IOException, OperatorCreationException, CertificateException {
+    public static X509Certificate sign(PKCS10CertificationRequest inputCSR, X509Certificate caCert, 
+            PrivateKey caPrivate) throws OperatorCreationException, CertificateException {
 
-        AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find("SHA1withRSA");
-        AlgorithmIdentifier digAlgId = new DefaultDigestAlgorithmIdentifierFinder().find(sigAlgId);
-
-        AsymmetricKeyParameter asymmKeyParam = PrivateKeyFactory.createKey(caPrivate.getEncoded());
-        SubjectPublicKeyInfo keyInfo = SubjectPublicKeyInfo.getInstance(inputCSR.getPublicKey().getEncoded());
-
+        X509Principal issuer = PrincipalUtil.getIssuerX509Principal(caCert);
         PKCS10CertificationRequestHolder pk10Holder = new PKCS10CertificationRequestHolder(inputCSR);
+        SubjectPublicKeyInfo subjectPublicKeyInfo = pk10Holder.getSubjectPublicKeyInfo();
 
-        X509v3CertificateBuilder certBuilder = new X509v3CertificateBuilder(
-                new X500Name("CN=issuer"), 
-                BigInteger.ONE,
-                new Date(System.currentTimeMillis()), 
-                new Date(System.currentTimeMillis() + ONE_YEAR_IN_MILLIS),
-                pk10Holder.getSubject(),
-                keyInfo);
+        X509v3CertificateBuilder certBuilder = new X509v3CertificateBuilder(new X500Name(issuer.getName()),
+                BigInteger.ONE, new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()
+                        + ONE_YEAR_IN_MILLIS), pk10Holder.getSubject(), pk10Holder.getSubjectPublicKeyInfo());
 
-        ContentSigner contentSigner = new BcRSAContentSignerBuilder(sigAlgId, digAlgId).build(asymmKeyParam);
+        certBuilder.addExtension(X509Extension.subjectKeyIdentifier, false, subjectPublicKeyInfo);
+        ContentSigner contentSigner = new JcaContentSignerBuilder("SHA1withRSA").setProvider("BC").build(caPrivate);
 
-        X509CertificateHolder certHolder = certBuilder.build(contentSigner);
-        X509CertificateStructure certStructure = certHolder.toASN1Structure();
-
-        CertificateFactory cf = CertificateFactory.getInstance("X.509", "BC");
-
-        // Read Certificate
-        InputStream inputStream = new ByteArrayInputStream(certStructure.getEncoded());
-        X509Certificate signedCert = (X509Certificate) cf.generateCertificate(inputStream);
-        inputStream.close();
-
-        return signedCert;
+        return (new JcaX509CertificateConverter()).setProvider("BC").getCertificate(certBuilder.build(contentSigner));
     }
-    
 }

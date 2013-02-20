@@ -31,9 +31,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -46,12 +46,12 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.List;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.ssl.PEMItem;
 import org.apache.commons.ssl.PEMUtil;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.openssl.PEMWriter;
 import org.connectopensource.interopgui.PropertiesHolder;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
 
@@ -59,14 +59,11 @@ import org.connectopensource.interopgui.dataobject.CertificateInfo;
  * Implementation of {@link CertificateService} that relies on JCE libraries.
  */
 public class JceCertificateService implements CertificateService {
-  
-    private static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----\n";    
-    private static final String END_CERT = "-----END CERTIFICATE-----\n";
-    
+
     private static final String EXTENSION_SIGNED_CERT = PropertiesHolder.getProps().getProperty(
             "file.extension.signed.pem");
-    private static final String PRIVKEY_PEM_PATH = PropertiesHolder.getProps().getProperty(
-            "privkeypem.path");    
+    private static final String PRIVKEY_PEM_PATH = PropertiesHolder.getProps().getProperty("privkeypem.path");
+    private static final String CACERT_PEM_PATH = PropertiesHolder.getProps().getProperty("cacertpem.path");
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
@@ -77,7 +74,7 @@ public class JceCertificateService implements CertificateService {
     @Override
     public void trustCertificate(CertificateInfo certInfo) {
         try {
-            X509Certificate x509Cert = createX509Cert(certInfo);
+            X509Certificate x509Cert = createX509Cert(certInfo.getPathToCert().getPath());
             JceTrustStoreManager.getInstance().addTrustedCert(x509Cert, certInfo.getAlias());
         } catch (Exception e) {
             throw new CertificateServiceException("Error while trusting cert, alias = " + certInfo.getAlias()
@@ -95,10 +92,11 @@ public class JceCertificateService implements CertificateService {
         try {
             signedCertInfo = new CertificateInfo();
             signedCertInfo.setPathToCert(new URI(certInfo.getPathToCert().getPath() + EXTENSION_SIGNED_CERT));
-            
-            PKCS10CertificationRequest csr = createCsr(certInfo);
-            X509Certificate signedCert = JceCsrSignedCertGenerator.sign(csr, getCaPrivateKey());
-            
+
+            PKCS10CertificationRequest csr = createCsr(certInfo.getPathToCert().getPath());
+            X509Certificate signedCert = JceCsrSignedCertGenerator.sign(csr, createX509Cert(CACERT_PEM_PATH),
+                    getCaPrivateKey());
+
             // drop the signed certificate in the same spot as the original path with an addtl extension
             writeCertToFile(signedCertInfo, signedCert);
             
@@ -113,23 +111,25 @@ public class JceCertificateService implements CertificateService {
     private void writeCertToFile(CertificateInfo signedCertInfo, X509Certificate signedCert)
             throws IOException, CertificateEncodingException {        
         FileOutputStream outputStream = null;
+        PEMWriter pemWriter = null;
         try {
-            outputStream = new FileOutputStream(new File(signedCertInfo.getPathToCert().getPath()));
-            outputStream.write((BEGIN_CERT).getBytes(Charset.forName("US-ASCII")));
-            outputStream.write(Base64.encodeBase64(signedCert.getEncoded()));
-            outputStream.write((END_CERT).getBytes(Charset.forName("US-ASCII")));
+            outputStream = new FileOutputStream(new File(signedCertInfo.getPathToCert().getPath()));            
+            pemWriter = new PEMWriter(new PrintWriter(outputStream));
+            pemWriter.writeObject(signedCert);
+            pemWriter.flush();            
         } finally {
+            IOUtils.closeQuietly(pemWriter);
             IOUtils.closeQuietly(outputStream);
         }
     }
 
-    private X509Certificate createX509Cert(CertificateInfo certInfo) 
+    private X509Certificate createX509Cert(String path) 
             throws URISyntaxException, IOException, CertificateException {
 
         FileInputStream inputStream = null;
         ByteArrayInputStream bais = null;
         try {
-            inputStream = new FileInputStream(new File(certInfo.getPathToCert().getPath()));
+            inputStream = new FileInputStream(new File(path));
 
             byte[] value = new byte[inputStream.available()];
             inputStream.read(value);
@@ -144,9 +144,9 @@ public class JceCertificateService implements CertificateService {
         }
     }
     
-    private PKCS10CertificationRequest createCsr(CertificateInfo certInfo) {
+    private PKCS10CertificationRequest createCsr(String path) {
 
-        final PEMItem csrPemFormat = getPemItem(certInfo.getPathToCert().getPath());
+        final PEMItem csrPemFormat = getPemItem(path);
 
         // Verify the type.
         if (!"CERTIFICATE REQUEST".equals(csrPemFormat.pemType)) {
