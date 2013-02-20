@@ -10,6 +10,7 @@ import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.services.CertificateService;
 import org.connectopensource.interopgui.services.DataService;
 import org.connectopensource.interopgui.services.EndpointService;
+import org.connectopensource.interopgui.services.JceCertificateService;
 import org.connectopensource.interopgui.view.Certificate;
 import org.connectopensource.interopgui.view.Document;
 import org.connectopensource.interopgui.view.Endpoint;
@@ -40,14 +41,14 @@ public class RegisterImpl {
      */
     private void saveEndpoints(List<Endpoint> endpoints) {
         EndpointService service = null;
-        service.saveEndpoints(endpoints);
+        //service.saveEndpoints(endpoints);
     }
 
     /**
      * @param cert
      */
     private void processCertificate(Certificate cert) {
-        CertificateService service = null;
+        CertificateService service = new JceCertificateService();
         service.trustCertificate(cert);
     }
 
@@ -56,6 +57,6 @@ public class RegisterImpl {
      */
     private void saveOrganization(OrganizationInfo org) {
         DataService service = null;
-        service.saveData(org);
+        //service.saveData(org);
     }
 }
