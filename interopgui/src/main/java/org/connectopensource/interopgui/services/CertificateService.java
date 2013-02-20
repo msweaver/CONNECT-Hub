@@ -10,15 +10,15 @@ public interface CertificateService {
     
     /**
      * Add certInfo to the configured truststore for the connect gateway.
-     * @param certificateInfo to be trusted.
+     * @param certInfo containing cert to be trusted.
      */
-    public void trustCertificate(CertificateInfo certInfo);
+    void trustCertificate(CertificateInfo certInfo);
 
     /**
      * Sign a certificate programmatically.
      * @param certInfo to be signed by the CONNECT Gateway CA 
      * @return signed certificate
      */
-    public CertificateInfo signCertificate(CertificateInfo certInfo);
+    CertificateInfo signCertificate(CertificateInfo certInfo);
     
 }

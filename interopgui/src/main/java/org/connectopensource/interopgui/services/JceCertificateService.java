@@ -29,20 +29,48 @@ package org.connectopensource.interopgui.services;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.Security;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.ssl.PEMItem;
+import org.apache.commons.ssl.PEMUtil;
+import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.connectopensource.interopgui.PropertiesHolder;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
 
 /**
  * Implementation of {@link CertificateService} that relies on JCE libraries.
  */
 public class JceCertificateService implements CertificateService {
-        
+  
+    private static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----\n";    
+    private static final String END_CERT = "-----END CERTIFICATE-----\n";
+    
+    private static final String EXTENSION_SIGNED_CERT = PropertiesHolder.getProps().getProperty(
+            "file.extension.signed.pem");
+    private static final String PRIVKEY_PEM_PATH = PropertiesHolder.getProps().getProperty(
+            "privkeypem.path");    
+    static {
+        Security.addProvider(new BouncyCastleProvider());
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -62,9 +90,38 @@ public class JceCertificateService implements CertificateService {
      */
     @Override
     public CertificateInfo signCertificate(CertificateInfo certInfo) {
-        throw new UnsupportedOperationException();
+        
+        CertificateInfo signedCertInfo = null;
+        try {
+            signedCertInfo = new CertificateInfo();
+            signedCertInfo.setPathToCert(new URI(certInfo.getPathToCert().getPath() + EXTENSION_SIGNED_CERT));
+            
+            PKCS10CertificationRequest csr = createCsr(certInfo);
+            X509Certificate signedCert = JceCsrSignedCertGenerator.sign(csr, getCaPrivateKey());
+            
+            // drop the signed certificate in the same spot as the original path with an addtl extension
+            writeCertToFile(signedCertInfo, signedCert);
+            
+        } catch (Exception e) {
+            throw new CertificateServiceException("Error while creating signed cert from CSR", e);
+        }
+        
+        return signedCertInfo;
     }
-    
+
+
+    private void writeCertToFile(CertificateInfo signedCertInfo, X509Certificate signedCert)
+            throws IOException, CertificateEncodingException {        
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(new File(signedCertInfo.getPathToCert().getPath()));
+            outputStream.write((BEGIN_CERT).getBytes(Charset.forName("US-ASCII")));
+            outputStream.write(Base64.encodeBase64(signedCert.getEncoded()));
+            outputStream.write((END_CERT).getBytes(Charset.forName("US-ASCII")));
+        } finally {
+            IOUtils.closeQuietly(outputStream);
+        }
+    }
 
     private X509Certificate createX509Cert(CertificateInfo certInfo) 
             throws URISyntaxException, IOException, CertificateException {
@@ -74,7 +131,7 @@ public class JceCertificateService implements CertificateService {
         try {
             inputStream = new FileInputStream(new File(certInfo.getPathToCert().getPath()));
 
-            byte value[] = new byte[inputStream.available()];
+            byte[] value = new byte[inputStream.available()];
             inputStream.read(value);
             bais = new ByteArrayInputStream(value);
 
@@ -86,6 +143,53 @@ public class JceCertificateService implements CertificateService {
             IOUtils.closeQuietly(bais);
         }
     }
+    
+    private PKCS10CertificationRequest createCsr(CertificateInfo certInfo) {
 
+        final PEMItem csrPemFormat = getPemItem(certInfo.getPathToCert().getPath());
+
+        // Verify the type.
+        if (!"CERTIFICATE REQUEST".equals(csrPemFormat.pemType)) {
+            throw new CertificateServiceException("pem does not appear to contain a CSR.");            
+        }
+         
+        return new PKCS10CertificationRequest(csrPemFormat.getDerBytes());
+    }
+    
+    private PrivateKey getCaPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
+        
+        final PEMItem privKeyPem = getPemItem(PRIVKEY_PEM_PATH);
+        
+        // PKCS8 decode the encoded RSA private key
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privKeyPem.getDerBytes());
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+
+        return kf.generatePrivate(keySpec);
+    }
+    
+    private PEMItem getPemItem(String filepath) { 
+
+        FileInputStream inputStream = null;
+        byte[] value = null;
+        try {
+            inputStream = new FileInputStream(new File(filepath));
+            value = new byte[inputStream.available()];
+            inputStream.read(value);
+        } catch (Exception e) {
+            throw new CertificateServiceException("pem is empty.", e);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
+        
+        @SuppressWarnings("rawtypes")
+        final List pemItems = PEMUtil.decode(value);
+                
+        // Verify list isn't empty - uses Apache Commons Lang.
+        if (pemItems.isEmpty()) {
+            throw new CertificateServiceException("privkey pem is empty: " + filepath);
+        }
+        
+        return (PEMItem) pemItems.get(0);
+    }
     
 }

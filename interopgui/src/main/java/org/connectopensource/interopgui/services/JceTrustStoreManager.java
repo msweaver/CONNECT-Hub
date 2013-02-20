@@ -42,23 +42,29 @@ import org.connectopensource.interopgui.PropertiesHolder;
 /**
  * Thread Safe Trust Store Manager provides synchronized read/write operations against a JCE Keystore.
  */
-public class JceTrustStoreManager {
+public final class JceTrustStoreManager {
     
     private final Properties props = PropertiesHolder.getProps();
     private final char[] trustStorePass = props.getProperty("truststore.pass").toCharArray();    
     private final String trustStorePath = props.getProperty("truststore.path");
-    private final String trustStorePathTmp = props.getProperty("truststore.path") + ".tmp";
-    private final String trustStorePathBak= props.getProperty("truststore.path") + ".bak";
+    private final String trustStorePathTmp = trustStorePath + ".tmp";
+    private final String trustStorePathBak = trustStorePath + ".bak";
     
     // Private constructor prevents instantiation from other classes
     private JceTrustStoreManager() {
         // private singleton.
     }
 
+    /**
+     * Singleton Holder.
+     */
     private static class SingletonHolder { 
         public static final JceTrustStoreManager INSTANCE = new JceTrustStoreManager();
     }
 
+    /**
+     * @return singleton instance of trust store manager.
+     */
     public static JceTrustStoreManager getInstance() {
         return SingletonHolder.INSTANCE;
     }    
@@ -99,7 +105,7 @@ public class JceTrustStoreManager {
         // back up before we start...
         try {
             FileUtils.copyFile(new File(trustStorePath),
-                    new File(trustStorePathBak + "." + new Long(System.currentTimeMillis()).toString()));
+                    new File(trustStorePathBak + "." + System.currentTimeMillis()));
         } catch (IOException e) {
             throw new CertificateServiceException("Unable to backup trust store [" + trustStorePath + "].", e);
         }
@@ -148,5 +154,5 @@ public class JceTrustStoreManager {
             throw new CertificateServiceException("Unable to save trust store to file.", e);
         }
     }
-
+    
 }

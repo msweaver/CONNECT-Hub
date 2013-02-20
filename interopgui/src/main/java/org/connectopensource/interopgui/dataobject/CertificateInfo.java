@@ -16,7 +16,7 @@ public final class CertificateInfo {
      */
     public CertificateInfo() {
         super();
-        this.alias = new Long(System.currentTimeMillis()).toString();
+        this.alias = String.valueOf(System.currentTimeMillis());
     }
 
     /**

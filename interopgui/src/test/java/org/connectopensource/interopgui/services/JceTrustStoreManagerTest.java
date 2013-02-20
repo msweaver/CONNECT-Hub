@@ -49,15 +49,27 @@ import org.junit.Test;
  */
 public class JceTrustStoreManagerTest {
     
+    /**
+     * Set up before each test.
+     * @throws URISyntaxException uri syntax exception.
+     */
     @Before
     public void setUp() throws URISyntaxException {
         Properties props = new Properties();
         props.setProperty("truststore.path", getClassPath() + "/truststore.jks");
         props.setProperty("truststore.pass", "changeit");
         props.setProperty("truststore.type", "JKS");
+        props.setProperty("truststore.ca.alias", "thecacert");
         PropertiesHolder.setProps(props);
     }
     
+    /**
+     * Test {@link JceTrustStoreManager#addTrustedCert(X509Certificate, String)}.
+     * @throws CertificateException cert exception
+     * @throws URISyntaxException uri syntax exception
+     * @throws IOException io exception
+     * @throws KeyStoreException key store exception
+     */
     @Test
     public void canAdd() throws CertificateException, URISyntaxException, IOException, KeyStoreException {
         JceTrustStoreManager trustStoreManager = JceTrustStoreManager.getInstance();  
@@ -65,7 +77,6 @@ public class JceTrustStoreManagerTest {
         trustStoreManager.addTrustedCert(cert, JceTrustStoreManagerTest.class.getName());
         assertTrue(JceTrustStoreManager.getInstance().loadTrustStore()
                 .containsAlias(JceTrustStoreManagerTest.class.getName()));
-
     }
     
     private X509Certificate getTestCert() throws URISyntaxException, IOException, CertificateException {
@@ -77,7 +88,7 @@ public class JceTrustStoreManagerTest {
             inputStream = new FileInputStream(getClassPath() + "/provider-cert.pem");
 
             // read the bytes
-            byte value[] = new byte[inputStream.available()];
+            byte[] value = new byte[inputStream.available()];
             inputStream.read(value);
             bais = new ByteArrayInputStream(value);
 

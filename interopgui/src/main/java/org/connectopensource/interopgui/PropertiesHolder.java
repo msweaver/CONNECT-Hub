@@ -31,7 +31,7 @@ import java.net.URL;
 import java.util.Properties;
 
 /**
- * Handle interopgui properties
+ * Handle interopgui properties.
  */
 public class PropertiesHolder {
     

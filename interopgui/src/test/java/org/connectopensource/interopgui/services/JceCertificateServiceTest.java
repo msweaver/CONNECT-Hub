@@ -26,7 +26,7 @@
  */
 package org.connectopensource.interopgui.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -43,24 +43,46 @@ import org.junit.Test;
  */
 public class JceCertificateServiceTest {
 
+    /**
+     * Set up before each test.
+     * @throws URISyntaxException uri syntax exception
+     */
     @Before
     public void setUp() throws URISyntaxException {
         Properties props = new Properties();
         props.setProperty("truststore.path", getClassPath() + "/truststore.jks");
         props.setProperty("truststore.pass", "changeit");
         props.setProperty("truststore.type", "JKS");
+        props.setProperty("privkeypem.path", getClassPath() + "/cakey-nopass.pem");
+        props.setProperty("file.extension.signed.pem", ".signedcert.pem");
         PropertiesHolder.setProps(props);
     }
     
+    /**
+     * Test {@link JceCertificateService#trustCertificate(CertificateInfo)}.
+     * @throws URISyntaxException uri syntax exception
+     * @throws KeyStoreException key store exception
+     */
     @Test
     public void canAddCertToTrustStore() throws URISyntaxException, KeyStoreException {
         CertificateService certService = new JceCertificateService();
-        certService.trustCertificate(getCertInfo());
+        certService.trustCertificate(getTrustedCertInfo());
         assertTrue(JceTrustStoreManager.getInstance().loadTrustStore()
                 .containsAlias(JceCertificateServiceTest.class.getName()));
     }
 
-    private CertificateInfo getCertInfo() throws URISyntaxException {
+    /**
+     * Test {@link JceCertificateService#signCertificate(CertificateInfo)}.
+     * @throws URISyntaxException uri syntax exception
+     */
+    @Test
+    public void canSignCsr() throws URISyntaxException {
+        CertificateService certService = new JceCertificateService();
+        CertificateInfo signedCertInfo = certService.signCertificate(getCsrCertInfo());
+        assertTrue(signedCertInfo.getPathToCert().getPath().endsWith(".signedcert.pem"));
+    }
+    
+    private CertificateInfo getTrustedCertInfo() throws URISyntaxException {
         
         CertificateInfo certInfo = new CertificateInfo();
         certInfo.setAlias(JceCertificateServiceTest.class.getName());
@@ -69,6 +91,15 @@ public class JceCertificateServiceTest {
         return certInfo;
     }
     
+    private CertificateInfo getCsrCertInfo() throws URISyntaxException {
+        
+        CertificateInfo certInfo = new CertificateInfo();
+        certInfo.setAlias(JceCertificateServiceTest.class.getName());
+        certInfo.setPathToCert(new File(getClassPath() + "/provider-req.pem").toURI());
+        
+        return certInfo;
+    }
+
     /**
      * Used when calling code requires absolute paths to test resources.
      * @return absolute classpath.

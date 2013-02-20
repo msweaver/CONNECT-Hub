@@ -39,11 +39,17 @@ import org.junit.Test;
  */
 public class PropertiesHolderTest {
 
+    /**
+     * Test {@link PropertiesHolder#getProps()}.
+     */
     @Test
     public void canGetProperties() {
         assertNotNull(PropertiesHolder.getProps());
     }
     
+    /**
+     * Test {@link PropertiesHolder#setProps(Properties)}.
+     */
     @Test
     public void canSetProperties() {
         Properties mockProps = mock(Properties.class);
