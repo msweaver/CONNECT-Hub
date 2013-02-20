@@ -27,4 +27,7 @@ public interface Certificate {
     
     public UploadedFile getFile();
     public void setFile(UploadedFile file);
+    
+    public String getAlias();
+    public void setAlias(String alias);
 }
