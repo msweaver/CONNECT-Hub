@@ -9,15 +9,14 @@
 <body>
     <comp:interface>
         <comp:attribute name="value" required="true"
-            type="org.connectopensource.interoperabilityshowcasegui.view.Endpoint" />
+            type="org.connectopensource.interopgui.view.Endpoint" />
         <comp:attribute name="specVersionPrompt" required="true" />
         <comp:attribute name="endpointPrompt" required="true" />
         <comp:attribute name="required" required="false" default="true"/>
         <comp:attribute name="requiredMessage" required="false" default="Required!" />
     </comp:interface>
     <comp:implementation>
-        test
-        <!-- div>#{cc.attrs.specVersionPrompt}</div>
+        <div>#{cc.attrs.specVersionPrompt}</div>
         <div>
             <h:inputText value="#{cc.attrs.value.specVersion}" id="specVersion" required="#{cc.attrs.required}"
                 requiredMessage="#{cc.attrs.requiredMessage}" />
@@ -26,7 +25,7 @@
         <div>
             <h:inputText value="#{cc.attrs.value.endpoint}" id="endpoint" required="#{cc.attrs.required}"
                 requiredMessage="#{cc.attrs.requiredMessage}" />
-        </div -->
+        </div>
     </comp:implementation>
 </body>
 </html>

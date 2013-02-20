@@ -10,14 +10,16 @@ import org.connectopensource.interopergui.managedbean.Register.SpecVersion;
  *
  */
 public class EndpointImpl implements Endpoint {
+    
+    private SpecVersion specVersion;
+    private String endpoint;
 
     /* (non-Javadoc)
      * @see org.connectopensource.interoperabilityshowcasegui.view.Endpoint#getSpecVersion()
      */
     @Override
     public SpecVersion getSpecVersion() {
-        // TODO Auto-generated method stub
-        return null;
+        return specVersion;
     }
 
     /* (non-Javadoc)
@@ -25,8 +27,7 @@ public class EndpointImpl implements Endpoint {
      */
     @Override
     public void setSpecVersion(SpecVersion version) {
-        // TODO Auto-generated method stub
-
+        this.specVersion = version;
     }
 
     /* (non-Javadoc)
@@ -34,8 +35,7 @@ public class EndpointImpl implements Endpoint {
      */
     @Override
     public String getEndpoint() {
-        // TODO Auto-generated method stub
-        return null;
+        return endpoint;
     }
 
     /* (non-Javadoc)
@@ -43,8 +43,7 @@ public class EndpointImpl implements Endpoint {
      */
     @Override
     public void setEndpoint(String endpoint) {
-        // TODO Auto-generated method stub
-
+        this.endpoint = endpoint;
     }
 
 }

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.connectopensource.interopgui.dataobject;
 
 import java.net.URI;
@@ -9,50 +6,45 @@ import java.net.URI;
  * @author msw
  *
  */
-public class CertificateInfo {
-    
-    public enum CertificateType { CERT, CERT_REQ }
+public final class CertificateInfo {
     
     private URI pathToCert;
-    private URI pathToResult;
+    private String alias;
     
-    private CertificateType certType;
-    
+    /**
+     * Default constructor specifies a timestamp for an alias.
+     */
+    public CertificateInfo() {
+        super();
+        this.alias = String.valueOf(System.currentTimeMillis());
+    }
+
     /**
      * @return the pathToCert
      */
     public URI getPathToCert() {
         return pathToCert;
     }
+    
     /**
      * @param pathToCert the pathToCert to set
      */
     public void setPathToCert(URI pathToCert) {
         this.pathToCert = pathToCert;
     }
+
     /**
-     * @return the pathToResult
+     * @return the alias
      */
-    public URI getPathToResult() {
-        return pathToResult;
-    }
-    /**
-     * @param pathToResult the pathToResult to set
-     */
-    public void setPathToResult(URI pathToResult) {
-        this.pathToResult = pathToResult;
-    }
-    /**
-     * @return the certType
-     */
-    public CertificateType getCertType() {
-        return certType;
-    }
-    /**
-     * @param certType the certType to set
-     */
-    public void setCertType(CertificateType certType) {
-        this.certType = certType;
+    public String getAlias() {
+        return alias;
     }
 
+    /**
+     * @param alias the alias to set
+     */
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+    
 }
