@@ -3,9 +3,11 @@
  */
 package org.connectopensource.interopgui.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.services.CertificateService;
 import org.connectopensource.interopgui.services.DataService;
@@ -31,7 +33,12 @@ public class RegisterImpl {
         
         saveOrganization(org);
         
-        processCertificate(cert);
+        try {
+            processCertificate(cert);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         
         saveEndpoints(endpoints);
     }
@@ -46,10 +53,12 @@ public class RegisterImpl {
 
     /**
      * @param cert
+     * @throws IOException 
      */
-    private void processCertificate(Certificate cert) {
+    private void processCertificate(Certificate cert) throws IOException {
         CertificateService service = new JceCertificateService();
-        service.trustCertificate(cert);
+        CertificateInfo certInfo = new CertificateInfo(cert);
+        service.trustCertificate(certInfo);
     }
 
     /**

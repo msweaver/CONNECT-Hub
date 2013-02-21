@@ -54,7 +54,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMWriter;
 import org.connectopensource.interopgui.PropertiesHolder;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
-import org.connectopensource.interopgui.view.Certificate;
 
 /**
  * Implementation of {@link CertificateService} that relies on JCE libraries.
@@ -65,110 +64,118 @@ public class JceCertificateService implements CertificateService {
             "file.extension.signed.pem");
     private static final String PRIVKEY_PEM_PATH = PropertiesHolder.getProps().getProperty("privkeypem.path");
     private static final String CACERT_PEM_PATH = PropertiesHolder.getProps().getProperty("cacertpem.path");
+    private static final String CERT_DOWNLOAD_PATH = PropertiesHolder.getProps().getProperty("cert.download.path");
+    
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void trustCertificate(Certificate certInfo) {
+    public void trustCertificate(CertificateInfo certInfo) {
         try {
-            X509Certificate x509Cert = createX509Cert(certInfo.getPathToCert().getPath());
+            X509Certificate x509Cert = createX509Cert(certInfo.getUploadedCert());
             JceTrustStoreManager.getInstance().addTrustedCert(x509Cert, certInfo.getAlias());
         } catch (Exception e) {
             throw new CertificateServiceException("Error while trusting cert, alias = " + certInfo.getAlias()
                     + ", path uri = " + certInfo.getPathToCert(), e);
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public CertificateInfo signCertificate(Certificate certInfo) {
-        
+    public CertificateInfo signCertificate(CertificateInfo certInfo) {
+
         CertificateInfo signedCertInfo = null;
         try {
             signedCertInfo = new CertificateInfo();
-            signedCertInfo.setPathToCert(new URI(certInfo.getPathToCert().getPath() + EXTENSION_SIGNED_CERT));
+            signedCertInfo.setPathToCert(new URI(CERT_DOWNLOAD_PATH + EXTENSION_SIGNED_CERT));
 
-            PKCS10CertificationRequest csr = createCsr(certInfo.getPathToCert().getPath());
+            PKCS10CertificationRequest csr = createCsr(certInfo.getUploadedCert());
             X509Certificate signedCert = JceCsrSignedCertGenerator.sign(csr, createX509Cert(CACERT_PEM_PATH),
                     getCaPrivateKey());
 
             // drop the signed certificate in the same spot as the original path with an addtl extension
             writeCertToFile(signedCertInfo, signedCert);
-            
+
         } catch (Exception e) {
             throw new CertificateServiceException("Error while creating signed cert from CSR", e);
         }
-        
+
         return signedCertInfo;
     }
 
-
-    private void writeCertToFile(CertificateInfo signedCertInfo, X509Certificate signedCert)
-            throws IOException, CertificateEncodingException {        
+    private void writeCertToFile(CertificateInfo signedCertInfo, X509Certificate signedCert) throws IOException,
+            CertificateEncodingException {
         FileOutputStream outputStream = null;
         PEMWriter pemWriter = null;
         try {
-            outputStream = new FileOutputStream(new File(signedCertInfo.getPathToCert().getPath()));            
+            outputStream = new FileOutputStream(new File(signedCertInfo.getPathToCert().getPath()));
             pemWriter = new PEMWriter(new PrintWriter(outputStream));
             pemWriter.writeObject(signedCert);
-            pemWriter.flush();            
+            pemWriter.flush();
         } finally {
             IOUtils.closeQuietly(pemWriter);
             IOUtils.closeQuietly(outputStream);
         }
     }
 
-    private X509Certificate createX509Cert(String path) 
-            throws URISyntaxException, IOException, CertificateException {
+    private X509Certificate createX509Cert(String path) throws URISyntaxException, IOException, CertificateException {
 
         FileInputStream inputStream = null;
-        ByteArrayInputStream bais = null;
         try {
             inputStream = new FileInputStream(new File(path));
-
             byte[] value = new byte[inputStream.available()];
             inputStream.read(value);
-            bais = new ByteArrayInputStream(value);
+
+            return (X509Certificate) createX509Cert(value);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
+    }
+
+    private X509Certificate createX509Cert(byte[] cert) throws URISyntaxException, IOException, CertificateException {
+
+        ByteArrayInputStream bais = null;
+        try {
+            bais = new ByteArrayInputStream(cert);
 
             CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
 
             return (X509Certificate) certFactory.generateCertificate(bais);
         } finally {
-            IOUtils.closeQuietly(inputStream);
             IOUtils.closeQuietly(bais);
         }
     }
-    
-    private PKCS10CertificationRequest createCsr(String path) {
 
-        final PEMItem csrPemFormat = getPemItem(path);
+    private PKCS10CertificationRequest createCsr(byte[] certRequest) {
+
+        final PEMItem csrPemFormat = getPemItem(certRequest);
 
         // Verify the type.
         if (!"CERTIFICATE REQUEST".equals(csrPemFormat.pemType)) {
-            throw new CertificateServiceException("pem does not appear to contain a CSR.");            
+            throw new CertificateServiceException("pem does not appear to contain a CSR.");
         }
-         
+
         return new PKCS10CertificationRequest(csrPemFormat.getDerBytes());
     }
-    
+
     private PrivateKey getCaPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        
+
         final PEMItem privKeyPem = getPemItem(PRIVKEY_PEM_PATH);
-        
+
         // PKCS8 decode the encoded RSA private key
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privKeyPem.getDerBytes());
         KeyFactory kf = KeyFactory.getInstance("RSA");
 
         return kf.generatePrivate(keySpec);
     }
-    
-    private PEMItem getPemItem(String filepath) { 
+
+    private PEMItem getPemItem(String filepath) {
 
         FileInputStream inputStream = null;
         byte[] value = null;
@@ -181,16 +188,21 @@ public class JceCertificateService implements CertificateService {
         } finally {
             IOUtils.closeQuietly(inputStream);
         }
-        
-        @SuppressWarnings("rawtypes")
-        final List pemItems = PEMUtil.decode(value);
-                
-        // Verify list isn't empty - uses Apache Commons Lang.
-        if (pemItems.isEmpty()) {
-            throw new CertificateServiceException("privkey pem is empty: " + filepath);
-        }
-        
-        return (PEMItem) pemItems.get(0);
+
+        return getPemItem(value);
     }
     
+    private PEMItem getPemItem(byte[] certRequest) {
+
+        @SuppressWarnings("rawtypes")
+        final List pemItems = PEMUtil.decode(certRequest);
+
+        // Verify list isn't empty - uses Apache Commons Lang.
+        if (pemItems.isEmpty()) {
+            throw new CertificateServiceException("privkey pem is empty!");
+        }
+
+        return (PEMItem) pemItems.get(0);
+    }
+
 }
