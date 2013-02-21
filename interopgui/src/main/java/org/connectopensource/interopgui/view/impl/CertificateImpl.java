@@ -1,35 +1,33 @@
-package org.connectopensource.interopgui.dataobject;
+package org.connectopensource.interopgui.view.impl;
 
-import java.io.IOException;
 import java.net.URI;
 
+import org.apache.myfaces.custom.fileupload.UploadedFile;
 import org.connectopensource.interopgui.view.Certificate;
 
 /**
  * @author msw
  *
  */
-public class CertificateInfo {
+public class CertificateImpl implements Certificate {
     
     private URI pathToCert;
     private URI pathToResult;
-    private Certificate.CertificateType certType;
-    private byte[] uploadedCert;
+    private CertificateType certType;
+    private UploadedFile file;
     private String alias;
+    
+    public CertificateType[] getCertificateTypes()
+    {
+        return CertificateType.values();
+    }
     
     /**
      * Default constructor specifies a timestamp for an alias.
      */
-    public CertificateInfo() {
+    public CertificateImpl() {
+        super();
         this.alias = String.valueOf(System.currentTimeMillis());
-    }
-    
-    public CertificateInfo(Certificate cert) throws IOException {
-        this.alias = String.valueOf(System.currentTimeMillis());
-        this.certType = cert.getCertType();
-        this.pathToCert = cert.getPathToCert();
-        this.pathToResult = cert.getPathToResult();
-        this.uploadedCert = cert.getFile().getBytes();
     }
 
     /**
@@ -63,20 +61,23 @@ public class CertificateInfo {
     /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Certificate#getFile()
      */
-    public byte[] getUploadedCert() {
-        return uploadedCert;
+    @Override
+    public UploadedFile getFile() {
+        return file;
     }
 
     /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Certificate#setFile(org.apache.myfaces.custom.fileupload.UploadedFile)
      */
-    public void setUploadedCert(byte[] uploadedCert) {
-        this.uploadedCert = uploadedCert;
+    @Override
+    public void setFile(UploadedFile file) {
+        this.file = file;
     }
 
     /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Certificate#getPathToResult()
      */
+    @Override
     public URI getPathToResult() {
         return pathToResult;
     }
@@ -84,6 +85,7 @@ public class CertificateInfo {
     /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Certificate#setPathToResult(java.net.URI)
      */
+    @Override
     public void setPathToResult(URI pathToResult) {
         this.pathToResult = pathToResult;
     }
@@ -91,14 +93,16 @@ public class CertificateInfo {
     /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Certificate#getCertType()
      */
-    public Certificate.CertificateType getCertType() {
+    @Override
+    public CertificateType getCertType() {
         return certType;
     }
 
     /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Certificate#setCertType(org.connectopensource.interopgui.view.Certificate.CertificateType)
      */
-    public void setCertType(Certificate.CertificateType certType) {
+    @Override
+    public void setCertType(CertificateType certType) {
         this.certType = certType;
     }
 }

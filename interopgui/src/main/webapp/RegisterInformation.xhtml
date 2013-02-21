@@ -43,7 +43,7 @@
       <p> Welcome to the CONNECT Interoperability Showcase Information Registration Page. Please enter your information below.</p>
    
 
-    <h:form>
+    <h:form enctype="multipart/form-data">
 HCID:<h:inputText id="hcid" value="#{register.hcid}" />
         <v:Endpoint specVersionPrompt="PD Version:" endpointPrompt="PD Endpoint:" value="#{register.endpoint}" spec="PATIENT_DISCOVERY" />
         <v:Endpoint specVersionPrompt="DQ Version:" endpointPrompt="DQ Endpoint:" value="#{register.endpoint}" spec="DOCUMENT_QUERY" />

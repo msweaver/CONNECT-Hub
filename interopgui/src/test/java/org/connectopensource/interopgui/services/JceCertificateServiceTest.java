@@ -29,13 +29,15 @@ package org.connectopensource.interopgui.services;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyStoreException;
 import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
 import org.connectopensource.interopgui.PropertiesHolder;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
-import org.connectopensource.interopgui.view.Certificate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -64,9 +66,10 @@ public class JceCertificateServiceTest {
      * Test {@link JceCertificateService#trustCertificate(CertificateInfo)}.
      * @throws URISyntaxException uri syntax exception
      * @throws KeyStoreException key store exception
+     * @throws IOException 
      */
     @Test
-    public void canAddCertToTrustStore() throws URISyntaxException, KeyStoreException {
+    public void canAddCertToTrustStore() throws URISyntaxException, KeyStoreException, IOException {
         CertificateService certService = new JceCertificateService();
         certService.trustCertificate(getTrustedCertInfo());
         assertTrue(JceTrustStoreManager.getInstance().loadTrustStore()
@@ -76,28 +79,29 @@ public class JceCertificateServiceTest {
     /**
      * Test {@link JceCertificateService#signCertificate(CertificateInfo)}.
      * @throws URISyntaxException uri syntax exception
+     * @throws IOException 
      */
     @Test
-    public void canSignCsr() throws URISyntaxException {
+    public void canSignCsr() throws URISyntaxException, IOException {
         CertificateService certService = new JceCertificateService();
-        Certificate signedCertInfo = certService.signCertificate(getCsrCertInfo());
+        CertificateInfo signedCertInfo = certService.signCertificate(getCsrCertInfo());
         assertTrue(signedCertInfo.getPathToCert().getPath().endsWith(".signedcert.pem"));
     }
     
-    private CertificateInfo getTrustedCertInfo() throws URISyntaxException {
+    private CertificateInfo getTrustedCertInfo() throws URISyntaxException, IOException {
         
         CertificateInfo certInfo = new CertificateInfo();
         certInfo.setAlias(JceCertificateServiceTest.class.getName());
-        certInfo.setPathToCert(new File(getClassPath() + "/provider-cert.pem").toURI());
+        certInfo.setUploadedCert(getCertFromFile(getClassPath() + "/provider-cert.pem"));
         
         return certInfo;
     }
     
-    private CertificateInfo getCsrCertInfo() throws URISyntaxException {
+    private CertificateInfo getCsrCertInfo() throws URISyntaxException, IOException {
         
         CertificateInfo certInfo = new CertificateInfo();
         certInfo.setAlias(JceCertificateServiceTest.class.getName());
-        certInfo.setPathToCert(new File(getClassPath() + "/provider-req.pem").toURI());
+        certInfo.setUploadedCert(getCertFromFile(getClassPath() + "/provider-req.pem"));
         
         return certInfo;
     }
@@ -108,6 +112,19 @@ public class JceCertificateServiceTest {
      */
     private File getClassPath() throws URISyntaxException {
         return new File(JceCertificateServiceTest.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-    }   
+    }  
+    
+    private byte[] getCertFromFile(String path) throws IOException {
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(new File(path));
+            byte[] value = new byte[inputStream.available()];
+            inputStream.read(value);
+
+            return value;
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
+    }
 
 }

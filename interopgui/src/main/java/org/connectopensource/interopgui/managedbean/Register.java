@@ -3,13 +3,13 @@
  */
 package org.connectopensource.interopgui.managedbean;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 
 import org.connectopensource.interopgui.controller.RegisterImpl;
-import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.EndpointInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
@@ -17,6 +17,7 @@ import org.connectopensource.interopgui.view.Certificate;
 import org.connectopensource.interopgui.view.Document;
 import org.connectopensource.interopgui.view.Endpoint;
 import org.connectopensource.interopgui.view.Patient;
+import org.connectopensource.interopgui.view.impl.CertificateImpl;
 
 /**
  * @author msw
@@ -39,7 +40,7 @@ public class Register {
     public Register() {        
         endpoints = new ArrayList<Endpoint>();
         
-        certificate = new CertificateInfo();
+        certificate = new CertificateImpl();
         
         demographics = new PatientInfo();
         
@@ -121,6 +122,13 @@ public class Register {
         System.out.println("saveInfo, doc id:" + doc.getDocumentId());
         System.out.println("saveInfo, doc type:" + doc.getDocumentType());
         System.out.println("saveInfo, doc comment:" + doc.getComment());
+        
+        try {
+            System.out.println("saveInfo, cert size: " + certificate.getFile());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         
         RegisterImpl impl = new RegisterImpl();
         impl.saveInfo(hcid, certificate, doc, endpoints, demographics);
