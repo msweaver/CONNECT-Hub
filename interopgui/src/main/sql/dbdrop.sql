@@ -3,7 +3,6 @@ GRANT USAGE ON *.* TO interopguiuser identified by 'interopguipass';
 DROP USER 'interopguiuser';
 DELETE FROM mysql.user WHERE User = 'interopguiuser';
 
-DROP TABLE IF EXISTS interopgui.orginfo;
 DROP DATABASE IF EXISTS interopgui;
 FLUSH PRIVILEGES;
 
