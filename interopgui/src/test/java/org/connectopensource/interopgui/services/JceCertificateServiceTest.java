@@ -35,6 +35,7 @@ import java.util.Properties;
 
 import org.connectopensource.interopgui.PropertiesHolder;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
+import org.connectopensource.interopgui.view.Certificate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -79,7 +80,7 @@ public class JceCertificateServiceTest {
     @Test
     public void canSignCsr() throws URISyntaxException {
         CertificateService certService = new JceCertificateService();
-        CertificateInfo signedCertInfo = certService.signCertificate(getCsrCertInfo());
+        Certificate signedCertInfo = certService.signCertificate(getCsrCertInfo());
         assertTrue(signedCertInfo.getPathToCert().getPath().endsWith(".signedcert.pem"));
     }
     

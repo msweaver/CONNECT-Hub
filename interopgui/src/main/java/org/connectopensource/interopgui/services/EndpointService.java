@@ -5,7 +5,7 @@ package org.connectopensource.interopgui.services;
 
 import java.util.List;
 
-import org.connectopensource.interopgui.dataobject.EndpointInfo;
+import org.connectopensource.interopgui.view.Endpoint;
 
 /**
  * @author msw
@@ -13,8 +13,9 @@ import org.connectopensource.interopgui.dataobject.EndpointInfo;
  */
 public interface EndpointService {
     
-    public void saveEndpoint(EndpointInfo endpoint);
-    public List<EndpointInfo> getEndpoints(String homeCommunityId);
-    public List<EndpointInfo> getAllEndpoints();
+    public void saveEndpoint(Endpoint endpoint);
+    public void saveEndpoints(List<Endpoint> endpoints);
+    public List<Endpoint> getEndpoints(String homeCommunityId);
+    public List<Endpoint> getAllEndpoints();
 
 }

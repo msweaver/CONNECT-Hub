@@ -54,6 +54,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMWriter;
 import org.connectopensource.interopgui.PropertiesHolder;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
+import org.connectopensource.interopgui.view.Certificate;
 
 /**
  * Implementation of {@link CertificateService} that relies on JCE libraries.
@@ -72,7 +73,7 @@ public class JceCertificateService implements CertificateService {
      * {@inheritDoc}
      */
     @Override
-    public void trustCertificate(CertificateInfo certInfo) {
+    public void trustCertificate(Certificate certInfo) {
         try {
             X509Certificate x509Cert = createX509Cert(certInfo.getPathToCert().getPath());
             JceTrustStoreManager.getInstance().addTrustedCert(x509Cert, certInfo.getAlias());
@@ -86,7 +87,7 @@ public class JceCertificateService implements CertificateService {
      * {@inheritDoc}
      */
     @Override
-    public CertificateInfo signCertificate(CertificateInfo certInfo) {
+    public CertificateInfo signCertificate(Certificate certInfo) {
         
         CertificateInfo signedCertInfo = null;
         try {

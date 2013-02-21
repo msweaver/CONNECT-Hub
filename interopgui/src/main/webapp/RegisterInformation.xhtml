@@ -3,36 +3,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
-<title>Insert title here</title>
+<title>Register Information</title>
 </head>
 <body xmlns:v="http://java.sun.com/jsf/composite/view">
-Welcome to the CONNECT Interoperability Showcase Information Registration Page. Please enter your information below.
+    Welcome to the CONNECT Interoperability Showcase Information Registration Page. Please enter your information below.
 
-<h:form>
+    <h:form>
 HCID:<h:inputText id="hcid" value="#{register.hcid}" />
-<v:Endpoint specVersionPrompt="PD Version:" endpointPrompt="PD Endpoint:" value="#{register.PDEndpoint}" />
-<v:Endpoint specVersionPrompt="DQ Version:" endpointPrompt="DQ Endpoint:" value="#{register.DQEndpoint}" />
-<v:Endpoint specVersionPrompt="DR Version:" endpointPrompt="DR Endpoint:" value="#{register.DREndpoint}" />
-<v:Endpoint specVersionPrompt="DS Version:" endpointPrompt="DS Endpoint:" value="#{register.DSEndpoint}" />
-<v:Endpoint specVersionPrompt="AD Version:" endpointPrompt="AD Endpoint:" value="#{register.ADEndpoint}" />
-<!-- Certificates
-<h:panelGroup>
-<h:selectOneListbox></h:selectOneListbox>Path:<h:textInput></h:textInput> Need browse button here.
-</h:panelGroup>
-Demographics
-<h:panelGroup>
-First Name:<h:inputText value="#{register.firstName }" />Last Name:<h:inputText value="#{register.lastName }" />
-<br>
-DoB:<h:inputText value="#{register.doB }" />Gender:<h:inputText value="#{register.gender }" />
-</h:panelGroup>
-Documents
-<h:panelGroup>Document Unique Id<h:inputText value="#{register.documentUniqueId }" />Document Type:<h:inputText value="#{register.documentType }" />
-<br>
-Comments:<h:inputText value="#{register.documentComment }" />
-</h:panelGroup>
--->
-<h:commandButton value="Submit" action="#{register.saveInfo}"/>
-
-</h:form>
+        <v:Endpoint specVersionPrompt="PD Version:" endpointPrompt="PD Endpoint:" value="#{register.endpoint}" spec="PATIENT_DISCOVERY" />
+        <v:Endpoint specVersionPrompt="DQ Version:" endpointPrompt="DQ Endpoint:" value="#{register.endpoint}" spec="DOCUMENT_QUERY" />
+        <v:Endpoint specVersionPrompt="DR Version:" endpointPrompt="DR Endpoint:" value="#{register.endpoint}" spec="DOCUMENT_RETRIEVE" />
+        <v:Endpoint specVersionPrompt="DS Version:" endpointPrompt="DS Endpoint:" value="#{register.endpoint}" spec="DOCUMENT_SUBMISSION" />
+        <v:Endpoint specVersionPrompt="AD Version:" endpointPrompt="AD Endpoint:" value="#{register.endpoint}" spec="ADMINISTRATIVE_DISTRIBUTION" />
+        <v:Certificate value="#{register.certificate}" />
+        <v:Patient firstNamePrompt="First Name:" lastNamePrompt="Last Name:" dobPrompt="Date of Birth (MM-DD-YYYY):"
+            genderPrompt="Gender:" value="#{register.demographics}" />
+        <v:Document docIdPrompt="Document Id:" documentTypePrompt="Document Type:" commentPrompt="Comment:" value="#{register.document}" />
+        <h:commandButton value="Submit" action="#{register.saveInfo}" />
+    </h:form>
 </body>
 </html>

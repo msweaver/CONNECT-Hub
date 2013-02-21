@@ -40,7 +40,8 @@ public class PropertiesHolder {
     private static Properties props;
     static {
         props = new Properties();
-        URL url = ClassLoader.getSystemResource(FILEPATH);
+        //URL url = ClassLoader.getSystemResource(FILEPATH);
+        URL url = PropertiesHolder.class.getClassLoader().getResource(FILEPATH);
         try {
             props.load(url.openStream());
         } catch (IOException e) {
