@@ -108,7 +108,7 @@ body {
                     <f:facet name="header">
                         <h:outputText value="Details" />
                     </f:facet>
-                    <h:commandButton value="Details" action="RegisterInformation?faces-direct=true" />
+                    <h:commandButton value="Details" action="#{listBean.showDetails(org.id)}" />
                 </h:column>
             </h:dataTable>
         </h:form>
