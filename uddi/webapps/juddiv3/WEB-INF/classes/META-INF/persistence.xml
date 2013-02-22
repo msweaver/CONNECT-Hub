@@ -60,8 +60,9 @@
       <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(SchemaAction='add')"/>
       <property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO"/>
       <property name="openjpa.jdbc.UpdateManager" value="operation-order"/>
-      <property name="openjpa.jdbc.DBDictionary" value="derby"/>
+      <property name="openjpa.jdbc.DBDictionary" value="mysql"/>
       <property name="openjpa.RuntimeUnenhancedClasses" value="warn"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
     </properties>
   </persistence-unit>
 </persistence>
