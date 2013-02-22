@@ -32,17 +32,13 @@ public class Register {
     
     private Certificate certificate = null;
 
-    private Patient demographics = null;
-    
-    private Document doc = null;
+    private PatientInfo demographics = null;    
+    private DocumentInfo doc = null;
     
     public Register() {        
-        endpoints = new ArrayList<Endpoint>();
-        
-        certificate = new CertificateImpl();
-        
-        demographics = new PatientInfo();
-        
+        endpoints = new ArrayList<Endpoint>();        
+        certificate = new CertificateImpl();        
+        demographics = new PatientInfo();       
         doc = new DocumentInfo();
     }
     
@@ -92,7 +88,10 @@ public class Register {
      * @param demographics the demographics to set
      */
     public void setDemographics(Patient demographics) {
-        this.demographics = demographics;
+        this.demographics.setFirstName(demographics.getFirstName());
+        this.demographics.setLastName(demographics.getLastName());
+        this.demographics.setGender(demographics.getGender());
+        this.demographics.setDateOfBirth(demographics.getDateOfBirth());
     }
     /**
      * @return the document
@@ -104,15 +103,14 @@ public class Register {
      * @param document the document to set
      */
     public void setDocument(Document document) {
-        this.doc = document;
+        this.doc.setDocumentId(document.getDocumentId());
+        this.doc.setDocumentType(document.getDocumentType());
+        this.doc.setComment(document.getComment());
     }
     
     public String saveInfo() {
         System.out.println("saveInfo, hcid: " + hcid);
-        
-        System.out.println("saveInfo, cert type:" + certificate.getCertType());
-        System.out.println("saveInfo, cert path:" + certificate.getPathToCert());
-        
+                
         System.out.println("saveInfo, first name:" + demographics.getFirstName());
         System.out.println("saveInfo, last name:" + demographics.getLastName());
         System.out.println("saveInfo, dob:" + demographics.getDateOfBirth());

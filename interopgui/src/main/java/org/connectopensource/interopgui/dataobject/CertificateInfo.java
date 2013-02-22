@@ -1,20 +1,25 @@
 package org.connectopensource.interopgui.dataobject;
 
 import java.io.IOException;
-import java.net.URI;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
+
+import org.connectopensource.interopgui.services.CertificateServiceException;
 import org.connectopensource.interopgui.view.Certificate;
 
 /**
  * @author msw
  *
  */
+@Embeddable 
 public class CertificateInfo {
     
-    private URI pathToCert;
-    private URI pathToResult;
     private Certificate.CertificateType certType;
-    private byte[] uploadedCert;
+    private byte[] certBytes;
     private String alias;
     
     /**
@@ -24,31 +29,20 @@ public class CertificateInfo {
         this.alias = String.valueOf(System.currentTimeMillis());
     }
     
-    public CertificateInfo(Certificate cert) throws IOException {
+    public CertificateInfo(Certificate cert) {
         this.alias = String.valueOf(System.currentTimeMillis());
         this.certType = cert.getCertType();
-        this.pathToCert = cert.getPathToCert();
-        this.pathToResult = cert.getPathToResult();
-        this.uploadedCert = cert.getFile().getBytes();
-    }
-
-    /**
-     * @return the pathToCert
-     */
-    public URI getPathToCert() {
-        return pathToCert;
-    }
-    
-    /**
-     * @param pathToCert the pathToCert to set
-     */
-    public void setPathToCert(URI pathToCert) {
-        this.pathToCert = pathToCert;
+        try {
+            this.certBytes = cert.getFile().getBytes();
+        } catch (IOException e) { 
+            throw new CertificateServiceException("Error getting bytes from UploadedFile.", e);
+        }
     }
 
     /**
      * @return the alias
      */
+    @Column(name = "alias")
     public String getAlias() {
         return alias;
     }
@@ -63,34 +57,24 @@ public class CertificateInfo {
     /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Certificate#getFile()
      */
-    public byte[] getUploadedCert() {
-        return uploadedCert;
+    @Lob
+    @Column(name = "cert")
+    public byte[] getCertBytes() {
+        return certBytes;
     }
 
     /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Certificate#setFile(org.apache.myfaces.custom.fileupload.UploadedFile)
      */
-    public void setUploadedCert(byte[] uploadedCert) {
-        this.uploadedCert = uploadedCert;
-    }
-
-    /* (non-Javadoc)
-     * @see org.connectopensource.interopgui.view.Certificate#getPathToResult()
-     */
-    public URI getPathToResult() {
-        return pathToResult;
-    }
-
-    /* (non-Javadoc)
-     * @see org.connectopensource.interopgui.view.Certificate#setPathToResult(java.net.URI)
-     */
-    public void setPathToResult(URI pathToResult) {
-        this.pathToResult = pathToResult;
+    public void setCertBytes(byte[] uploadedCert) {
+        this.certBytes = uploadedCert;
     }
 
     /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Certificate#getCertType()
      */
+    @Column(name="certtype")
+    @Enumerated(EnumType.STRING)
     public Certificate.CertificateType getCertType() {
         return certType;
     }
@@ -101,4 +85,5 @@ public class CertificateInfo {
     public void setCertType(Certificate.CertificateType certType) {
         this.certType = certType;
     }
+
 }

@@ -6,7 +6,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <changeSet id="2" author="mlandis">    
+    <changeSet id="1" author="mlandis">    
         <createTable tableName="orginfo">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -14,10 +14,13 @@
             <column name="hcid" type="varchar(32)">
                 <constraints nullable="false"/>
             </column>
-            <column name="cert" type="CLOB">
+            <column name="cert" type="BLOB">
                 <constraints nullable="false"/>
             </column>
-             <column name="certtype" type="varchar(32)">
+            <column name="certtype" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="alias" type="varchar(128)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

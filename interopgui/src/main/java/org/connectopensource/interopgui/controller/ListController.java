@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.services.DataService;
-import org.connectopensource.interopgui.view.Certificate;
 import org.connectopensource.interopgui.view.OrganizationSummary;
 import org.connectopensource.interopgui.view.impl.OrganizationSummaryImpl;
 
