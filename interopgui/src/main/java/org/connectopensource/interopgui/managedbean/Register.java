@@ -3,7 +3,6 @@
  */
 package org.connectopensource.interopgui.managedbean;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,6 +131,6 @@ public class Register {
         
         RegisterImpl impl = new RegisterImpl();
         impl.saveInfo(hcid, certificate, doc, endpoints, demographics);
-        return "";
+        return "ListInformation?faces-direct=true";
     }
 }
