@@ -29,3 +29,5 @@ ivy-project-cache/
 target/
 CheckstyleReport/
 MANIFEST.MF
+.settings/
+.settings/org.eclipse.wst.common.component

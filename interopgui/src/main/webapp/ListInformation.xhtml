@@ -41,68 +41,77 @@ body {
 
         <h1>CONNECT GUI</h1>
         <p>Welcome to the CONNECT Interoperability Showcase Information Display Page.</p>
-        <h:dataTable value="#{listBean.orgSummaries}" var="org" class="table table-hover">
-            <h:column rendered="false">
-                <f:facet name="header">
-                    <h:outputText value="ID" />
-                </f:facet>
-                <h:outputText value="#{org.id}" />
-            </h:column>
+        <h:form class="form-horizontal">
+            <h:dataTable value="#{listBean.orgSummaries}" var="org" class="table table-hover">
+                <h:column rendered="false">
+                    <f:facet name="header">
+                        <h:outputText value="ID" />
+                    </f:facet>
+                    <h:outputText value="#{org.id}" />
+                </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="HCID" />
-                </f:facet>
-                <h:outputText value="#{org.hcid}" />
-            </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="HCID" />
+                    </f:facet>
+                    <h:outputText value="#{org.hcid}" />
+                </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Org Name" />
-                </f:facet>
-                <h:outputText value="#{org.organizationName}" />
-            </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Org Name" />
+                    </f:facet>
+                    <h:outputText value="#{org.organizationName}" />
+                </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Trusted By CONNECT CA?" />
-                </f:facet>
-                <h:panelGroup rendered="#{org.hasSignedCert}">
-                    <i class="icon-ok" />
-                </h:panelGroup>
-                <h:panelGroup rendered="#{!org.hasSignedCert}">
-                    <i class="icon-remove" />
-                </h:panelGroup>
-            </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Trusted By CONNECT CA?" />
+                    </f:facet>
+                    <h:panelGroup rendered="#{org.hasSignedCert}">
+                        <i class="icon-ok" />
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{!org.hasSignedCert}">
+                        <i class="icon-remove" />
+                    </h:panelGroup>
+                </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Exchange Endpoints" />
-                </f:facet>
-                <h:outputText value="#{org.countExchangeEndpoints}" />
-            </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Exchange Endpoints" />
+                    </f:facet>
+                    <h:outputText value="#{org.countExchangeEndpoints}" />
+                </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Direct Endpoints" />
-                </f:facet>
-                <h:outputText value="#{org.countDirectEndpoints}" />
-            </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Direct Endpoints" />
+                    </f:facet>
+                    <h:outputText value="#{org.countDirectEndpoints}" />
+                </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Patients" />
-                </f:facet>
-                <h:outputText value="#{org.countPatients}" />
-            </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Patients" />
+                    </f:facet>
+                    <h:outputText value="#{org.countPatients}" />
+                </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Documents" />
-                </f:facet>
-                <h:outputText value="#{org.countDocuments}" />
-            </h:column>
-        </h:dataTable>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Documents" />
+                    </f:facet>
+                    <h:outputText value="#{org.countDocuments}" />
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Details" />
+                    </f:facet>
+                    <h:commandButton value="Details" action="RegisterInformation?faces-direct=true" />
+                </h:column>
+            </h:dataTable>
+        </h:form>
     </div>
     <script src="/js/jquery.js"></script>
 </h:body>
