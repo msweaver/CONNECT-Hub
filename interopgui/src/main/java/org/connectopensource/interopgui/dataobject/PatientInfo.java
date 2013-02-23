@@ -5,28 +5,61 @@ package org.connectopensource.interopgui.dataobject;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import org.connectopensource.interopgui.view.Patient;
 
 /**
  * @author msw
- *
  */
+@Entity
+@Table(name="patient")
 public class PatientInfo implements Patient {
     
-    public enum Gender { MALE, FEMALE, UNKNOWN }
-    
+    private Long id;
     private String firstName;
     private String lastName;
     private Date dateOfBirth;
     private Gender gender;
+    private OrganizationInfo organizationInfo;
+
     
+    @Transient
     public Gender[] getGenders() {
         return Gender.values();
     }
     
     /**
+     * @return the id
+     */
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)    
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
      * @return the firstName
      */
+    @Column(name = "first")
     public String getFirstName() {
         return firstName;
     }
@@ -39,6 +72,7 @@ public class PatientInfo implements Patient {
     /**
      * @return the lastName
      */
+    @Column(name = "last")
     public String getLastName() {
         return lastName;
     }
@@ -51,6 +85,7 @@ public class PatientInfo implements Patient {
     /**
      * @return the dateOfBirth
      */
+    @Column(name = "dob")
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
@@ -63,6 +98,8 @@ public class PatientInfo implements Patient {
     /**
      * @return the gender
      */
+    @Column(name="gender")
+    @Enumerated(EnumType.STRING)
     public Gender getGender() {
         return gender;
     }
@@ -72,4 +109,20 @@ public class PatientInfo implements Patient {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
+    
+    /**
+     * @return the organizationInfo
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orginfo_id", nullable = false)
+    public OrganizationInfo getOrganizationInfo() {
+        return organizationInfo;
+    }
+    /**
+     * @param organizationInfo the organizationInfo to set
+     */
+    public void setOrganizationInfo(OrganizationInfo organizationInfo) {
+        this.organizationInfo = organizationInfo;
+    }
+
 }
