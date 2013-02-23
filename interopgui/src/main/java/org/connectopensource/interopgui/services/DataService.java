@@ -33,5 +33,5 @@ public interface DataService {
      * @param Id
      * @return list of organization info matching an id.
      */
-    public List<OrganizationInfo> getData(String Id);
+    public OrganizationInfo getData(String id);
 }

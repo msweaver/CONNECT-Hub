@@ -11,13 +11,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.StringUtils;
-import org.connectopensource.interopgui.controller.RegisterImpl;
+import org.connectopensource.interopgui.controller.RegisterController;
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.EndpointInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.view.Certificate;
 import org.connectopensource.interopgui.view.Document;
 import org.connectopensource.interopgui.view.Endpoint;
+import org.connectopensource.interopgui.view.Organization;
 import org.connectopensource.interopgui.view.Patient;
 import org.connectopensource.interopgui.view.impl.CertificateImpl;
 
@@ -32,6 +33,7 @@ public class Register {
         CERT_REQ, CERT_TO_TRUST
     }
 
+    private String orgId = null;
     private String hcid = null;
     private String orgName = null;
 
@@ -55,7 +57,6 @@ public class Register {
      * 
      */
     private void loadDetail() {
-        String orgId = StringUtils.EMPTY;
         Map<String, Object> sessionMap = null;
         
         try {
@@ -66,7 +67,8 @@ public class Register {
             e.printStackTrace();
         }
 
-        if (!StringUtils.EMPTY.equals(orgId)) {
+        if (!StringUtils.isBlank(orgId)) {
+            System.out.println("OrgId:" + orgId + ":");
             loadOrganization(orgId);
             sessionMap.put("organizationId", StringUtils.EMPTY);
         }
@@ -77,7 +79,17 @@ public class Register {
      */
     private void loadOrganization(String orgId) {
         // TODO Auto-generated method stub
-
+        RegisterController controller = new RegisterController();
+        Organization org = controller.retrieveOrganization(orgId);
+        
+        orgId = org.getOrgId();
+        hcid = org.getHCID();
+        orgName = org.getOrgName();
+        
+        endpoints = org.getEndpoints();       
+        certificate = org.getCertificate();        
+        demographics = org.getPatients();
+        doc = org.getDocuments();
     }
 
     /**
@@ -177,8 +189,9 @@ public class Register {
             e.printStackTrace();
         }
 
-        RegisterImpl impl = new RegisterImpl();
+        RegisterController impl = new RegisterController();
         impl.saveInfo(hcid, orgName, certificate, doc, endpoints, demographics);
+        
         return "ListInformation?faces-direct=true";
     }
 }

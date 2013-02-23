@@ -3,6 +3,7 @@ package org.connectopensource.interopgui.view.impl;
 import java.net.URI;
 
 import org.apache.myfaces.custom.fileupload.UploadedFile;
+import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.connectopensource.interopgui.view.Certificate;
 
 /**
@@ -28,6 +29,15 @@ public class CertificateImpl implements Certificate {
     public CertificateImpl() {
         super();
         this.alias = String.valueOf(System.currentTimeMillis());
+    }
+
+    /**
+     * @param certInfo
+     */
+    public CertificateImpl(CertificateInfo certInfo) {
+        alias = certInfo.getAlias();
+        //TODO: certInfo.getCertBytes();
+        certType = certInfo.getCertType();
     }
 
     /**
