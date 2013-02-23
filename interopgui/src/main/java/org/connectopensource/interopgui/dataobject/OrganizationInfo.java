@@ -3,13 +3,15 @@
  */
 package org.connectopensource.interopgui.dataobject;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,8 +27,9 @@ public class OrganizationInfo {
     
     Long id;
     String homeCommunityId;        
-    List<PatientInfo> patients;
-    List<DocumentInfo> documents;
+    String orgName;
+    Set<PatientInfo> patients;
+    Set<DocumentInfo> documents;
     CertificateInfo certInfo;
     
     /**
@@ -46,20 +49,21 @@ public class OrganizationInfo {
     }
 
     public OrganizationInfo() {
-        patients = new ArrayList<PatientInfo>();
-        documents = new ArrayList<DocumentInfo>();
+        patients = new HashSet<PatientInfo>();
+        documents = new HashSet<DocumentInfo>();
     }
 
-    public OrganizationInfo(String homeCommunityId, CertificateInfo certInfo, List<PatientInfo> patients,
-            List<DocumentInfo> documents) {
+    public OrganizationInfo(String homeCommunityId, String orgName, CertificateInfo certInfo,
+            List<PatientInfo> patients, List<DocumentInfo> documents) {
 
         this.homeCommunityId = homeCommunityId;
+        this.orgName = orgName;
         this.certInfo = certInfo;
-        
-        this.patients = new ArrayList<PatientInfo>();
+
+        this.patients = new HashSet<PatientInfo>();
         this.patients.addAll(patients);
-        
-        this.documents = new ArrayList<DocumentInfo>();
+
+        this.documents = new HashSet<DocumentInfo>();
         this.documents.addAll(documents);
     }
 
@@ -76,6 +80,21 @@ public class OrganizationInfo {
      */
     public void setHomeCommunityId(String homeCommunityId) {
         this.homeCommunityId = homeCommunityId;
+    }
+
+    /**
+     * @return the orgName
+     */
+    @Column(name = "orgname")
+    public String getOrgName() {
+        return orgName;
+    }
+
+    /**
+     * @param orgName the orgName to set
+     */
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 
     /**
@@ -96,33 +115,31 @@ public class OrganizationInfo {
     /**
      * @return the patients
      */
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo")
-    public List<PatientInfo> getPatients() {
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)    
+    public Set<PatientInfo> getPatients() {
         return patients;
-    }
-
-    /**
-     * @return the documents
-     */
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo")
-    public List<DocumentInfo> getDocuments() {
-        return documents;
     }
 
     /**
      * @param patients the patients to set
      */
-    public void setPatients(List<PatientInfo> patients) {
+    public void setPatients(Set<PatientInfo> patients) {
         this.patients = patients;
+    }
+
+    /**
+     * @return the documents
+     */
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)
+    public Set<DocumentInfo> getDocuments() {
+        return documents;
     }
 
     /**
      * @param documents the documents to set
      */
-    public void setDocuments(List<DocumentInfo> documents) {
+    public void setDocuments(Set<DocumentInfo> documents) {
         this.documents = documents;
     }
-    
-    
 
 }
