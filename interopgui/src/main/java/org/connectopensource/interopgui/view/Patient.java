@@ -5,7 +5,7 @@ package org.connectopensource.interopgui.view;
 
 import java.util.Date;
 
-import org.connectopensource.interopgui.dataobject.PatientInfo.Gender;
+import org.connectopensource.interopgui.dataobject.Gender;
 
 /**
  * @author msw
