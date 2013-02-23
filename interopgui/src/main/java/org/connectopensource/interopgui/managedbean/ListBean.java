@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 
 import org.connectopensource.interopgui.controller.ListController;
 import org.connectopensource.interopgui.view.OrganizationSummary;
@@ -29,6 +30,13 @@ public class ListBean {
             orgSummaries = populateOrgSummaries();
         }
         return orgSummaries;
+    }
+    
+    public String showDetails(String Id) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().put("organizationId", Id);
+        
+        return "RegisterInformation?faces-direct=true";
     }
 
     private List<OrganizationSummary> populateOrgSummaries() {

@@ -27,6 +27,11 @@ public interface DataService {
      * @param homeCommunityId
      * @return list of organization info matching a home community.
      */
-    public List<OrganizationInfo> getData(String homeCommunityId);
-
+    public List<OrganizationInfo> getDataByHCID(String homeCommunityId);
+    
+    /**
+     * @param Id
+     * @return list of organization info matching an id.
+     */
+    public List<OrganizationInfo> getData(String Id);
 }

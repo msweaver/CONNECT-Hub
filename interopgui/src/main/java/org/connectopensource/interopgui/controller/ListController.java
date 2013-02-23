@@ -40,7 +40,7 @@ public class ListController {
         impl1.setCountDocuments("1");
         impl1.setHcid("2.2");
         impl1.setHasSignedCert(true);
-        impl1.setId(0);
+        impl1.setId(1);
         impl1.setOrganizationName("CGI");
         orgSummaries.add(impl1);
         
@@ -49,7 +49,7 @@ public class ListController {
         impl2.setCountDocuments("1");
         impl2.setHcid("6.6.6");
         impl2.setHasSignedCert(false);
-        impl2.setId(0);
+        impl2.setId(666);
         impl2.setOrganizationName("DIL DIL DIL DIL DIL DIL DIL DIL");
         orgSummaries.add(impl2);
         

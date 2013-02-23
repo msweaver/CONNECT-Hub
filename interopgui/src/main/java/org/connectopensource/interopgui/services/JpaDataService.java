@@ -83,6 +83,15 @@ public class JpaDataService implements DataService {
     public List<OrganizationInfo> getData(String homeCommunityId) {
         throw new UnsupportedOperationException();
     }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.services.DataService#getDataByHCID(java.lang.String)
+     */
+    @Override
+    public List<OrganizationInfo> getDataByHCID(String homeCommunityId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
      
     
 }
