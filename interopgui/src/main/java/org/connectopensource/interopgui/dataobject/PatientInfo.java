@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.connectopensource.interopgui.view.Patient;
@@ -86,6 +88,7 @@ public class PatientInfo implements Patient {
      * @return the dateOfBirth
      */
     @Column(name = "dob")
+    @Temporal(TemporalType.DATE)
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
