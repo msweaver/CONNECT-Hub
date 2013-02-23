@@ -71,7 +71,8 @@ public class RegisterImpl {
         if (cert.getCertType() == CertificateType.CERT) {
             service.trustCertificate(certInfo);            
         } else if (cert.getCertType() == CertificateType.CERT_REQ) {
-            service.signCertificate(certInfo);                        
+            CertificateInfo signedCert = service.signCertificate(certInfo);
+            certInfo.setCertBytes(signedCert.getCertBytes());
         } 
     }
 

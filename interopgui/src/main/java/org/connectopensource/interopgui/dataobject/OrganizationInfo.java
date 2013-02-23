@@ -6,6 +6,7 @@ package org.connectopensource.interopgui.dataobject;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -95,7 +96,7 @@ public class OrganizationInfo {
     /**
      * @return the patients
      */
-    @OneToMany(mappedBy="organizationInfo")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo")
     public List<PatientInfo> getPatients() {
         return patients;
     }
@@ -103,7 +104,7 @@ public class OrganizationInfo {
     /**
      * @return the documents
      */
-    @OneToMany(mappedBy="organizationInfo")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo")
     public List<DocumentInfo> getDocuments() {
         return documents;
     }
