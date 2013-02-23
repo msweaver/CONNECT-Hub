@@ -96,6 +96,12 @@ public class RegisterController {
         OrganizationInfo orgInfo = retrieveOrgInfo(orgId);
         Organization orgView = new OrganizationImpl();
         
+        System.out.println("hcid: " + orgInfo.getHomeCommunityId());
+        System.out.println("orgname: " + orgInfo.getOrgName());
+        orgView.setHCID(orgInfo.getHomeCommunityId());
+        orgView.setOrgName(orgInfo.getOrgName());
+        orgView.setOrgId(orgInfo.getId().toString());
+        
         CertificateInfo certInfo = orgInfo.getCertInfo();
         Certificate cert = new CertificateImpl(certInfo);
         orgView.setCertificate(cert);

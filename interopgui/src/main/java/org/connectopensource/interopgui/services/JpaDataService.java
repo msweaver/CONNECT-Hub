@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.jpa.AbstractJpaTemplate;
@@ -80,8 +81,24 @@ public class JpaDataService implements DataService {
      * {@inheritDoc}
      */
     @Override
-    public OrganizationInfo getData(String id) {
-        throw new UnsupportedOperationException();
+    public OrganizationInfo getData(final String id) {
+        try {
+            final Long lid = Long.valueOf(id);
+            AbstractJpaTemplate<OrganizationInfo> jpa = new AbstractJpaTemplate<OrganizationInfo>() {
+                @Override
+                protected List<OrganizationInfo> execute(EntityManager entityManager) {
+                    TypedQuery<OrganizationInfo> query = entityManager.createQuery("from OrganizationInfo where id = :id", OrganizationInfo.class);
+                    query.setParameter("id", lid);
+                    return query.getResultList(); 
+                }            
+            };
+            List<OrganizationInfo> results = jpa.execute();
+            
+            //there should only be one result
+            return results.get(0);
+        } catch (Exception e) {
+            throw new DataServiceException("Error while retrieving org info.", e);
+        }
     }
 
     /* (non-Javadoc)

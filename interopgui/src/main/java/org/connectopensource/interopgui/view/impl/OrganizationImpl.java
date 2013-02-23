@@ -20,6 +20,9 @@ public class OrganizationImpl implements Organization {
 
     private List<Endpoint> endpoints = null;
     private Certificate cert = null;
+    private String orgName = null;
+    private String hcid = null;
+    private String orgId = null;
     
     /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Organization#getEndpoints()
@@ -82,6 +85,54 @@ public class OrganizationImpl implements Organization {
     public void setPatients(PatientInfo patient) {
         // TODO Auto-generated method stub
 
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Organization#getHCID()
+     */
+    @Override
+    public String getHCID() {
+        return hcid;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Organization#setHCID(java.lang.String)
+     */
+    @Override
+    public void setHCID(String homeCommunityId) {
+        this.hcid = homeCommunityId;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Organization#getOrgName()
+     */
+    @Override
+    public String getOrgName() {
+        return orgName;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Organization#setOrgName(java.lang.String)
+     */
+    @Override
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;       
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Organization#getOrgId()
+     */
+    @Override
+    public String getOrgId() {
+        return orgId;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Organization#setOrgId(java.lang.String)
+     */
+    @Override
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
 }

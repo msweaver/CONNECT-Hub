@@ -33,6 +33,7 @@ public class Register {
         CERT_REQ, CERT_TO_TRUST
     }
 
+    private String orgId = null;
     private String hcid = null;
     private String orgName = null;
 
@@ -56,7 +57,6 @@ public class Register {
      * 
      */
     private void loadDetail() {
-        String orgId = StringUtils.EMPTY;
         Map<String, Object> sessionMap = null;
         
         try {
@@ -67,7 +67,8 @@ public class Register {
             e.printStackTrace();
         }
 
-        if (!StringUtils.EMPTY.equals(orgId)) {
+        if (!StringUtils.isBlank(orgId)) {
+            System.out.println("OrgId:" + orgId + ":");
             loadOrganization(orgId);
             sessionMap.put("organizationId", StringUtils.EMPTY);
         }
@@ -80,6 +81,10 @@ public class Register {
         // TODO Auto-generated method stub
         RegisterController controller = new RegisterController();
         Organization org = controller.retrieveOrganization(orgId);
+        
+        orgId = org.getOrgId();
+        hcid = org.getHCID();
+        orgName = org.getOrgName();
         
         endpoints = org.getEndpoints();       
         certificate = org.getCertificate();        
