@@ -26,7 +26,8 @@ import org.connectopensource.interopgui.view.Endpoint;
  */
 public class RegisterImpl {
 
-    public void saveInfo(String hcid, Certificate cert, DocumentInfo doc, List<Endpoint> endpoints, PatientInfo patient) {
+    public void saveInfo(String hcid, String orgName, Certificate cert, DocumentInfo doc, List<Endpoint> endpoints,
+            PatientInfo patient) {
 
         List<DocumentInfo> documents = new ArrayList<DocumentInfo>();
         documents.add(doc);
@@ -34,7 +35,7 @@ public class RegisterImpl {
         patients.add(patient);
         
         CertificateInfo certInfo = new CertificateInfo(cert);
-        OrganizationInfo org = new OrganizationInfo(hcid, certInfo, patients, documents);        
+        OrganizationInfo org = new OrganizationInfo(hcid, orgName, certInfo, patients, documents);        
         
         // set the org info on the patient and document data so they are also persisted...
         doc.setOrganizationInfo(org);

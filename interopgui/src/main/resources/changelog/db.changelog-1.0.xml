@@ -11,6 +11,9 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="orgname" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
             <column name="hcid" type="varchar(32)">
                 <constraints nullable="false"/>
             </column>

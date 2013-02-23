@@ -116,7 +116,7 @@ public class PatientInfo implements Patient {
     /**
      * @return the organizationInfo
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "orginfo_id", nullable = false)
     public OrganizationInfo getOrganizationInfo() {
         return organizationInfo;

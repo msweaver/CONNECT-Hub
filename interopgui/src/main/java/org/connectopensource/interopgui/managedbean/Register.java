@@ -33,6 +33,7 @@ public class Register {
     }
 
     private String hcid = null;
+    private String orgName = null;
 
     private List<Endpoint> endpoints = null;
 
@@ -91,6 +92,20 @@ public class Register {
      */
     public void setHcid(String hcid) {
         this.hcid = hcid;
+    }
+
+    /**
+     * @return the orgName
+     */
+    public String getOrgName() {
+        return orgName;
+    }
+
+    /**
+     * @param orgName the orgName to set
+     */
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 
     /**
@@ -163,7 +178,7 @@ public class Register {
         }
 
         RegisterImpl impl = new RegisterImpl();
-        impl.saveInfo(hcid, certificate, doc, endpoints, demographics);
+        impl.saveInfo(hcid, orgName, certificate, doc, endpoints, demographics);
         return "ListInformation?faces-direct=true";
     }
 }
