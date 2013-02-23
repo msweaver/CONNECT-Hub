@@ -19,12 +19,15 @@ import org.connectopensource.interopgui.services.JpaDataService;
 import org.connectopensource.interopgui.view.Certificate;
 import org.connectopensource.interopgui.view.Certificate.CertificateType;
 import org.connectopensource.interopgui.view.Endpoint;
+import org.connectopensource.interopgui.view.Organization;
+import org.connectopensource.interopgui.view.impl.CertificateImpl;
+import org.connectopensource.interopgui.view.impl.OrganizationImpl;
 
 /**
  * @author msw
  *
  */
-public class RegisterImpl {
+public class RegisterController {
 
     public void saveInfo(String hcid, String orgName, Certificate cert, DocumentInfo doc, List<Endpoint> endpoints,
             PatientInfo patient) {
@@ -83,5 +86,35 @@ public class RegisterImpl {
     private void saveOrganization(OrganizationInfo org) {
         DataService service = new JpaDataService();
         service.saveData(org);
+    }
+
+    /**
+     * @param orgId
+     * @return
+     */
+    public Organization retrieveOrganization(String orgId) {
+        OrganizationInfo orgInfo = retrieveOrgInfo(orgId);
+        Organization orgView = new OrganizationImpl();
+        
+        CertificateInfo certInfo = orgInfo.getCertInfo();
+        Certificate cert = new CertificateImpl(certInfo);
+        orgView.setCertificate(cert);
+        
+        // TODO: populate patients
+        
+        // TODO: populate endpoints
+        
+        // TODO: populate documents
+        
+        return orgView;
+    }
+
+    /**
+     * @param orgId
+     * @return
+     */
+    private OrganizationInfo retrieveOrgInfo(String orgId) {
+        DataService service = new JpaDataService();
+        return service.getData(orgId);
     }
 }

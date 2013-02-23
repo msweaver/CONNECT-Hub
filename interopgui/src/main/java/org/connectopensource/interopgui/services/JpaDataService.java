@@ -80,7 +80,7 @@ public class JpaDataService implements DataService {
      * {@inheritDoc}
      */
     @Override
-    public List<OrganizationInfo> getData(String homeCommunityId) {
+    public OrganizationInfo getData(String id) {
         throw new UnsupportedOperationException();
     }
 
