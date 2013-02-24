@@ -1,118 +1,95 @@
 <?xml version="1.0" encoding="US-ASCII" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
     <title>Register Information</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <h:outputStylesheet name="css/bootstrap.min.css" />
-    <style>
-body {
-	padding-top: 60px;
-	/* 60px to make the container go all the way to the bottom of the topbar */
-}
-</style>
-    <h:outputStylesheet name="css/bootstrap-responsive.min.css" />
 </h:head>
 <h:body xmlns:v="http://java.sun.com/jsf/composite/view" xmlns:f="http://java.sun.com/jsf/core">
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
+    <ui:composition template="/resources/template/layout.xhtml">
+
+        <ui:define name="content">
+
             <div class="container">
-                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-                </button>
-                <a class="brand" href="#">Project name</a>
-                <div class="nav-collapse collapse">
-                    <ul class="nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <!--/.nav-collapse -->
+
+                <h1>CONNECT Hub</h1>
+                <p>Welcome to the CONNECT Interoperability Showcase Information Display Page.</p>
+                <h:form class="form-horizontal">
+                    <h:dataTable value="#{listBean.orgSummaries}" var="org" class="table table-hover">
+                        <h:column rendered="false">
+                            <f:facet name="header">
+                                <h:outputText value="ID" />
+                            </f:facet>
+                            <h:outputText value="#{org.id}" />
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="HCID" />
+                            </f:facet>
+                            <h:outputText value="#{org.hcid}" />
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Org Name" />
+                            </f:facet>
+                            <h:outputText value="#{org.organizationName}" />
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Trusted By CONNECT CA?" />
+                            </f:facet>
+                            <h:panelGroup rendered="#{org.hasSignedCert}">
+                                <i class="icon-ok" />
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{!org.hasSignedCert}">
+                                <i class="icon-remove" />
+                            </h:panelGroup>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Exchange Endpoints" />
+                            </f:facet>
+                            <h:outputText value="#{org.countExchangeEndpoints}" />
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Direct Endpoints" />
+                            </f:facet>
+                            <h:outputText value="#{org.countDirectEndpoints}" />
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Patients" />
+                            </f:facet>
+                            <h:outputText value="#{org.countPatients}" />
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Documents" />
+                            </f:facet>
+                            <h:outputText value="#{org.countDocuments}" />
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Details" />
+                            </f:facet>
+                            <h:commandButton value="Details" action="#{listBean.showDetails(org.id)}" />
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
             </div>
-        </div>
-    </div>
+            <script src="/js/jquery.js"></script>
 
-    <div class="container">
-
-        <h1>CONNECT GUI</h1>
-        <p>Welcome to the CONNECT Interoperability Showcase Information Display Page.</p>
-        <h:form class="form-horizontal">
-            <h:dataTable value="#{listBean.orgSummaries}" var="org" class="table table-hover">
-                <h:column rendered="false">
-                    <f:facet name="header">
-                        <h:outputText value="ID" />
-                    </f:facet>
-                    <h:outputText value="#{org.id}" />
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="HCID" />
-                    </f:facet>
-                    <h:outputText value="#{org.hcid}" />
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="Org Name" />
-                    </f:facet>
-                    <h:outputText value="#{org.organizationName}" />
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="Trusted By CONNECT CA?" />
-                    </f:facet>
-                    <h:panelGroup rendered="#{org.hasSignedCert}">
-                        <i class="icon-ok" />
-                    </h:panelGroup>
-                    <h:panelGroup rendered="#{!org.hasSignedCert}">
-                        <i class="icon-remove" />
-                    </h:panelGroup>
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="Exchange Endpoints" />
-                    </f:facet>
-                    <h:outputText value="#{org.countExchangeEndpoints}" />
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="Direct Endpoints" />
-                    </f:facet>
-                    <h:outputText value="#{org.countDirectEndpoints}" />
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="Patients" />
-                    </f:facet>
-                    <h:outputText value="#{org.countPatients}" />
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="Documents" />
-                    </f:facet>
-                    <h:outputText value="#{org.countDocuments}" />
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="Details" />
-                    </f:facet>
-                    <h:commandButton value="Details" action="#{listBean.showDetails(org.id)}" />
-                </h:column>
-            </h:dataTable>
-        </h:form>
-    </div>
-    <script src="/js/jquery.js"></script>
+        </ui:define>
+    </ui:composition>
 </h:body>
 </html>
