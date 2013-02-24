@@ -41,7 +41,7 @@ public class RegisterController {
         OrganizationInfo org = new OrganizationInfo(hcid, orgName, certInfo);        
         
         try {
-            processCertificate(cert);
+            processCertificate(certInfo);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -88,14 +88,12 @@ public class RegisterController {
      * @param cert
      * @throws IOException 
      */
-    private void processCertificate(Certificate cert) throws IOException {
+    private void processCertificate(CertificateInfo certInfo) throws IOException {
 
         CertificateService service = new JceCertificateService();
-        CertificateInfo certInfo = new CertificateInfo(cert);
-        
-        if (cert.getCertType() == CertificateType.CERT) {
+        if (certInfo.getCertType() == CertificateType.CERT) {
             service.trustCertificate(certInfo);            
-        } else if (cert.getCertType() == CertificateType.CERT_REQ) {
+        } else if (certInfo.getCertType() == CertificateType.CERT_REQ) {
             CertificateInfo signedCert = service.signCertificate(certInfo);
             certInfo.setCertBytes(signedCert.getCertBytes());
         } 

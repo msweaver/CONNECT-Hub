@@ -39,7 +39,7 @@
             <h:panelGroup layout="block" rendered="#{register.orgId != ''}" >
 <!-- This has to be left-justy or whitespace will be rendered -->
 <pre>
-<h:outputText value="#{register.certificate.alias}" />]
+<h:outputText value="#{register.certificate.pemString}" />
 </pre>
             </h:panelGroup>
             <v:Certificate value="#{register.certificate}" rendered="#{register.orgId == ''}" />

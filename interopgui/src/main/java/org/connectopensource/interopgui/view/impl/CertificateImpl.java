@@ -1,5 +1,7 @@
 package org.connectopensource.interopgui.view.impl;
 
+import java.nio.charset.Charset;
+
 import org.apache.myfaces.custom.fileupload.UploadedFile;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.connectopensource.interopgui.view.Certificate;
@@ -13,7 +15,7 @@ public class CertificateImpl implements Certificate {
     private CertificateType certType;
     private UploadedFile file;
     private String alias;
-    private String certPemString;
+    private String pemString;
     
     public CertificateType[] getCertificateTypes()
     {
@@ -33,7 +35,7 @@ public class CertificateImpl implements Certificate {
      */
     public CertificateImpl(CertificateInfo certInfo) {
         alias = certInfo.getAlias();
-        //TODO: certInfo.getCertBytes();
+        pemString = new String(certInfo.getCertBytes(), Charset.forName("US-ASCII"));
         certType = certInfo.getCertType();
     }
 
@@ -82,4 +84,20 @@ public class CertificateImpl implements Certificate {
     public void setCertType(CertificateType certType) {
         this.certType = certType;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getPemString() {
+        return pemString;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPemString(String pemString) {
+        this.pemString = pemString;
+    }   
 }

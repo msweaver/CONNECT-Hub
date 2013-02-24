@@ -35,7 +35,6 @@ public class Register {
     private String orgId = StringUtils.EMPTY;
     private String hcid = null;
     private String orgName = null;
-    private String certString = null;
 
     private List<Endpoint> endpoints = null;
     private Certificate certificate = null;
