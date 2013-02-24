@@ -3,8 +3,6 @@
  */
 package org.connectopensource.interopgui.view;
 
-import java.net.URI;
-
 import org.apache.myfaces.custom.fileupload.UploadedFile;
 
 /**
@@ -24,4 +22,8 @@ public interface Certificate {
     
     public String getAlias();
     public void setAlias(String alias);
+    
+    public String getPemString();
+    public void setPemString(String pemString);
+
 }

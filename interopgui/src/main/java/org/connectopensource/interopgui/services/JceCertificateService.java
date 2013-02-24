@@ -27,9 +27,11 @@
 package org.connectopensource.interopgui.services;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -47,6 +49,7 @@ import org.apache.commons.ssl.PEMItem;
 import org.apache.commons.ssl.PEMUtil;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.openssl.PEMWriter;
 import org.connectopensource.interopgui.PropertiesHolder;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.connectopensource.interopgui.view.Certificate.CertificateType;
@@ -91,10 +94,11 @@ public class JceCertificateService implements CertificateService {
             X509Certificate signedCert = JceCsrSignedCertGenerator.sign(csr, createX509Cert(CACERT_PEM_PATH),
                     getCaPrivateKey());
 
-            // drop the signed certificate in the same spot as the original path with an addtl extension
-            signedCertInfo.setCertBytes(signedCert.getEncoded());
-            signedCertInfo.setCertType(CertificateType.CERT);
+            // drop in the new signed certificate bytes from PEM format.
+            signedCertInfo.setCertBytes(getSignedCertBytes(signedCert));
 
+            // We need to store that this is signed... even though this is not a CSR anymore, type is still CERT_REQ
+            signedCertInfo.setCertType(CertificateType.CERT_REQ);            
         } catch (Exception e) {
             throw new CertificateServiceException("Error while creating signed cert from CSR", e);
         }
@@ -182,5 +186,22 @@ public class JceCertificateService implements CertificateService {
 
         return (PEMItem) pemItems.get(0);
     }
+
+  
+    private byte[] getSignedCertBytes(X509Certificate signedCert) throws IOException {
+        ByteArrayOutputStream outputStream = null;
+        PEMWriter pemWriter = null;
+        try {
+            outputStream = new ByteArrayOutputStream();
+            pemWriter = new PEMWriter(new PrintWriter(outputStream));
+            pemWriter.writeObject(signedCert);
+            pemWriter.flush();
+            return outputStream.toByteArray();
+        } finally {
+            IOUtils.closeQuietly(pemWriter);
+            IOUtils.closeQuietly(outputStream);
+        }
+    }
+  
 
 }
