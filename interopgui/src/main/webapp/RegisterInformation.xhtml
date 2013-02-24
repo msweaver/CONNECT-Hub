@@ -1,123 +1,86 @@
 <?xml version="1.0" encoding="US-ASCII" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:h="http://java.sun.com/jsf/html">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-   <title>Register Information</title>
-   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <meta name="description" content="" />
-   <meta name="author" content="" />
-   <h:outputStylesheet name="css/bootstrap.min.css" />
-   <style>
-body {
-	padding-top: 60px;
-	/* 60px to make the container go all the way to the bottom of the topbar */
-}
-</style>
-   <h:outputStylesheet name="css/bootstrap-responsive.min.css" />
+    <title>Register Information</title>
 </h:head>
 <h:body xmlns:v="http://java.sun.com/jsf/composite/view">
 
-   <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-         <div class="container">
-            <button type="button" class="btn btn-navbar"
-               data-toggle="collapse" data-target=".nav-collapse">
-               <span class="icon-bar"></span> <span class="icon-bar"></span>
-               <span class="icon-bar"></span>
-            </button>
-            <a class="brand" href="#">CONNECT GUI</a>
-            <div class="nav-collapse collapse">
-               <ul class="nav">
-                  <li><a href="#">Home</a></li>
-                  <li class="active"><a href="/faces/RegisterInformation.xhtml">Registration</a></li>
-                  <li><a href="#contact">Contact</a></li>
-               </ul>
+    <ui:composition template="/resources/template/layout.xhtml">
+
+        <ui:define name="content">
+
+            <div class="container">
+
+                <h1>CONNECT GUI</h1>
+                <p>Welcome to the CONNECT Interoperability Showcase Information Registration Page. Please enter your
+                    information below.</p>
+
+
+                <h:form enctype="multipart/form-data" class="form-horizontal">
+                    <div class="control-group">
+                        <label class="control-label" for="hcid">HCID:</label>
+                        <div class="controls">
+                            <h:inputText id="hcid" value="#{register.hcid}" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="orgName">Organization Name:</label>
+                        <div class="controls">
+                            <h:inputText id="orgName" value="#{register.orgName}" />
+                        </div>
+                    </div>
+                    <fieldset>
+                        <legend>Patient Discovery</legend>
+                        <v:Endpoint specVersionPrompt="Version:" endpointPrompt="Endpoint:" value="#{register.endpoint}"
+                            spec="PATIENT_DISCOVERY" />
+                    </fieldset>
+                    <fieldset>
+                        <legend>Query For Documents</legend>
+                        <v:Endpoint specVersionPrompt="Version:" endpointPrompt="Endpoint:" value="#{register.endpoint}"
+                            spec="DOCUMENT_QUERY" />
+                    </fieldset>
+                    <fieldset>
+                        <legend>Document Retrieve</legend>
+
+                        <v:Endpoint specVersionPrompt="Version:" endpointPrompt="Endpoint:" value="#{register.endpoint}"
+                            spec="DOCUMENT_RETRIEVE" />
+                    </fieldset>
+                    <fieldset>
+                        <legend>Document Submission</legend>
+
+                        <v:Endpoint specVersionPrompt="Version:" endpointPrompt="Endpoint:" value="#{register.endpoint}"
+                            spec="DOCUMENT_SUBMISSION" />
+                    </fieldset>
+                    <fieldset>
+                        <legend>Administration Distribution</legend>
+
+                        <v:Endpoint specVersionPrompt="AD Version:" endpointPrompt="AD Endpoint:"
+                            value="#{register.endpoint}" spec="ADMINISTRATIVE_DISTRIBUTION" />
+                    </fieldset>
+                    <fieldset>
+                        <legend>Certificate</legend>
+                        <v:Certificate value="#{register.certificate}" />
+                    </fieldset>
+                    <fieldset>
+                        <legend>Patient</legend>
+                        <v:Patient firstNamePrompt="First Name:" lastNamePrompt="Last Name:"
+                            dobPrompt="Date of Birth (MM-DD-YYYY):" genderPrompt="Gender:"
+                            value="#{register.demographics}" />
+                    </fieldset>
+                    <fieldset>
+                        <legend>Document</legend>
+                        <v:Document docIdPrompt="Document Id:" documentTypePrompt="Document Type:"
+                            commentPrompt="Comment:" value="#{register.document}" />
+                    </fieldset>
+                    <h:commandButton value="Submit" action="#{register.saveInfo}" class="btn" />
+                </h:form>
+
             </div>
-            <!--/.nav-collapse -->
-         </div>
-      </div>
-   </div>
+            <script src="/js/jquery.js"></script>
 
-   <div class="container">
-
-      <h1>CONNECT GUI</h1>
-      <p>Welcome to the CONNECT Interoperability Showcase
-         Information Registration Page. Please enter your information
-         below.</p>
-
-
-      <h:form enctype="multipart/form-data" class="form-horizontal">
-         <div class="control-group">
-            <label class="control-label" for="hcid">HCID:</label>
-            <div class="controls">
-               <h:inputText id="hcid" value="#{register.hcid}" />
-            </div>
-         </div>
-         <div class="control-group">
-            <label class="control-label" for="orgName">Organization Name:</label>
-            <div class="controls">
-               <h:inputText id="orgName" value="#{register.orgName}" />
-            </div>
-         </div>
-         <fieldset>
-            <legend>Patient Discovery</legend>
-            <v:Endpoint specVersionPrompt="Version:"
-               endpointPrompt="Endpoint:" value="#{register.endpoint}"
-               spec="PATIENT_DISCOVERY" />
-         </fieldset>
-         <fieldset>
-            <legend>Query For Documents</legend>
-            <v:Endpoint specVersionPrompt="Version:"
-               endpointPrompt="Endpoint:" value="#{register.endpoint}"
-               spec="DOCUMENT_QUERY" />
-         </fieldset>
-         <fieldset>
-            <legend>Document Retrieve</legend>
-
-            <v:Endpoint specVersionPrompt="Version:"
-               endpointPrompt="Endpoint:" value="#{register.endpoint}"
-               spec="DOCUMENT_RETRIEVE" />
-         </fieldset>
-         <fieldset>
-            <legend>Document Submission</legend>
-
-            <v:Endpoint specVersionPrompt="Version:"
-               endpointPrompt="Endpoint:" value="#{register.endpoint}"
-               spec="DOCUMENT_SUBMISSION" />
-         </fieldset>
-         <fieldset>
-            <legend>Administration Distribution</legend>
-
-            <v:Endpoint specVersionPrompt="AD Version:"
-               endpointPrompt="AD Endpoint:"
-               value="#{register.endpoint}"
-               spec="ADMINISTRATIVE_DISTRIBUTION" />
-         </fieldset>
-         <fieldset>
-            <legend>Certificate</legend>
-            <v:Certificate value="#{register.certificate}" />
-         </fieldset>
-         <fieldset>
-            <legend>Patient</legend>
-            <v:Patient firstNamePrompt="First Name:"
-               lastNamePrompt="Last Name:"
-               dobPrompt="Date of Birth (MM-DD-YYYY):"
-               genderPrompt="Gender:" value="#{register.demographics}" />
-         </fieldset>
-         <fieldset>
-            <legend>Document</legend>
-            <v:Document docIdPrompt="Document Id:"
-               documentTypePrompt="Document Type:"
-               commentPrompt="Comment:" value="#{register.document}" />
-         </fieldset>
-         <h:commandButton value="Submit" action="#{register.saveInfo}"
-            class="btn" />
-      </h:form>
-
-   </div>
-   <script src="/js/jquery.js"></script>
-
+        </ui:define>
+    </ui:composition>
 </h:body>
 </html>
