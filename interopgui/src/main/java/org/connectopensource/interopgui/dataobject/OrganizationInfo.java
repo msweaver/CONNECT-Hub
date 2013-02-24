@@ -53,6 +53,21 @@ public class OrganizationInfo {
         documents = new HashSet<DocumentInfo>();
     }
 
+    /**
+     * @param homeCommunityId
+     * @param orgName
+     * @param certInfo
+     */
+    public OrganizationInfo(String homeCommunityId, String orgName, CertificateInfo certInfo) {
+
+        this.homeCommunityId = homeCommunityId;
+        this.orgName = orgName;
+        this.certInfo = certInfo;
+
+        this.patients = new HashSet<PatientInfo>();
+        this.documents = new HashSet<DocumentInfo>();
+    }
+
     public OrganizationInfo(String homeCommunityId, String orgName, CertificateInfo certInfo,
             List<PatientInfo> patients, List<DocumentInfo> documents) {
 

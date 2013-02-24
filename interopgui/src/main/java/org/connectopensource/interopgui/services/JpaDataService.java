@@ -44,7 +44,7 @@ public class JpaDataService implements DataService {
      * {@inheritDoc}
      */
     @Override
-    public void saveData(final OrganizationInfo org) {
+    public Long saveData(final OrganizationInfo org) {
                 
         try {
             new AbstractJpaTemplate<OrganizationInfo>() {
@@ -57,6 +57,8 @@ public class JpaDataService implements DataService {
         } catch (Exception e) {
             throw new DataServiceException("Error while persisting org info.", e);
         }
+        
+        return org.getId();
     }
 
     /**

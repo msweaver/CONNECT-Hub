@@ -1,7 +1,5 @@
 package org.connectopensource.interopgui.view.impl;
 
-import java.net.URI;
-
 import org.apache.myfaces.custom.fileupload.UploadedFile;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.connectopensource.interopgui.view.Certificate;
@@ -12,11 +10,10 @@ import org.connectopensource.interopgui.view.Certificate;
  */
 public class CertificateImpl implements Certificate {
     
-    private URI pathToCert;
-    private URI pathToResult;
     private CertificateType certType;
     private UploadedFile file;
     private String alias;
+    private String certPemString;
     
     public CertificateType[] getCertificateTypes()
     {
@@ -38,20 +35,6 @@ public class CertificateImpl implements Certificate {
         alias = certInfo.getAlias();
         //TODO: certInfo.getCertBytes();
         certType = certInfo.getCertType();
-    }
-
-    /**
-     * @return the pathToCert
-     */
-    public URI getPathToCert() {
-        return pathToCert;
-    }
-    
-    /**
-     * @param pathToCert the pathToCert to set
-     */
-    public void setPathToCert(URI pathToCert) {
-        this.pathToCert = pathToCert;
     }
 
     /**
@@ -82,22 +65,6 @@ public class CertificateImpl implements Certificate {
     @Override
     public void setFile(UploadedFile file) {
         this.file = file;
-    }
-
-    /* (non-Javadoc)
-     * @see org.connectopensource.interopgui.view.Certificate#getPathToResult()
-     */
-    @Override
-    public URI getPathToResult() {
-        return pathToResult;
-    }
-
-    /* (non-Javadoc)
-     * @see org.connectopensource.interopgui.view.Certificate#setPathToResult(java.net.URI)
-     */
-    @Override
-    public void setPathToResult(URI pathToResult) {
-        this.pathToResult = pathToResult;
     }
 
     /* (non-Javadoc)

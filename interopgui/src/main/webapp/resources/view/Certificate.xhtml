@@ -17,7 +17,7 @@
             <h:selectOneMenu value="#{cc.attrs.value.certType}">
                 <f:selectItems value="#{cc.attrs.value.certificateTypes}" />
             </h:selectOneMenu>
-            <t:inputFileUpload id="certFile" value="#{cc.attrs.value.file}"/>
+            <t:inputFileUpload id="certFile" value="#{cc.attrs.value.file}" styleClass="btn" />
         </h:panelGroup>
     </comp:implementation>
 </body>

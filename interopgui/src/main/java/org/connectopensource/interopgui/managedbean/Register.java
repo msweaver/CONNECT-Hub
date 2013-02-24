@@ -16,10 +16,8 @@ import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.EndpointInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.view.Certificate;
-import org.connectopensource.interopgui.view.Document;
 import org.connectopensource.interopgui.view.Endpoint;
 import org.connectopensource.interopgui.view.Organization;
-import org.connectopensource.interopgui.view.Patient;
 import org.connectopensource.interopgui.view.impl.CertificateImpl;
 
 /**
@@ -33,30 +31,30 @@ public class Register {
         CERT_REQ, CERT_TO_TRUST
     }
 
-    private String orgId = null;
+    private String alert = StringUtils.EMPTY;
+    private String orgId = StringUtils.EMPTY;
     private String hcid = null;
     private String orgName = null;
+    private String certString = null;
 
     private List<Endpoint> endpoints = null;
-
     private Certificate certificate = null;
-
-    private PatientInfo demographics = null;    
-    private DocumentInfo doc = null;
+    private List<PatientInfo> patients = null;
+    private List<DocumentInfo> documents = null;
     
-    public Register() {        
+    public Register() {
+        
         endpoints = new ArrayList<Endpoint>();        
         certificate = new CertificateImpl();        
-        demographics = new PatientInfo();
-        doc = new DocumentInfo();
+        patients = new ArrayList<PatientInfo>();
+        documents = new ArrayList<DocumentInfo>();
 
-        loadDetail();
     }
-
+    
     /**
-     * 
+     * This method needs to be kicked off in a pre-render view event 
      */
-    private void loadDetail() {
+    public void loadDetail() {
         Map<String, Object> sessionMap = null;
         
         try {
@@ -71,6 +69,8 @@ public class Register {
             System.out.println("OrgId:" + orgId + ":");
             loadOrganization(orgId);
             sessionMap.put("organizationId", StringUtils.EMPTY);
+        } else {
+            orgId = StringUtils.EMPTY;
         }
     }
 
@@ -88,8 +88,8 @@ public class Register {
         
         endpoints = org.getEndpoints();       
         certificate = org.getCertificate();        
-        demographics = org.getPatients();
-        doc = org.getDocuments();
+        patients = org.getPatients();
+        documents = org.getDocuments();
     }
 
     /**
@@ -149,37 +149,37 @@ public class Register {
     }
 
     /**
-     * @return the demographics
+     * @return the patients
      */
-    public Patient getDemographics() {
-        return demographics;
+    public List<PatientInfo> getPatients() {
+        return patients;
     }
 
     /**
-     * @param demographics the demographics to set
+     * @return the patients
      */
-    public void setDemographics(Patient demographics) {
-        this.demographics.setFirstName(demographics.getFirstName());
-        this.demographics.setLastName(demographics.getLastName());
-        this.demographics.setGender(demographics.getGender());
-        this.demographics.setDateOfBirth(demographics.getDateOfBirth());
+    public List<DocumentInfo> getDocuments() {
+        return documents;
     }
 
-    /**
-     * @return the document
-     */
-    public Document getDocument() {
-        return doc;
-    }
-
-    /**
-     * @param document the document to set
-     */
-    public void setDocument(Document document) {
-        this.doc.setDocumentId(document.getDocumentId());
-        this.doc.setDocumentType(document.getDocumentType());
-        this.doc.setComment(document.getComment());
-    }
+//    /**
+//     * @param demographics the demographics to set
+//     */
+//    public void setDemographics(Patient demographics) {
+//        this.demographics.setFirstName(demographics.getFirstName());
+//        this.demographics.setLastName(demographics.getLastName());
+//        this.demographics.setGender(demographics.getGender());
+//        this.demographics.setDateOfBirth(demographics.getDateOfBirth());
+//    }
+//
+//    /**
+//     * @param document the document to set
+//     */
+//    public void setDocument(Document document) {
+//        this.doc.setDocumentId(document.getDocumentId());
+//        this.doc.setDocumentType(document.getDocumentType());
+//        this.doc.setComment(document.getComment());
+//    }
 
     public String saveInfo() {
         try {
@@ -190,8 +190,33 @@ public class Register {
         }
 
         RegisterController impl = new RegisterController();
-        impl.saveInfo(hcid, orgName, certificate, doc, endpoints, demographics);
-        
+        Long id = impl.saveInfo(hcid, orgName, certificate);
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().put("organizationId", String.valueOf(id));
+
+        // redirect back so we can gather more data from the registration form (endpoints, patients, etc...)
+        alert = "Organization information saved. Now add patients, documents, endpoints and direct endpoints.";
+        return "RegisterInformation?faces-direct=true";
+    }
+
+    public String back() {
         return "ListInformation?faces-direct=true";
     }
+
+    /**
+     * @return the orgId
+     */
+    public String getOrgId() {
+        return orgId;
+    }
+
+    /**
+     * @return the alert
+     */
+    public String getAlert() {
+        return alert;
+    }
+    
+    
 }

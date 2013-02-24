@@ -15,8 +15,9 @@ public interface DataService {
     
     /**
      * @param org
+     * @return the id of the newly saved record.
      */
-    public void saveData(OrganizationInfo org);
+    public Long saveData(OrganizationInfo org);
     
     /**
      * @return list of all Organization Info
