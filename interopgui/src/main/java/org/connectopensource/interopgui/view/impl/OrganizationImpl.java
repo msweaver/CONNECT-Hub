@@ -19,6 +19,8 @@ import org.connectopensource.interopgui.view.Organization;
 public class OrganizationImpl implements Organization {
 
     private List<Endpoint> endpoints = null;
+    private List<PatientInfo> patients = null;
+    private List<DocumentInfo> documents = null;
     private Certificate cert = null;
     private String orgName = null;
     private String hcid = null;
@@ -49,42 +51,6 @@ public class OrganizationImpl implements Organization {
     @Override
     public void setCertificate(Certificate cert) {
         this.cert = cert;
-    }
-
-    /* (non-Javadoc)
-     * @see org.connectopensource.interopgui.view.Organization#getDocuments()
-     */
-    @Override
-    public DocumentInfo getDocuments() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.connectopensource.interopgui.view.Organization#setDocuments(org.connectopensource.interopgui.dataobject.DocumentInfo)
-     */
-    @Override
-    public void setDocuments(DocumentInfo doc) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.connectopensource.interopgui.view.Organization#getPatients()
-     */
-    @Override
-    public PatientInfo getPatients() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.connectopensource.interopgui.view.Organization#setPatients(org.connectopensource.interopgui.dataobject.PatientInfo)
-     */
-    @Override
-    public void setPatients(PatientInfo patient) {
-        // TODO Auto-generated method stub
-
     }
 
     /* (non-Javadoc)
@@ -135,4 +101,37 @@ public class OrganizationImpl implements Organization {
         this.orgId = orgId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<PatientInfo> getPatients() {
+        return patients;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<DocumentInfo> getDocuments() {
+        return documents;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDocuments(List<DocumentInfo> documents) {
+        this.documents = documents;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPatients(List<PatientInfo> patients) {
+        this.patients = patients;
+    }
+
+    
 }

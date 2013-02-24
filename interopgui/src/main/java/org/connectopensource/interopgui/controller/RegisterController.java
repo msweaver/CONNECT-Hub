@@ -29,20 +29,16 @@ import org.connectopensource.interopgui.view.impl.OrganizationImpl;
  */
 public class RegisterController {
 
-    public void saveInfo(String hcid, String orgName, Certificate cert, DocumentInfo doc, List<Endpoint> endpoints,
-            PatientInfo patient) {
-
-        List<DocumentInfo> documents = new ArrayList<DocumentInfo>();
-        documents.add(doc);
-        List<PatientInfo> patients = new ArrayList<PatientInfo>();
-        patients.add(patient);
+    /**
+     * @param hcid home community id
+     * @param orgName organization name
+     * @param cert certificate
+     * @return id of the persisted org
+     */
+    public Long saveInfo(String hcid, String orgName, Certificate cert) {
         
         CertificateInfo certInfo = new CertificateInfo(cert);
-        OrganizationInfo org = new OrganizationInfo(hcid, orgName, certInfo, patients, documents);        
-        
-        // set the org info on the patient and document data so they are also persisted...
-        doc.setOrganizationInfo(org);
-        patient.setOrganizationInfo(org);
+        OrganizationInfo org = new OrganizationInfo(hcid, orgName, certInfo);        
         
         try {
             processCertificate(cert);
@@ -50,10 +46,35 @@ public class RegisterController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        saveOrganization(org);
-        
-        saveEndpoints(endpoints);
+        return saveOrganization(org);
     }
+
+    
+//    public void saveInfo(String hcid, String orgName, Certificate cert, DocumentInfo doc, List<Endpoint> endpoints,
+//            PatientInfo patient) {
+//
+//        List<DocumentInfo> documents = new ArrayList<DocumentInfo>();
+//        documents.add(doc);
+//        List<PatientInfo> patients = new ArrayList<PatientInfo>();
+//        patients.add(patient);
+//        
+//        CertificateInfo certInfo = new CertificateInfo(cert);
+//        OrganizationInfo org = new OrganizationInfo(hcid, orgName, certInfo, patients, documents);        
+//        
+//        // set the org info on the patient and document data so they are also persisted...
+//        doc.setOrganizationInfo(org);
+//        patient.setOrganizationInfo(org);
+//        
+//        try {
+//            processCertificate(cert);
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        saveOrganization(org);
+//        
+//        saveEndpoints(endpoints);
+//    }
 
     /**
      * @param endpoints
@@ -81,11 +102,12 @@ public class RegisterController {
     }
 
     /**
-     * @param org
+     * @param org to be saved.
+     * @return id of newly persisted record.
      */
-    private void saveOrganization(OrganizationInfo org) {
+    private Long saveOrganization(OrganizationInfo org) {
         DataService service = new JpaDataService();
-        service.saveData(org);
+        return service.saveData(org);
     }
 
     /**
@@ -93,6 +115,7 @@ public class RegisterController {
      * @return
      */
     public Organization retrieveOrganization(String orgId) {
+        
         OrganizationInfo orgInfo = retrieveOrgInfo(orgId);
         Organization orgView = new OrganizationImpl();
         
@@ -107,10 +130,16 @@ public class RegisterController {
         orgView.setCertificate(cert);
         
         // TODO: populate patients
+        List<PatientInfo> patients = new ArrayList<PatientInfo>(orgInfo.getPatients().size());
+        patients.addAll(orgInfo.getPatients());        
+        orgView.setPatients(patients);
         
         // TODO: populate endpoints
         
         // TODO: populate documents
+        List<DocumentInfo> documents = new ArrayList<DocumentInfo>(orgInfo.getDocuments().size());
+        documents.addAll(orgInfo.getDocuments());        
+        orgView.setDocuments(documents);
         
         return orgView;
     }

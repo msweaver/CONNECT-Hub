@@ -75,6 +75,7 @@ public class ListController {
             OrganizationSummary summary = new OrganizationSummaryImpl();
             summary.setCountDirectEndpoints("0");
             summary.setCountDocuments(String.valueOf(orgInfo.getDocuments().size()));
+            summary.setCountPatients(String.valueOf(orgInfo.getPatients().size()));
             summary.setHcid(orgInfo.getHomeCommunityId());
             summary.setHasSignedCert(orgInfo.getCertInfo().getCertType() == CertificateType.CERT_REQ);
             summary.setId(orgInfo.getId());

@@ -22,6 +22,16 @@ public interface Organization {
     /**
      * @return
      */
+    public List<PatientInfo> getPatients();
+
+    /**
+     * @return
+     */
+    public List<DocumentInfo> getDocuments();
+
+    /**
+     * @return
+     */
     public Certificate getCertificate();
     
     /**
@@ -32,22 +42,12 @@ public interface Organization {
     /**
      * @return
      */
-    public DocumentInfo getDocuments();
-    
-    /**
-     * @return
-     */
-    public void setDocuments(DocumentInfo doc);
+    public void setDocuments(List<DocumentInfo> doc);
 
     /**
      * @return
      */
-    public PatientInfo getPatients();
-    
-    /**
-     * @return
-     */
-    public void setPatients(PatientInfo patient);
+    public void setPatients(List<PatientInfo> patient);
 
     /**
      * @param homeCommunityId
