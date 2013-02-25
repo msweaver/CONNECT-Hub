@@ -6,13 +6,33 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <changeSet id="1" author="mlandis">
+    <changeSet id="1" author="mlandis">    
         <createTable tableName="orginfo">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="orgname" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
             <column name="hcid" type="varchar(32)">
                 <constraints nullable="false"/>
+            </column>
+            <column name="cert" type="BLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="certtype" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="alias" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="patient">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="orginfo_id" type="BIGINT">
+                <constraints references="orginfo(id)" foreignKeyName="patient_orginfo_fk" nullable="false"/>
             </column>
             <column name="first" type="varchar(32)">
                 <constraints nullable="false"/>
@@ -20,24 +40,29 @@
             <column name="last" type="varchar(32)">
                 <constraints nullable="false"/>
             </column>
-            <column name="dob" type="varchar(10)">
+            <column name="dob" type="DATE">
                 <constraints nullable="false"/>
             </column>
-            <column name="gender" type="char(1)">
+            <column name="gender" type="varchar(10)">
                 <constraints nullable="false"/>
             </column>
-             <column name="docid" type="varchar(256)">
+        </createTable>
+        <createTable tableName="document">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="orginfo_id" type="BIGINT">
+                <constraints references="orginfo(id)" foreignKeyName="document_orginfo_fk" nullable="false"/>
+            </column>            
+            <column name="docid" type="varchar(256)">
                 <constraints nullable="false"/>
             </column>
-             <column name="comment" type="CLOB">
+            <column name="doctype" type="varchar(256)">
                 <constraints nullable="false"/>
             </column>
-             <column name="cert" type="CLOB">
-                <constraints nullable="false"/>
-            </column>
-             <column name="certtype" type="varchar(32)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="comment" type="CLOB">
+                <constraints nullable="true"/>
+            </column>            
         </createTable>
     </changeSet>
 

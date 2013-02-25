@@ -26,6 +26,7 @@
  */
 package org.connectopensource.interopgui.services;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -38,6 +39,7 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.connectopensource.interopgui.PropertiesHolder;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
+import org.connectopensource.interopgui.view.Certificate.CertificateType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,7 +58,6 @@ public class JceCertificateServiceTest {
         props.setProperty("truststore.path", getClassPath() + "/truststore.jks");
         props.setProperty("truststore.pass", "changeit");
         props.setProperty("truststore.type", "JKS");
-        props.setProperty("file.extension.signed.pem", ".signedcert.pem");
         props.setProperty("privkeypem.path", getClassPath() + "/cakey-nopass.pem");
         props.setProperty("cacertpem.path", getClassPath() + "/cacert.pem");
         PropertiesHolder.setProps(props);
@@ -85,14 +86,15 @@ public class JceCertificateServiceTest {
     public void canSignCsr() throws URISyntaxException, IOException {
         CertificateService certService = new JceCertificateService();
         CertificateInfo signedCertInfo = certService.signCertificate(getCsrCertInfo());
-        assertTrue(signedCertInfo.getPathToCert().getPath().endsWith(".signedcert.pem"));
+        assertNotNull(signedCertInfo.getCertBytes());
     }
     
     private CertificateInfo getTrustedCertInfo() throws URISyntaxException, IOException {
         
         CertificateInfo certInfo = new CertificateInfo();
         certInfo.setAlias(JceCertificateServiceTest.class.getName());
-        certInfo.setUploadedCert(getCertFromFile(getClassPath() + "/provider-cert.pem"));
+        certInfo.setCertType(CertificateType.CERT);
+        certInfo.setCertBytes(getCertFromFile(getClassPath() + "/provider-cert.pem"));
         
         return certInfo;
     }
@@ -101,7 +103,8 @@ public class JceCertificateServiceTest {
         
         CertificateInfo certInfo = new CertificateInfo();
         certInfo.setAlias(JceCertificateServiceTest.class.getName());
-        certInfo.setUploadedCert(getCertFromFile(getClassPath() + "/provider-req.pem"));
+        certInfo.setCertType(CertificateType.CERT_REQ);
+        certInfo.setCertBytes(getCertFromFile(getClassPath() + "/provider-req.pem"));
         
         return certInfo;
     }

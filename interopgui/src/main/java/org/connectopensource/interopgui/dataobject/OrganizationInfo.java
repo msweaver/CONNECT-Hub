@@ -3,43 +3,89 @@
  */
 package org.connectopensource.interopgui.dataobject;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.connectopensource.interopgui.view.Certificate;
-import org.connectopensource.interopgui.view.Document;
-import org.connectopensource.interopgui.view.Patient;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * @author msw
- *
  */
+@Entity
+@Table(name="orginfo")
 public class OrganizationInfo {
     
-    String homeCommunityId;
-    List<Patient> patients;
-    List<Document> documents;
-    Certificate cert;
+    Long id;
+    String homeCommunityId;        
+    String orgName;
+    Set<PatientInfo> patients;
+    Set<DocumentInfo> documents;
+    CertificateInfo certInfo;
     
-    public OrganizationInfo() {
-        patients = new ArrayList<Patient>();
-        documents = new ArrayList<Document>();
+    /**
+     * @return the id
+     */
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
     }
-    
-    public OrganizationInfo(String homeCommunityId, Certificate cert, List<Patient> patients, List<Document> doc) {
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public OrganizationInfo() {
+        patients = new HashSet<PatientInfo>();
+        documents = new HashSet<DocumentInfo>();
+    }
+
+    /**
+     * @param homeCommunityId
+     * @param orgName
+     * @param certInfo
+     */
+    public OrganizationInfo(String homeCommunityId, String orgName, CertificateInfo certInfo) {
+
         this.homeCommunityId = homeCommunityId;
-        this.cert = cert;
-        
-        this.patients = new ArrayList<Patient>();
+        this.orgName = orgName;
+        this.certInfo = certInfo;
+
+        this.patients = new HashSet<PatientInfo>();
+        this.documents = new HashSet<DocumentInfo>();
+    }
+
+    public OrganizationInfo(String homeCommunityId, String orgName, CertificateInfo certInfo,
+            List<PatientInfo> patients, List<DocumentInfo> documents) {
+
+        this.homeCommunityId = homeCommunityId;
+        this.orgName = orgName;
+        this.certInfo = certInfo;
+
+        this.patients = new HashSet<PatientInfo>();
         this.patients.addAll(patients);
-        
-        this.documents = new ArrayList<Document>();
+
+        this.documents = new HashSet<DocumentInfo>();
         this.documents.addAll(documents);
     }
 
     /**
      * @return the homeCommunityId
      */
+    @Column(name = "hcid")
     public String getHomeCommunityId() {
         return homeCommunityId;
     }
@@ -52,33 +98,63 @@ public class OrganizationInfo {
     }
 
     /**
+     * @return the orgName
+     */
+    @Column(name = "orgname")
+    public String getOrgName() {
+        return orgName;
+    }
+
+    /**
+     * @param orgName the orgName to set
+     */
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    /**
      * @return the cert
      */
-    public Certificate getCert() {
-        return cert;
+    @Embedded
+    public CertificateInfo getCertInfo() {
+        return certInfo;
     }
 
     /**
      * @param cert the cert to set
      */
-    public void setCert(Certificate cert) {
-        this.cert = cert;
+    public void setCertInfo(CertificateInfo certInfo) {
+        this.certInfo = certInfo;
     }
 
     /**
      * @return the patients
      */
-    public List<Patient> getPatients() {
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)    
+    public Set<PatientInfo> getPatients() {
         return patients;
+    }
+
+    /**
+     * @param patients the patients to set
+     */
+    public void setPatients(Set<PatientInfo> patients) {
+        this.patients = patients;
     }
 
     /**
      * @return the documents
      */
-    public List<Document> getDocuments() {
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)
+    public Set<DocumentInfo> getDocuments() {
         return documents;
     }
-    
-    
+
+    /**
+     * @param documents the documents to set
+     */
+    public void setDocuments(Set<DocumentInfo> documents) {
+        this.documents = documents;
+    }
 
 }

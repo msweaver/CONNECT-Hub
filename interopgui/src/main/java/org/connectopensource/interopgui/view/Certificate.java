@@ -3,8 +3,6 @@
  */
 package org.connectopensource.interopgui.view;
 
-import java.net.URI;
-
 import org.apache.myfaces.custom.fileupload.UploadedFile;
 
 /**
@@ -15,13 +13,7 @@ public interface Certificate {
 
     public enum CertificateType { CERT, CERT_REQ }
     public CertificateType[] getCertificateTypes();
-    
-    public URI getPathToCert();
-    public void setPathToCert(URI pathToCert);
-
-    public URI getPathToResult();
-    public void setPathToResult(URI pathToResult);
-    
+        
     public CertificateType getCertType();
     public void setCertType(CertificateType certType);
     
@@ -30,4 +22,8 @@ public interface Certificate {
     
     public String getAlias();
     public void setAlias(String alias);
+    
+    public String getPemString();
+    public void setPemString(String pemString);
+
 }

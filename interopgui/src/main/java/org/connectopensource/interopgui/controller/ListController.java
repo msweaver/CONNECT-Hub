@@ -8,7 +8,8 @@ import java.util.List;
 
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.services.DataService;
-import org.connectopensource.interopgui.view.Certificate;
+import org.connectopensource.interopgui.services.JpaDataService;
+import org.connectopensource.interopgui.view.Certificate.CertificateType;
 import org.connectopensource.interopgui.view.OrganizationSummary;
 import org.connectopensource.interopgui.view.impl.OrganizationSummaryImpl;
 
@@ -26,33 +27,6 @@ public class ListController {
     }
     
     private List<OrganizationSummary> processInformationForDisplay() {
-        ArrayList<OrganizationSummary> orgSummaries = new ArrayList<OrganizationSummary>();
-        OrganizationSummary impl = new OrganizationSummaryImpl();
-        impl.setCountDirectEndpoints("0");
-        impl.setCountDocuments("3");
-        impl.setHcid("1.1");
-        impl.setHasSignedCert(true);
-        impl.setId(0);
-        impl.setOrganizationName("CONNECT open source dot org");
-        orgSummaries.add(impl);
-        
-        OrganizationSummary impl1 = new OrganizationSummaryImpl();
-        impl1.setCountDirectEndpoints("0");
-        impl1.setCountDocuments("1");
-        impl1.setHcid("2.2");
-        impl1.setHasSignedCert(true);
-        impl1.setId(0);
-        impl1.setOrganizationName("CGI");
-        orgSummaries.add(impl1);
-        
-        OrganizationSummary impl2 = new OrganizationSummaryImpl();
-        impl2.setCountDirectEndpoints("0");
-        impl2.setCountDocuments("1");
-        impl2.setHcid("6.6.6");
-        impl2.setHasSignedCert(false);
-        impl2.setId(0);
-        impl2.setOrganizationName("DIL DIL DIL DIL DIL DIL DIL DIL");
-        orgSummaries.add(impl2);
         
         /*List<OrganizationInfo> dataList = getOrganizationInfoFromService();
         for (OrganizationInfo info : dataList) {
@@ -87,12 +61,29 @@ public class ListController {
             osImpl.setOrganizationName(organizationName);
         }
         */
-        return orgSummaries;
+        
+        return getOrganizationSummaries();
     }
     
-    private List<OrganizationInfo> getOrganizationInfoFromService() {
-        DataService service = null;
-        return service.getData();
+    private List<OrganizationSummary> getOrganizationSummaries() {
+
+        DataService service = new JpaDataService();
+        List<OrganizationInfo> orgs = service.getData();
+        List<OrganizationSummary> summaries = new ArrayList<OrganizationSummary>(orgs.size());
+        
+        for (OrganizationInfo orgInfo : orgs) {
+            OrganizationSummary summary = new OrganizationSummaryImpl();
+            summary.setCountDirectEndpoints("0");
+            summary.setCountDocuments(String.valueOf(orgInfo.getDocuments().size()));
+            summary.setCountPatients(String.valueOf(orgInfo.getPatients().size()));
+            summary.setHcid(orgInfo.getHomeCommunityId());
+            summary.setHasSignedCert(orgInfo.getCertInfo().getCertType() == CertificateType.CERT_REQ);
+            summary.setId(orgInfo.getId());
+            summary.setOrganizationName(orgInfo.getOrgName());
+            summaries.add(summary);
+        }
+        
+        return summaries;
     }
 
 }

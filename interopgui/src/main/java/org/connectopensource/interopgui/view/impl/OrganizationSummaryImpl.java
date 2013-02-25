@@ -12,7 +12,7 @@ import org.connectopensource.interopgui.view.OrganizationSummary;
  */
 public class OrganizationSummaryImpl implements OrganizationSummary {
     
-    private int id = 0;
+    private Long id = 0L;
     private String hcid = StringUtils.EMPTY;
     private String organizationName = StringUtils.EMPTY;
     private boolean hasSignedCert = false;
@@ -24,13 +24,13 @@ public class OrganizationSummaryImpl implements OrganizationSummary {
     /**
      * @return the id
      */
-    public int getId() {
+    public Long getId() {
         return id;
     }
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
     /**

@@ -1,8 +1,9 @@
 package org.connectopensource.interopgui.view.impl;
 
-import java.net.URI;
+import java.nio.charset.Charset;
 
 import org.apache.myfaces.custom.fileupload.UploadedFile;
+import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.connectopensource.interopgui.view.Certificate;
 
 /**
@@ -11,11 +12,10 @@ import org.connectopensource.interopgui.view.Certificate;
  */
 public class CertificateImpl implements Certificate {
     
-    private URI pathToCert;
-    private URI pathToResult;
     private CertificateType certType;
     private UploadedFile file;
     private String alias;
+    private String pemString;
     
     public CertificateType[] getCertificateTypes()
     {
@@ -31,17 +31,12 @@ public class CertificateImpl implements Certificate {
     }
 
     /**
-     * @return the pathToCert
+     * @param certInfo
      */
-    public URI getPathToCert() {
-        return pathToCert;
-    }
-    
-    /**
-     * @param pathToCert the pathToCert to set
-     */
-    public void setPathToCert(URI pathToCert) {
-        this.pathToCert = pathToCert;
+    public CertificateImpl(CertificateInfo certInfo) {
+        alias = certInfo.getAlias();
+        pemString = new String(certInfo.getCertBytes(), Charset.forName("US-ASCII"));
+        certType = certInfo.getCertType();
     }
 
     /**
@@ -75,22 +70,6 @@ public class CertificateImpl implements Certificate {
     }
 
     /* (non-Javadoc)
-     * @see org.connectopensource.interopgui.view.Certificate#getPathToResult()
-     */
-    @Override
-    public URI getPathToResult() {
-        return pathToResult;
-    }
-
-    /* (non-Javadoc)
-     * @see org.connectopensource.interopgui.view.Certificate#setPathToResult(java.net.URI)
-     */
-    @Override
-    public void setPathToResult(URI pathToResult) {
-        this.pathToResult = pathToResult;
-    }
-
-    /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Certificate#getCertType()
      */
     @Override
@@ -105,4 +84,20 @@ public class CertificateImpl implements Certificate {
     public void setCertType(CertificateType certType) {
         this.certType = certType;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getPemString() {
+        return pemString;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPemString(String pemString) {
+        this.pemString = pemString;
+    }   
 }

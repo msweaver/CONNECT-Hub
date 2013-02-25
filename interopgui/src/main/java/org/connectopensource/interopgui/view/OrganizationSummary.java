@@ -9,8 +9,8 @@ package org.connectopensource.interopgui.view;
  */
 public interface OrganizationSummary {
     
-    public int getId();
-    public void setId(int id);
+    public Long getId();
+    public void setId(Long id);
 
     public String getHcid();
     public void setHcid(String hcid);
