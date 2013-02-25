@@ -43,6 +43,7 @@ public class Register {
     private List<DocumentInfo> documents = null;
     private List<DirectEndpoint> directEndpoints = null;
     private PatientInfo patient = null;
+    private DocumentInfo document = null;
     
     public Register() {
         
@@ -50,9 +51,9 @@ public class Register {
         certificate = new CertificateImpl();        
         patients = new ArrayList<PatientInfo>();
         documents = new ArrayList<DocumentInfo>();
-        directEndpoints = new ArrayList<DirectEndpoint>();
-        
+        directEndpoints = new ArrayList<DirectEndpoint>();        
         patient = new PatientInfo();
+        document = new DocumentInfo();
     }
     
     /**
@@ -62,9 +63,8 @@ public class Register {
         Map<String, Object> sessionMap = null;
         
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            sessionMap = context.getExternalContext().getSessionMap();
-            orgId = (String) context.getExternalContext().getSessionMap().get("organizationId");
+            sessionMap = getSessionMap();
+            orgId = (String) sessionMap.get("organizationId");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -191,8 +191,7 @@ public class Register {
         RegisterController impl = new RegisterController();
         Long id = impl.saveInfo(hcid, orgName, certificate);
 
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().getSessionMap().put("organizationId", String.valueOf(id));
+        getSessionMap().put("organizationId", String.valueOf(id));
 
         // redirect back so we can gather more data from the registration form (endpoints, patients, etc...)
         alert = "Organization information saved. Now add patients, documents, endpoints and direct endpoints.";
@@ -215,14 +214,36 @@ public class Register {
             e.printStackTrace();
         }
 
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().getSessionMap().put("organizationId", String.valueOf(orgId));
+        getSessionMap().put("organizationId", String.valueOf(orgId));
 
         alert = "Patient added.";
         return "RegisterInformation?faces-direct=true";
         
     }
     
+    /**
+     * Add a document.
+     * @return route for screen flow destination
+     */
+    public String addDocument() {
+
+        RegisterController registerController = new RegisterController();
+        registerController.saveDocument(document, orgId);
+        
+        try {
+            System.out.println("saving document: " + document);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        getSessionMap().put("organizationId", String.valueOf(orgId));
+
+        alert = "Document added.";
+        return "RegisterInformation?faces-direct=true";
+        
+    }
+
     
     public String back() {
         return "ListInformation?faces-direct=true";
@@ -261,5 +282,25 @@ public class Register {
      */
     public void setPatient(PatientInfo patient) {
         this.patient = patient;
+    }
+
+    /**
+     * @return the document
+     */
+    public DocumentInfo getDocument() {
+        return document;
+    }
+
+    /**
+     * @param document the document to set
+     */
+    public void setDocument(DocumentInfo document) {
+        this.document = document;
     }    
+    
+    private Map<String, Object> getSessionMap() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        return context.getExternalContext().getSessionMap();
+    }
+    
 }

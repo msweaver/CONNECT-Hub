@@ -60,6 +60,16 @@ public class RegisterController {
         service.addPatient(patient, orgId);        
     }
 
+    /**
+     * Persist a new patient with an organization.
+     * @param document information to be persisted
+     * @param orgId organization parent for this patient
+     */
+    public void saveDocument(DocumentInfo document, String orgId)  {        
+        DataService service = new JpaDataService();        
+        service.addDocument(document, orgId);        
+    }
+
     
 //    public void saveInfo(String hcid, String orgName, Certificate cert, DocumentInfo doc, List<Endpoint> endpoints,
 //            PatientInfo patient) {
