@@ -19,7 +19,7 @@
           <h:outputText value="#{register.alert}" />
         </h:panelGroup>
 
-        <h1>CONNECT GUI</h1>
+        <h1>CONNECT Hub</h1>
         <p>Welcome to the CONNECT Interoperability Showcase Information Registration Page. Please enter your information below.</p>
         <h:form enctype="multipart/form-data" class="form-horizontal">
           <div class="control-group">
@@ -44,8 +44,83 @@
             </h:panelGroup>
             <v:Certificate value="#{register.certificate}" rendered="#{register.orgId == ''}" />
           </fieldset>
+          <H3>Details</H3>
           <fieldset>
-            <legend>Details</legend>
+            <legend>Direct</legend>
+            <div class="accordion" id="accordion1">
+            <div class="accordion-group">
+                  <div class="accordion-heading">
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+                          href="#collapseDirectEndpoints"> Direct Endpoints </a>
+                  </div>
+                  <div id="collapseDirectEndpoints" class="accordion-body collapse">
+                      <div class="accordion-inner">
+                      <h:dataTable value="#{register.directEndpoints}" var="e" class="table table-hover">
+                      <h:column rendered="false">
+                            <f:facet name="header">
+                                <h:outputText value="ID" />
+                            </f:facet>
+                            <h:outputText value="#{e.id}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Endpoint" />
+                            </f:facet>
+                            <h:outputText value="#{e.endpoint}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="DNS: Address" />
+                            </f:facet>
+                            <h:panelGroup rendered="#{e.dnsAddressBound}">
+                                <i class="icon-ok" />
+                            </h:panelGroup>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="DNS: Domain" />
+                            </f:facet>
+                            <h:panelGroup rendered="#{e.dnsDomainBound}">
+                                <i class="icon-ok" />
+                            </h:panelGroup>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="LDAP: Address" />
+                            </f:facet>
+                            <h:panelGroup rendered="#{e.ldapAddressBound}">
+                                <i class="icon-ok" />
+                            </h:panelGroup>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="LDAP: Domain" />
+                            </f:facet>
+                            <h:panelGroup rendered="#{e.ldapDomainBound}">
+                                <i class="icon-ok" />
+                            </h:panelGroup>
+                        </h:column>
+                      </h:dataTable>
+                      <a href="#directEndpointModal" role="button" class="btn" data-toggle="modal">Add</a>
+                      <div id="directEndpointModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3 id="myModalLabel">Add Direct Endpoint</h3>
+                        </div>
+                        <div class="modal-body">
+                        <v:DirectEndpoint value=""/>
+                        </div>
+                        <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button class="btn btn-primary">Save</button>
+                      </div>
+                  </div>
+                </div>
+                </div>
+                </div>
+            </div>
+            
+            <legend>Exchange</legend>
             <div class="accordion" id="accordion2">
               <div class="accordion-group">
                 <div class="accordion-heading">
@@ -138,15 +213,6 @@
                         </h:column>
                       </h:dataTable>
                     </div>
-                  </div>
-                </div>
-                <div class="accordion-group">
-                  <div class="accordion-heading">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
-                          href="#collapseDirectEndpoints"> Direct Endpoints </a>
-                  </div>
-                  <div id="collapseDirectEndpoints" class="accordion-body collapse">
-                      <div class="accordion-inner">TODO::List of direct endpoints...</div>
                   </div>
                 </div>
               </div>

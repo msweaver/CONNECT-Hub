@@ -16,6 +16,7 @@ import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.EndpointInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.view.Certificate;
+import org.connectopensource.interopgui.view.DirectEndpoint;
 import org.connectopensource.interopgui.view.Endpoint;
 import org.connectopensource.interopgui.view.Organization;
 import org.connectopensource.interopgui.view.impl.CertificateImpl;
@@ -40,6 +41,7 @@ public class Register {
     private Certificate certificate = null;
     private List<PatientInfo> patients = null;
     private List<DocumentInfo> documents = null;
+    private List<DirectEndpoint> directEndpoints = null;
     
     public Register() {
         
@@ -47,9 +49,10 @@ public class Register {
         certificate = new CertificateImpl();        
         patients = new ArrayList<PatientInfo>();
         documents = new ArrayList<DocumentInfo>();
+        directEndpoints = new ArrayList<DirectEndpoint>();
 
     }
-    
+
     /**
      * This method needs to be kicked off in a pre-render view event 
      */
@@ -159,6 +162,20 @@ public class Register {
      */
     public List<DocumentInfo> getDocuments() {
         return documents;
+    }
+    
+    /**
+     * @return the directEndpoints
+     */
+    public List<DirectEndpoint> getDirectEndpoints() {
+        return directEndpoints;
+    }
+
+    /**
+     * @param directEndpoints the directEndpoints to set
+     */
+    public void setDirectEndpoints(List<DirectEndpoint> directEndpoints) {
+        this.directEndpoints = directEndpoints;
     }
 
 //    /**
