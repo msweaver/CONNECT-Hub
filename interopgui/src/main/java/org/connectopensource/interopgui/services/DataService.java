@@ -8,6 +8,7 @@ import java.util.List;
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
+import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
 
 /**
  * @author msw
@@ -51,5 +52,11 @@ public interface DataService {
      * @return the id of the newly saved record.
      */
     public DocumentInfo addDocument(DocumentInfo document, String orgId);
+
+    /**
+     * @param directEndpoint
+     * @param orgId
+     */
+    public DirectEndpointImpl addDirectEndpoint(DirectEndpointImpl directEndpoint, String orgId);
 
 }

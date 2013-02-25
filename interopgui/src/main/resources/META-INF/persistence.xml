@@ -9,6 +9,7 @@
         <class>org.connectopensource.interopgui.dataobject.CertificateInfo</class>
         <class>org.connectopensource.interopgui.dataobject.PatientInfo</class>
         <class>org.connectopensource.interopgui.dataobject.DocumentInfo</class>
+        <class>org.connectopensource.interopgui.view.impl.DirectEndpointImpl</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
             
         <properties>

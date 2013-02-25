@@ -3,29 +3,48 @@
  */
 package org.connectopensource.interopgui.view.impl;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.view.DirectEndpoint;
 
 /**
  * @author msw
- *
+ * 
  */
+@Entity
+@Table(name = "directEndpoint")
 public class DirectEndpointImpl implements DirectEndpoint {
-    
+
     private String endpoint = null;
+    private Long id;
     private boolean dnsDomainBound = false;
     private boolean dnsAddressBound = false;
     private boolean ldapDomainBound = false;
     private boolean ldapAddressBound = false;
+    private OrganizationInfo orgInfo = null;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.connectopensource.interopgui.view.DirectEndpoint#getEndpoint()
      */
-    @Override
+    @Column(name = "endpoint")
     public String getEndpoint() {
         return endpoint;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.connectopensource.interopgui.view.DirectEndpoint#setEndpoint(java.lang.String)
      */
     @Override
@@ -33,15 +52,19 @@ public class DirectEndpointImpl implements DirectEndpoint {
         this.endpoint = endpoint;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.connectopensource.interopgui.view.DirectEndpoint#getDnsAddressBound()
      */
-    @Override
+    @Column(name = "dnsAddressBound")
     public boolean getDnsAddressBound() {
         return dnsAddressBound;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.connectopensource.interopgui.view.DirectEndpoint#setDnsAddressBound(boolean)
      */
     @Override
@@ -49,15 +72,19 @@ public class DirectEndpointImpl implements DirectEndpoint {
         this.dnsAddressBound = dnsAddressBound;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.connectopensource.interopgui.view.DirectEndpoint#getDnsDomainBound()
      */
-    @Override
+    @Column(name = "dnsDomainBound")
     public boolean getDnsDomainBound() {
         return dnsDomainBound;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.connectopensource.interopgui.view.DirectEndpoint#setDnsDomainBound(boolean)
      */
     @Override
@@ -65,15 +92,19 @@ public class DirectEndpointImpl implements DirectEndpoint {
         this.dnsDomainBound = dnsDomainBound;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.connectopensource.interopgui.view.DirectEndpoint#getLdapAddressBound()
      */
-    @Override
+    @Column(name = "ldapAddressBound")
     public boolean getLdapAddressBound() {
         return ldapAddressBound;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.connectopensource.interopgui.view.DirectEndpoint#setLdapAddressBound(boolean)
      */
     @Override
@@ -81,15 +112,19 @@ public class DirectEndpointImpl implements DirectEndpoint {
         this.ldapAddressBound = ldapAddressBound;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.connectopensource.interopgui.view.DirectEndpoint#getLdapDomainBound()
      */
-    @Override
+    @Column(name = "ldapDomainBound")
     public boolean getLdapDomainBound() {
         return ldapDomainBound;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.connectopensource.interopgui.view.DirectEndpoint#setLdapDomainBound(boolean)
      */
     @Override
@@ -97,4 +132,57 @@ public class DirectEndpointImpl implements DirectEndpoint {
         this.ldapDomainBound = ldapDomainBound;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.connectopensource.interopgui.view.DirectEndpoint#getId()
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.connectopensource.interopgui.view.DirectEndpoint#setId(java.lang.String)
+     */
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.connectopensource.interopgui.view.DirectEndpoint#getOrganizationInfo()
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "orginfo_id", nullable = false)
+    public OrganizationInfo getOrganizationInfo() {
+        return orgInfo;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.connectopensource.interopgui.view.DirectEndpoint#setOrganizationInfo(org.connectopensource.interopgui.dataobject
+     * .OrganizationInfo)
+     */
+    @Override
+    public void setOrganizationInfo(OrganizationInfo orgInfo) {
+        this.orgInfo = orgInfo;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "DirectEndpointImpl [endpoint=" + endpoint + ", id=" + id + ", dnsDomainBound=" + dnsDomainBound
+                + ", dnsAddressBound=" + dnsAddressBound + ", ldapDomainBound=" + ldapDomainBound
+                + ", ldapAddressBound=" + ldapAddressBound + ", orgInfo=" + orgInfo + "]";
+    }
 }

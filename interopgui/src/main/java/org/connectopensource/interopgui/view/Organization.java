@@ -79,4 +79,13 @@ public interface Organization {
      */
     public void setOrgId(String orgId);
 
+    /**
+     * @return
+     */
+    public List<DirectEndpoint> getDirectEndpoints();
+
+    /**
+     * @return
+     */
+    public void setDirectEndpoints(List<DirectEndpoint> directEndpoints);
 }

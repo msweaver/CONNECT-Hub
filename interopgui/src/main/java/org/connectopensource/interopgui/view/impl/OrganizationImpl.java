@@ -9,6 +9,7 @@ import java.util.List;
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.view.Certificate;
+import org.connectopensource.interopgui.view.DirectEndpoint;
 import org.connectopensource.interopgui.view.Endpoint;
 import org.connectopensource.interopgui.view.Organization;
 
@@ -21,6 +22,7 @@ public class OrganizationImpl implements Organization {
     private List<Endpoint> endpoints = null;
     private List<PatientInfo> patients = null;
     private List<DocumentInfo> documents = null;
+    private List<DirectEndpoint> directEndpoints = null;
     private Certificate cert = null;
     private String orgName = null;
     private String hcid = null;
@@ -131,6 +133,22 @@ public class OrganizationImpl implements Organization {
     @Override
     public void setPatients(List<PatientInfo> patients) {
         this.patients = patients;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Organization#getDirectEndpoints()
+     */
+    @Override
+    public List<DirectEndpoint> getDirectEndpoints() {
+        return directEndpoints;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Organization#setDirectEndpoints(java.util.List)
+     */
+    @Override
+    public void setDirectEndpoints(List<DirectEndpoint> directEndpoints) {
+        this.directEndpoints = directEndpoints;
     }
 
     

@@ -73,7 +73,7 @@ public class ListController {
         
         for (OrganizationInfo orgInfo : orgs) {
             OrganizationSummary summary = new OrganizationSummaryImpl();
-            summary.setCountDirectEndpoints("0");
+            summary.setCountDirectEndpoints(String.valueOf(orgInfo.getDirectEndpoints().size()));
             summary.setCountDocuments(String.valueOf(orgInfo.getDocuments().size()));
             summary.setCountPatients(String.valueOf(orgInfo.getPatients().size()));
             summary.setHcid(orgInfo.getHomeCommunityId());

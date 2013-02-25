@@ -36,6 +36,7 @@ import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.jpa.AbstractJpaTemplate;
+import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
 
 /**
  * JPA Implementation of {@link DataService}.
@@ -135,7 +136,34 @@ public class JpaDataService implements DataService {
         } catch (Exception e) {
             throw new DataServiceException("Error while persisting org info.", e);
         }
-    }     
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.connectopensource.interopgui.services.DataService#addDirectEndpoint(org.connectopensource.interopgui.view
+     * .DirectEndpoint, java.lang.String)
+     */
+    @Override
+    public DirectEndpointImpl addDirectEndpoint(final DirectEndpointImpl directEndpoint, final String orgId) {
+        final Long lid = Long.valueOf(orgId);
+        try {
+            return new AbstractJpaTemplate<DirectEndpointImpl>() {
+                @Override
+                protected List<DirectEndpointImpl> execute(EntityManager entityManager) {
+                    TypedQuery<OrganizationInfo> query = entityManager.createQuery("from OrganizationInfo where id = :id", OrganizationInfo.class);
+                    query.setParameter("id", lid);
+                    OrganizationInfo orgInfo = query.getResultList().get(0);
+                    directEndpoint.setOrganizationInfo(orgInfo);
+                    orgInfo.getDirectEndpoints().add(directEndpoint);
+                    return Collections.singletonList(directEndpoint); 
+                }            
+            }.execute().get(0);        
+        } catch (Exception e) {
+            throw new DataServiceException("Error while persisting org info.", e);
+        }
+    }
     
     /**
      * {@inheritDoc}

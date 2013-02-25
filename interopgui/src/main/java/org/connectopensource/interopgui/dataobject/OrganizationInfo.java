@@ -18,6 +18,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.connectopensource.interopgui.view.DirectEndpoint;
+import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
+
 /**
  * @author msw
  */
@@ -31,7 +34,23 @@ public class OrganizationInfo {
     Set<PatientInfo> patients;
     Set<DocumentInfo> documents;
     CertificateInfo certInfo;
+    Set<DirectEndpointImpl> directEndpoints;
     
+    /**
+     * @return the directEndpoints
+     */
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)  
+    public Set<DirectEndpointImpl> getDirectEndpoints() {
+        return directEndpoints;
+    }
+
+    /**
+     * @param directEndpoints the directEndpoints to set
+     */
+    public void setDirectEndpoints(Set<DirectEndpointImpl> directEndpoints) {
+        this.directEndpoints = directEndpoints;
+    }
+
     /**
      * @return the id
      */
