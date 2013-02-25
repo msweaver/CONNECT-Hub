@@ -64,6 +64,29 @@
                 <constraints nullable="true"/>
             </column>            
         </createTable>
+        <createTable tableName="directEndpoint">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="orginfo_id" type="BIGINT">
+                <constraints references="orginfo(id)" foreignKeyName="patient_orginfo_fk" nullable="false"/>
+            </column>
+            <column name="endpoint" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dnsAddressBound" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dnsDomainBound" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ldapAddressBound" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ldapDomainBound" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
     </changeSet>
 
 </databaseChangeLog>

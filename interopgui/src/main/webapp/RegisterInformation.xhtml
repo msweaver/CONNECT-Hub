@@ -108,11 +108,11 @@
                         <h3 id="myModalLabel">Add Direct Endpoint</h3>
                         </div>
                         <div class="modal-body">
-                        <!-- v:DirectEndpoint value=""/> -->
+                        <v:DirectEndpoint value="#{register.directEndpoint}"/>
                         </div>
                         <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                        <button class="btn btn-primary">Save</button>
+                        <h:commandButton value="Save" action="#{register.addDirectEndpoint}" class="btn btn-primary" />
                       </div>
                   </div>
                 </div>

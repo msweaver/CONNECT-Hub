@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.StringUtils;
@@ -20,12 +21,14 @@ import org.connectopensource.interopgui.view.DirectEndpoint;
 import org.connectopensource.interopgui.view.Endpoint;
 import org.connectopensource.interopgui.view.Organization;
 import org.connectopensource.interopgui.view.impl.CertificateImpl;
+import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
 
 /**
  * @author msw
  * 
  */
 @ManagedBean
+@ViewScoped
 public class Register {
 
     public enum CertificateType {
@@ -44,24 +47,26 @@ public class Register {
     private List<DirectEndpoint> directEndpoints = null;
     private PatientInfo patient = null;
     private DocumentInfo document = null;
-    
+    private DirectEndpoint currentDirectEndpoint = null;
+
     public Register() {
-        
-        endpoints = new ArrayList<Endpoint>();        
-        certificate = new CertificateImpl();        
+
+        endpoints = new ArrayList<Endpoint>();
+        certificate = new CertificateImpl();
         patients = new ArrayList<PatientInfo>();
         documents = new ArrayList<DocumentInfo>();
-        directEndpoints = new ArrayList<DirectEndpoint>();        
+        directEndpoints = new ArrayList<DirectEndpoint>();
         patient = new PatientInfo();
         document = new DocumentInfo();
+        currentDirectEndpoint = new DirectEndpointImpl();
     }
-    
+
     /**
-     * This method needs to be kicked off in a pre-render view event 
+     * This method needs to be kicked off in a pre-render view event
      */
     public void loadDetail() {
         Map<String, Object> sessionMap = null;
-        
+
         try {
             sessionMap = getSessionMap();
             orgId = (String) sessionMap.get("organizationId");
@@ -85,15 +90,16 @@ public class Register {
 
         RegisterController controller = new RegisterController();
         Organization org = controller.retrieveOrganization(orgId);
-        
+
         orgId = org.getOrgId();
         hcid = org.getHCID();
         orgName = org.getOrgName();
-        
-        endpoints = org.getEndpoints();       
-        certificate = org.getCertificate();        
+
+        endpoints = org.getEndpoints();
+        certificate = org.getCertificate();
         patients = org.getPatients();
         documents = org.getDocuments();
+        directEndpoints = org.getDirectEndpoints();
     }
 
     /**
@@ -173,6 +179,14 @@ public class Register {
         return directEndpoints;
     }
 
+    public DirectEndpoint getDirectEndpoint() {
+        return currentDirectEndpoint;
+    }
+
+    public void setDirectEndpoint(DirectEndpoint endpoint) {
+        currentDirectEndpoint = endpoint;
+    }
+
     /**
      * @param directEndpoints the directEndpoints to set
      */
@@ -200,13 +214,14 @@ public class Register {
 
     /**
      * Add a patient.
+     * 
      * @return route for screen flow destination
      */
     public String addPatient() {
 
         RegisterController registerController = new RegisterController();
         registerController.savePatient(patient, orgId);
-        
+
         try {
             System.out.println("saving patient: " + patient);
         } catch (Exception e) {
@@ -218,18 +233,19 @@ public class Register {
 
         alert = "Patient added.";
         return "RegisterInformation?faces-direct=true";
-        
+
     }
-    
+
     /**
      * Add a document.
+     * 
      * @return route for screen flow destination
      */
     public String addDocument() {
 
         RegisterController registerController = new RegisterController();
         registerController.saveDocument(document, orgId);
-        
+
         try {
             System.out.println("saving document: " + document);
         } catch (Exception e) {
@@ -241,12 +257,45 @@ public class Register {
 
         alert = "Document added.";
         return "RegisterInformation?faces-direct=true";
-        
+
     }
 
-    
+    /*
+     * Add a patient.
+     * 
+     * @return route for screen flow destination
+     */
+    public String addDirectEndpoint() {
+
+        RegisterController registerController = new RegisterController();
+        registerController.saveDirectEndpoint(currentDirectEndpoint, orgId);
+
+        try {
+            System.out.println("saving direct endpoint: " + currentDirectEndpoint);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().put("organizationId", String.valueOf(orgId));
+
+        alert = "Direct Endpoint added.";
+        return "RegisterInformation?faces-direct=true";
+
+    }
+
     public String back() {
         return "ListInformation?faces-direct=true";
+    }
+
+    public String submitForm() {
+        directEndpoints.add(currentDirectEndpoint);
+        System.out.println("number of direct endpoints: " + directEndpoints.size());
+        System.out.println("direct endpoint: " + currentDirectEndpoint.getEndpoint());
+        System.out.println("direct endpoint dns add: " + currentDirectEndpoint.getDnsAddressBound());
+        System.out.println("direct endpoint dns domain: " + currentDirectEndpoint.getDnsDomainBound());
+        alert = "Direct Endpoint Added.";
+        return "";
     }
 
     /**
@@ -296,11 +345,11 @@ public class Register {
      */
     public void setDocument(DocumentInfo document) {
         this.document = document;
-    }    
-    
+    }
+
     private Map<String, Object> getSessionMap() {
         FacesContext context = FacesContext.getCurrentInstance();
         return context.getExternalContext().getSessionMap();
     }
-    
+
 }
