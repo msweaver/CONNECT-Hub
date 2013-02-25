@@ -42,6 +42,7 @@ public class Register {
     private List<PatientInfo> patients = null;
     private List<DocumentInfo> documents = null;
     private List<DirectEndpoint> directEndpoints = null;
+    private PatientInfo patient = null;
     
     public Register() {
         
@@ -50,9 +51,10 @@ public class Register {
         patients = new ArrayList<PatientInfo>();
         documents = new ArrayList<DocumentInfo>();
         directEndpoints = new ArrayList<DirectEndpoint>();
-
+        
+        patient = new PatientInfo();
     }
-
+    
     /**
      * This method needs to be kicked off in a pre-render view event 
      */
@@ -80,7 +82,7 @@ public class Register {
      * @param orgId
      */
     private void loadOrganization(String orgId) {
-        // TODO Auto-generated method stub
+
         RegisterController controller = new RegisterController();
         Organization org = controller.retrieveOrganization(orgId);
         
@@ -163,7 +165,7 @@ public class Register {
     public List<DocumentInfo> getDocuments() {
         return documents;
     }
-    
+
     /**
      * @return the directEndpoints
      */
@@ -177,25 +179,6 @@ public class Register {
     public void setDirectEndpoints(List<DirectEndpoint> directEndpoints) {
         this.directEndpoints = directEndpoints;
     }
-
-//    /**
-//     * @param demographics the demographics to set
-//     */
-//    public void setDemographics(Patient demographics) {
-//        this.demographics.setFirstName(demographics.getFirstName());
-//        this.demographics.setLastName(demographics.getLastName());
-//        this.demographics.setGender(demographics.getGender());
-//        this.demographics.setDateOfBirth(demographics.getDateOfBirth());
-//    }
-//
-//    /**
-//     * @param document the document to set
-//     */
-//    public void setDocument(Document document) {
-//        this.doc.setDocumentId(document.getDocumentId());
-//        this.doc.setDocumentType(document.getDocumentType());
-//        this.doc.setComment(document.getComment());
-//    }
 
     public String saveInfo() {
         try {
@@ -216,6 +199,31 @@ public class Register {
         return "RegisterInformation?faces-direct=true";
     }
 
+    /**
+     * Add a patient.
+     * @return route for screen flow destination
+     */
+    public String addPatient() {
+
+        RegisterController registerController = new RegisterController();
+        registerController.savePatient(patient, orgId);
+        
+        try {
+            System.out.println("saving patient: " + patient);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().put("organizationId", String.valueOf(orgId));
+
+        alert = "Patient added.";
+        return "RegisterInformation?faces-direct=true";
+        
+    }
+    
+    
     public String back() {
         return "ListInformation?faces-direct=true";
     }
@@ -228,11 +236,30 @@ public class Register {
     }
 
     /**
+     * @param orgId the orgId to set
+     */
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    /**
      * @return the alert
      */
     public String getAlert() {
         return alert;
     }
-    
-    
+
+    /**
+     * @return the patient
+     */
+    public PatientInfo getPatient() {
+        return patient;
+    }
+
+    /**
+     * @param patient the patient to set
+     */
+    public void setPatient(PatientInfo patient) {
+        this.patient = patient;
+    }    
 }

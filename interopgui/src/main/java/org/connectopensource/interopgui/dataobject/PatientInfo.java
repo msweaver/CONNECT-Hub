@@ -128,4 +128,15 @@ public class PatientInfo implements Patient {
         this.organizationInfo = organizationInfo;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "PatientInfo [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth="
+                + dateOfBirth + ", gender=" + gender + ", organizationInfo=" + organizationInfo.orgName + "]";
+    }
+    
+    
+
 }

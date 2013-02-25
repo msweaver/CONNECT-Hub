@@ -7,41 +7,62 @@
 <title>Insert title here</title>
 </head>
 <body>
+
     <comp:interface>
-        <comp:attribute name="value" required="true" type="org.connectopensource.interopgui.view.Patient" />
-        <comp:attribute name="firstNamePrompt" required="true" />
-        <comp:attribute name="lastNamePrompt" required="true" />
-        <comp:attribute name="dobPrompt" required="true" />
-        <comp:attribute name="genderPrompt" required="true" />
-        <comp:attribute name="required" required="false" default="false" />
-        <comp:attribute name="requiredMessage" required="false" default="Required!" />
+      <comp:attribute name="orgId" required="true" />
+      <comp:attribute name="firstNamePrompt" required="true" />
+      <comp:attribute name="lastNamePrompt" required="true" />
+      <comp:attribute name="dobPrompt" required="true" />
+      <comp:attribute name="genderPrompt" required="true" />
+      <comp:attribute name="required" required="false" default="false" />
+      <comp:attribute name="requiredMessage" required="false" default="Required!" />
     </comp:interface>
     <comp:implementation>
-        <h:panelGroup>
-            <div>#{cc.attrs.firstNamePrompt}</div>
-            <div>
-                <h:inputText value="#{cc.attrs.value.firstName}" id="firstName" required="#{cc.attrs.required}"
-                    requiredMessage="#{cc.attrs.requiredMessage}" />
-            </div>
-            <div>#{cc.attrs.lastNamePrompt}</div>
-            <div>
-                <h:inputText value="#{cc.attrs.value.lastName}" id="lastName" required="#{cc.attrs.required}"
-                    requiredMessage="#{cc.attrs.requiredMessage}" />
-            </div>
-            <div>#{cc.attrs.dobPrompt}</div>
-            <div>
-                <h:inputText value="#{cc.attrs.value.dateOfBirth}" id="dateOfBirth" required="#{cc.attrs.required}"
-                    requiredMessage="#{cc.attrs.requiredMessage}">
-                    <f:convertDateTime pattern="M-d-yyyy" />
-                </h:inputText>
-            </div>
-            <div>#{cc.attrs.genderPrompt}</div>
-            <div>
-                <h:selectOneMenu id="gender" value="#{cc.attrs.value.gender}">
-                    <f:selectItems value="#{cc.attrs.value.genders}" />
-                </h:selectOneMenu>
-            </div>
-        </h:panelGroup>
-    </comp:implementation>
+
+    <div id="patientmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&#215;</button>
+        <h3>Add Patient</h3>
+      </div>
+
+      <div class="modal-body">
+      <h:panelGroup>
+        <h:inputHidden value="#{register.orgId}" id="orgId" />
+
+        <div>#{cc.attrs.firstNamePrompt}</div>
+        <div>
+          <h:inputText value="#{register.patient.firstName}" id="firstName" required="#{cc.attrs.required}"
+                       requiredMessage="#{cc.attrs.requiredMessage}" />
+        </div>
+        <div>#{cc.attrs.lastNamePrompt}</div>
+        <div>
+          <h:inputText value="#{register.patient.lastName}" id="lastName" required="#{cc.attrs.required}"
+                       requiredMessage="#{cc.attrs.requiredMessage}" />
+        </div>
+        <div>#{cc.attrs.dobPrompt}</div>
+        <div>
+          <h:inputText value="#{register.patient.dateOfBirth}" id="dateOfBirth" required="#{cc.attrs.required}"
+                       requiredMessage="#{cc.attrs.requiredMessage}">
+            <f:convertDateTime pattern="M-d-yyyy" />
+          </h:inputText>
+        </div>
+        <div>#{cc.attrs.genderPrompt}</div>
+        <div>
+          <h:selectOneMenu id="gender" value="#{register.patient.gender}">
+            <f:selectItems value="#{register.patient.genders}" />
+          </h:selectOneMenu>
+        </div>
+      </h:panelGroup>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <h:commandButton value="Submit" action="#{register.addPatient()}" styleClass="btn btn-primary" />
+      </div>
+    </div>
+
+  </comp:implementation>
+
 </body>
 </html>

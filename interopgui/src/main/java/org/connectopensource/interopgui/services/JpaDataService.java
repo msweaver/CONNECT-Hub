@@ -33,6 +33,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
+import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.jpa.AbstractJpaTemplate;
 
 /**
@@ -111,6 +112,31 @@ public class JpaDataService implements DataService {
         // TODO Auto-generated method stub
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PatientInfo addPatient(final PatientInfo patient, final String orgId) {
+        final Long lid = Long.valueOf(orgId);
+        try {
+            return new AbstractJpaTemplate<PatientInfo>() {
+                @Override
+                protected List<PatientInfo> execute(EntityManager entityManager) {
+                    TypedQuery<OrganizationInfo> query = entityManager.createQuery("from OrganizationInfo where id = :id", OrganizationInfo.class);
+                    query.setParameter("id", lid);
+                    OrganizationInfo orgInfo = query.getResultList().get(0);
+                    patient.setOrganizationInfo(orgInfo);
+                    orgInfo.getPatients().add(patient);
+                    return Collections.singletonList(patient); 
+                }            
+            }.execute().get(0);        
+        } catch (Exception e) {
+            throw new DataServiceException("Error while persisting org info.", e);
+        }
+    }
      
+    
+    
     
 }

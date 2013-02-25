@@ -6,6 +6,7 @@ package org.connectopensource.interopgui.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
@@ -47,6 +48,16 @@ public class RegisterController {
             e.printStackTrace();
         }
         return saveOrganization(org);
+    }
+    
+    /**
+     * Persist a new patient with an organization.
+     * @param patient information to be persisted
+     * @param orgId organization parent for this patient
+     */
+    public void savePatient(PatientInfo patient, String orgId)  {        
+        DataService service = new JpaDataService();        
+        service.addPatient(patient, orgId);        
     }
 
     
