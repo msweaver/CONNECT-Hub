@@ -6,6 +6,7 @@ package org.connectopensource.interopgui.services;
 import java.util.List;
 
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
+import org.connectopensource.interopgui.dataobject.PatientInfo;
 
 /**
  * @author msw
@@ -35,4 +36,11 @@ public interface DataService {
      * @return list of organization info matching an id.
      */
     public OrganizationInfo getData(String id);
+    
+    /**
+     * @param org
+     * @return the id of the newly saved record.
+     */
+    public PatientInfo addPatient(PatientInfo patient, String orgId);
+
 }
