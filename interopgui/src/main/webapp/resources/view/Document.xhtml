@@ -8,28 +8,51 @@
 </head>
 <body>
     <comp:interface>
-        <comp:attribute name="value" required="true" type="org.connectopensource.interopgui.view.Document" />
-        <comp:attribute name="docIdPrompt" required="true" />
-        <comp:attribute name="commentPrompt" required="true" />
-        <comp:attribute name="required" required="false" default="false" />
-        <comp:attribute name="requiredMessage" required="false" default="Required!" />
+      <comp:attribute name="orgId" required="true" />
+      <comp:attribute name="docIdPrompt" required="true" />
+      <comp:attribute name="commentPrompt" required="true" />
+      <comp:attribute name="required" required="false" default="false" />
+      <comp:attribute name="requiredMessage" required="false" default="Required!" />
     </comp:interface>
     <comp:implementation>
+
+    <div id="documentmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&#215;</button>
+        <h3>Add Document</h3>
+      </div>
+
+      <div class="modal-body">
+      <h:panelGroup>
+
+        <h:inputHidden value="#{register.orgId}" id="orgId" />
+
         <div>#{cc.attrs.docIdPrompt}</div>
         <div>
-            <h:inputText value="#{cc.attrs.value.documentId}" id="documentId" required="#{cc.attrs.required}"
+            <h:inputText value="#{register.document.documentId}" id="documentId" required="#{cc.attrs.required}"
                 requiredMessage="#{cc.attrs.requiredMessage}" />
         </div>
         <div>#{cc.attrs.documentTypePrompt}</div>
         <div>
-            <h:inputText value="#{cc.attrs.value.documentType}" id="documentType" required="#{cc.attrs.required}"
+            <h:inputText value="#{register.document.documentType}" id="documentType" required="#{cc.attrs.required}"
                 requiredMessage="#{cc.attrs.requiredMessage}" />
         </div>
         <div>#{cc.attrs.commentPrompt}</div>
         <div>
-            <h:inputText value="#{cc.attrs.value.comment}" id="comment" required="#{cc.attrs.required}"
+            <h:inputText value="#{register.document.comment}" id="comment" required="#{cc.attrs.required}"
                 requiredMessage="#{cc.attrs.requiredMessage}" />
         </div>
+      </h:panelGroup>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <h:commandButton value="Submit" action="#{register.addDocument()}" styleClass="btn btn-primary" />
+      </div>
+    </div>
+
+
     </comp:implementation>
 </body>
 </html>

@@ -177,7 +177,9 @@
                             <h:outputText value="#{patient.gender}" />
                         </h:column>
                       </h:dataTable>
-                      <a href="#patientmodal" role="button" class="btn" data-toggle="modal" rendered="#{register.orgId == ''}">Add Patient</a>
+                      <h:panelGroup rendered="#{register.orgId != ''}">
+                        <a href="#patientmodal" role="button" class="btn" data-toggle="modal">Add Patient</a>
+                      </h:panelGroup>
                     </div>
                   </div>
                 </div>
@@ -217,46 +219,21 @@
                             <h:outputText value="#{document.comment}" />
                         </h:column>
                       </h:dataTable>
+                      <h:panelGroup rendered="#{register.orgId != ''}">
+                        <a href="#documentmodal" role="button" class="btn" data-toggle="modal">Add Document</a>
+                      </h:panelGroup>
                     </div>
                   </div>
                 </div>
               </div>
             </fieldset>
-<!--
-            <fieldset>
-                <legend>Patient Discovery</legend>
-                <v:Endpoint specVersionPrompt="Version:" endpointPrompt="Endpoint:" value="#{register.endpoint}"
-                    spec="PATIENT_DISCOVERY" />
-            </fieldset>
-            <fieldset>
-                <legend>Query For Documents</legend>
-                <v:Endpoint specVersionPrompt="Version:" endpointPrompt="Endpoint:" value="#{register.endpoint}"
-                    spec="DOCUMENT_QUERY" />
-            </fieldset>
-            <fieldset>
-                <legend>Document Retrieve</legend>
-
-                <v:Endpoint specVersionPrompt="Version:" endpointPrompt="Endpoint:" value="#{register.endpoint}"
-                    spec="DOCUMENT_RETRIEVE" />
-            </fieldset>
-            <fieldset>
-                <legend>Document Submission</legend>
-
-                <v:Endpoint specVersionPrompt="Version:" endpointPrompt="Endpoint:" value="#{register.endpoint}"
-                    spec="DOCUMENT_SUBMISSION" />
-            </fieldset>
-            <fieldset>
-                <legend>Administration Distribution</legend>
-
-                <v:Endpoint specVersionPrompt="AD Version:" endpointPrompt="AD Endpoint:" value="#{register.endpoint}"
-                    spec="ADMINISTRATIVE_DISTRIBUTION" />
-            </fieldset>
--->
 
           <h:commandButton value="Back" action="#{register.back}" styleClass="btn" rendered="#{register.orgId != ''}" />
           <h:commandButton value="Submit" action="#{register.saveInfo}" styleClass="btn btn-primary" rendered="#{register.orgId == ''}" />
 
           <v:Patient firstNamePrompt="First Name:" lastNamePrompt="Last Name:" dobPrompt="Date of Birth (MM-DD-YYYY):" genderPrompt="Gender:" orgId="#{register.orgId}"/>
+          <v:Document docIdPrompt="Document Id:" documentTypePrompt="Document Type:" commentPrompt="Comment:" orgId="#{register.orgId}"/>
+
         </h:form>
       </div>
     </div>
