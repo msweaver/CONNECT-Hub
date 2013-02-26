@@ -117,7 +117,7 @@
                             </h:panelGroup>
                         </h:column>
                       </h:dataTable>
-                      <a href="#directEndpointModal" role="button" class="btn" data-toggle="modal">Add</a>
+                      <a href="#directEndpointModal" role="button" class="btn" data-toggle="modal">Add Direct Endpoint</a>
                       <div id="directEndpointModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
@@ -127,7 +127,7 @@
                         <v:DirectEndpoint value="#{register.directEndpoint}"/>
                         </div>
                         <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <h:commandButton value="Save" action="#{register.addDirectEndpoint}" class="btn btn-primary" />
                       </div>
                   </div>
