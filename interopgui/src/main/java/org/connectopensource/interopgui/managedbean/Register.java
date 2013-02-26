@@ -56,7 +56,7 @@ public class Register {
         directEndpoints = new ArrayList<DirectEndpoint>();        
         patient = new PatientInfo();
         document = new DocumentInfo();
-        endpoint = new EndpointImpl(null,null,null);
+        endpoint = new EndpointImpl(null,null,"https://");
         currentDirectEndpoint = new DirectEndpointImpl();
     }
     
