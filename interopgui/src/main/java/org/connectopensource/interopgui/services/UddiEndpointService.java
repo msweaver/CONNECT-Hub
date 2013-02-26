@@ -74,15 +74,17 @@ public class UddiEndpointService implements EndpointService {
     }
 
     @Override
-    public void saveEndpoint(Endpoint endpoint) {
-        // TODO Auto-generated method stub
+    public void saveEndpoint(Organization organization, Endpoint endpoint) {
+        publishBusinessService(organization, endpoint);
 
     }
 
     @Override
-    public void saveEndpoints(List<Endpoint> endpoints) {
-        for (Endpoint endpoint : endpoints) {
-            saveEndpoint(endpoint);
+    public void saveEndpoints(Organization organization) {
+        publishBusinessEntity(organization);
+        
+        for (Endpoint endpoint : organization.getEndpoints()) {
+            saveEndpoint(organization, endpoint);
         }
 
     }
