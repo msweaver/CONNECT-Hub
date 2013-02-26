@@ -69,7 +69,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="orginfo_id" type="BIGINT">
-                <constraints references="orginfo(id)" foreignKeyName="patient_orginfo_fk" nullable="false"/>
+                <constraints references="orginfo(id)" foreignKeyName="directendpoint_orginfo_fk" nullable="false"/>
             </column>
             <column name="endpoint" type="varchar(256)">
                 <constraints nullable="false"/>
