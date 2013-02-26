@@ -39,7 +39,7 @@ public class EndpointImpl implements Endpoint {
     private Specification specification;
     private SpecVersion version;
     private String url;
-    
+           
     /**
      * @param specification
      * @param version
@@ -51,13 +51,19 @@ public class EndpointImpl implements Endpoint {
         this.url = url;
     }
 
-    /* (non-Javadoc)
-     * @see org.connectopensource.interopgui.view.Endpoint#getSpecVersions()
+    /**
+     * {@inheritDoc}
+     */
+    public SpecVersion[] getSpecVersions() {
+        return SpecVersion.values();
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
-    public SpecVersion[] getSpecVersions() {
-        // TODO Auto-generated method stub
-        return null;
+    public Specification[] getSpecifications() {
+        return Specification.values();
     }
 
     /* (non-Javadoc)

@@ -5,12 +5,10 @@ package org.connectopensource.interopgui.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
-import org.connectopensource.interopgui.dataobject.EndpointInfo;
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.services.CertificateService;
@@ -18,15 +16,14 @@ import org.connectopensource.interopgui.services.DataService;
 import org.connectopensource.interopgui.services.EndpointService;
 import org.connectopensource.interopgui.services.JceCertificateService;
 import org.connectopensource.interopgui.services.JpaDataService;
+import org.connectopensource.interopgui.services.UddiEndpointService;
 import org.connectopensource.interopgui.view.Certificate;
 import org.connectopensource.interopgui.view.Certificate.CertificateType;
 import org.connectopensource.interopgui.view.DirectEndpoint;
-import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
 import org.connectopensource.interopgui.view.Endpoint;
-import org.connectopensource.interopgui.view.Endpoint.SpecVersion;
-import org.connectopensource.interopgui.view.Endpoint.Specification;
 import org.connectopensource.interopgui.view.Organization;
 import org.connectopensource.interopgui.view.impl.CertificateImpl;
+import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
 import org.connectopensource.interopgui.view.impl.OrganizationImpl;
 
 /**
@@ -82,9 +79,16 @@ public class RegisterController {
      * @param orgId organization parent for this patient
      */
     public void saveEndpoint(Endpoint endpoint, String orgId)  {
-        // TODO::Instantiate the real endpoint service
-        EndpointService service = null;        
-        service.saveEndpoint(endpoint);
+
+        EndpointService endpointService = new UddiEndpointService();        
+
+        OrganizationInfo orgInfo = retrieveOrgInfo(orgId);        
+        Organization orgView = new OrganizationImpl();
+        orgView.setHCID(orgInfo.getHomeCommunityId());
+        orgView.setOrgName(orgInfo.getOrgName());
+        orgView.setOrgId(orgInfo.getId().toString());
+
+        endpointService.saveEndpoint(orgView, endpoint);
     }
     
     /**
@@ -134,19 +138,14 @@ public class RegisterController {
         patients.addAll(orgInfo.getPatients());        
         orgView.setPatients(patients);
         
-        // TODO::Provide implementation of endpointservice
-        EndpointService endpointService = null;
+//        EndpointService endpointService = new UddiEndpointService();
 //        orgView.setEndPoints(endpointService.getEndpoints(orgInfo.getHomeCommunityId()));
-        Endpoint endpoint = new EndpointInfo();
-        endpoint.setSpecification(Specification.DOCUMENT_QUERY);
-        endpoint.setSpecVersion(SpecVersion.SUMMER_2011);
-        endpoint.setEndpoint("http://some.endpoint.org/path/to/uri.wsdls");
+
         // TODO: populate endpoints
         List<DirectEndpoint> directEndpoints = new ArrayList<DirectEndpoint>(orgInfo.getDirectEndpoints().size());
         directEndpoints.addAll(orgInfo.getDirectEndpoints());
         orgView.setDirectEndpoints(directEndpoints);
         
-        orgView.setEndPoints(Collections.singletonList(endpoint));
                 
         List<DocumentInfo> documents = new ArrayList<DocumentInfo>(orgInfo.getDocuments().size());
         documents.addAll(orgInfo.getDocuments());        
