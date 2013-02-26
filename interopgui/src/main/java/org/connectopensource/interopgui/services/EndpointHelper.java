@@ -54,7 +54,7 @@ public class EndpointHelper {
         case DOCUMENT_RETRIEVE:
             return getSpecVersion(specVersion, "2.0", "3.0");
         case DOCUMENT_SUBMISSION:
-            return getSpecVersion(specVersion, "1.1.0", "2.0");
+            return getSpecVersion(specVersion, "1.1", "2.0");
         default:
             break;
         
@@ -74,7 +74,7 @@ public class EndpointHelper {
         case DOCUMENT_RETRIEVE:
             return getSpecVersion(keyValue, "2.0", "3.0");
         case DOCUMENT_SUBMISSION:
-            return getSpecVersion(keyValue, "1.1.0", "2.0");
+            return getSpecVersion(keyValue, "1.1", "2.0");
         default:
             break;
         
