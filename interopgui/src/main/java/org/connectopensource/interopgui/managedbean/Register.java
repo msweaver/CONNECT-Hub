@@ -11,7 +11,6 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.lang.StringUtils;
 import org.connectopensource.interopgui.controller.RegisterController;
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
-import org.connectopensource.interopgui.dataobject.EndpointInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.view.Certificate;
 import org.connectopensource.interopgui.view.DirectEndpoint;
@@ -19,6 +18,7 @@ import org.connectopensource.interopgui.view.Endpoint;
 import org.connectopensource.interopgui.view.Organization;
 import org.connectopensource.interopgui.view.impl.CertificateImpl;
 import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
+import org.connectopensource.interopgui.view.impl.EndpointImpl;
 
 /**
  * @author msw
@@ -56,7 +56,7 @@ public class Register {
         directEndpoints = new ArrayList<DirectEndpoint>();        
         patient = new PatientInfo();
         document = new DocumentInfo();
-        endpoint = new EndpointInfo();
+        endpoint = new EndpointImpl(null,null,null);
         currentDirectEndpoint = new DirectEndpointImpl();
     }
     
