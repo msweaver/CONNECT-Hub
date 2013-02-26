@@ -1,9 +1,5 @@
-/**
- * 
- */
 package org.connectopensource.interopgui.view.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
@@ -33,10 +29,16 @@ public class OrganizationImpl implements Organization {
      */
     @Override
     public List<Endpoint> getEndpoints() {
-        if (endpoints == null) {
-            endpoints = new ArrayList<Endpoint>();
-        }
         return endpoints;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setEndPoints(List<Endpoint> endpoints) {
+        // TODO Auto-generated method stub
+        
     }
 
     /* (non-Javadoc)

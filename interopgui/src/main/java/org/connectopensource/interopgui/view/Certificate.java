@@ -11,7 +11,24 @@ import org.apache.myfaces.custom.fileupload.UploadedFile;
  */
 public interface Certificate {
 
-    public enum CertificateType { CERT, CERT_REQ }
+    public enum CertificateType { 
+
+        CERT("Trusted Cert (pem)"), CERT_REQ("CSR (pem)");
+        
+        private final String label;
+        
+        private CertificateType(String label) {
+            this.label = label;
+        }
+
+        /**
+         * @return the label
+         */
+        public String getLabel() {
+            return label;
+        }
+    }
+    
     public CertificateType[] getCertificateTypes();
         
     public CertificateType getCertType();

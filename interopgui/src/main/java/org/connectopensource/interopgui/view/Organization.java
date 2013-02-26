@@ -15,7 +15,7 @@ import org.connectopensource.interopgui.dataobject.PatientInfo;
 public interface Organization {
 
     /**
-     * @return
+     * @return endpoints
      */
     public List<Endpoint> getEndpoints();
 
@@ -34,6 +34,11 @@ public interface Organization {
      */
     public Certificate getCertificate();
     
+    /**
+     * @param endpoints to set
+     */
+    public void setEndPoints(List<Endpoint> endpoints);
+
     /**
      * @return
      */

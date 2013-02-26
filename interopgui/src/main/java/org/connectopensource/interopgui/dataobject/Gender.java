@@ -29,4 +29,22 @@ package org.connectopensource.interopgui.dataobject;
 /**
  * 
  */
-public enum Gender { MALE, FEMALE, UNKNOWN }
+public enum Gender { 
+
+    MALE("Male"), FEMALE("Female"), UNKNOWN("Undisclosed");
+    
+    private final String label;
+    
+    private Gender(String label) {
+        this.label = label;
+    }
+
+    /**
+     * @return the label
+     */
+    public String getLabel() {
+        return label;
+    }
+
+    
+}

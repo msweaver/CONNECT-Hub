@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.connectopensource.interopgui.managedbean;
 
 import java.util.ArrayList;
@@ -41,32 +38,34 @@ public class Register {
     private String orgName = null;
 
     private List<Endpoint> endpoints = null;
-    private Certificate certificate = null;
     private List<PatientInfo> patients = null;
     private List<DocumentInfo> documents = null;
     private List<DirectEndpoint> directEndpoints = null;
+
+    private Certificate certificate = null;
     private PatientInfo patient = null;
     private DocumentInfo document = null;
+    private Endpoint endpoint = null;
     private DirectEndpoint currentDirectEndpoint = null;
-
-    public Register() {
-
-        endpoints = new ArrayList<Endpoint>();
-        certificate = new CertificateImpl();
+    
+    public Register() {        
+        endpoints = new ArrayList<Endpoint>();        
+        certificate = new CertificateImpl();        
         patients = new ArrayList<PatientInfo>();
         documents = new ArrayList<DocumentInfo>();
-        directEndpoints = new ArrayList<DirectEndpoint>();
+        directEndpoints = new ArrayList<DirectEndpoint>();        
         patient = new PatientInfo();
         document = new DocumentInfo();
+        endpoint = new EndpointInfo();
         currentDirectEndpoint = new DirectEndpointImpl();
     }
-
+    
     /**
-     * This method needs to be kicked off in a pre-render view event
+     * This method needs to be kicked off in a pre-render view event 
      */
     public void loadDetail() {
         Map<String, Object> sessionMap = null;
-
+        
         try {
             sessionMap = getSessionMap();
             orgId = (String) sessionMap.get("organizationId");
@@ -90,13 +89,13 @@ public class Register {
 
         RegisterController controller = new RegisterController();
         Organization org = controller.retrieveOrganization(orgId);
-
+        
         orgId = org.getOrgId();
         hcid = org.getHCID();
         orgName = org.getOrgName();
-
-        endpoints = org.getEndpoints();
-        certificate = org.getCertificate();
+        
+        endpoints = org.getEndpoints();       
+        certificate = org.getCertificate();        
         patients = org.getPatients();
         documents = org.getDocuments();
         directEndpoints = org.getDirectEndpoints();
@@ -131,17 +130,17 @@ public class Register {
     }
 
     /**
-     * 
+     * @return endpoint
      */
     public Endpoint getEndpoint() {
-        return new EndpointInfo();
+        return endpoint;
     }
 
     /**
-     * 
+     * @param endpoint to be set
      */
     public void setEndpoint(Endpoint endpoint) {
-        endpoints.add(endpoint);
+        this.endpoint = endpoint ;
     }
 
     /**
@@ -194,6 +193,13 @@ public class Register {
         this.directEndpoints = directEndpoints;
     }
 
+    /**
+     * @return the endpoints
+     */
+    public List<Endpoint> getEndpoints() {
+        return endpoints;
+    }
+
     public String saveInfo() {
         try {
             System.out.println("saveInfo, cert size: " + certificate.getFile());
@@ -221,7 +227,7 @@ public class Register {
 
         RegisterController registerController = new RegisterController();
         registerController.savePatient(patient, orgId);
-
+        
         try {
             System.out.println("saving patient: " + patient);
         } catch (Exception e) {
@@ -233,9 +239,9 @@ public class Register {
 
         alert = "Patient added.";
         return "RegisterInformation?faces-direct=true";
-
+        
     }
-
+    
     /**
      * Add a document.
      * 
@@ -245,7 +251,7 @@ public class Register {
 
         RegisterController registerController = new RegisterController();
         registerController.saveDocument(document, orgId);
-
+        
         try {
             System.out.println("saving document: " + document);
         } catch (Exception e) {
@@ -257,7 +263,7 @@ public class Register {
 
         alert = "Document added.";
         return "RegisterInformation?faces-direct=true";
-
+        
     }
 
     /*
@@ -266,7 +272,7 @@ public class Register {
      * @return route for screen flow destination
      */
     public String addDirectEndpoint() {
-
+    
         RegisterController registerController = new RegisterController();
         registerController.saveDirectEndpoint(currentDirectEndpoint, orgId);
 
@@ -345,11 +351,12 @@ public class Register {
      */
     public void setDocument(DocumentInfo document) {
         this.document = document;
-    }
-
+    }    
+    
+    
     private Map<String, Object> getSessionMap() {
         FacesContext context = FacesContext.getCurrentInstance();
         return context.getExternalContext().getSessionMap();
     }
-
+    
 }

@@ -44,13 +44,14 @@
         <div>
           <h:inputText value="#{register.patient.dateOfBirth}" id="dateOfBirth" required="#{cc.attrs.required}"
                        requiredMessage="#{cc.attrs.requiredMessage}">
-            <f:convertDateTime pattern="M-d-yyyy" />
+            <f:convertDateTime pattern="MM-dd-yyyy" />
           </h:inputText>
         </div>
         <div>#{cc.attrs.genderPrompt}</div>
         <div>
           <h:selectOneMenu id="gender" value="#{register.patient.gender}">
-            <f:selectItems value="#{register.patient.genders}" />
+            <f:selectItems value="#{register.patient.genders}" var="p"
+                           itemValue="#{p}" itemLabel="#{p.label}" />
           </h:selectOneMenu>
         </div>
       </h:panelGroup>
