@@ -10,34 +10,63 @@
 </head>
 <body>
    <comp:interface>
-      <comp:attribute name="value" required="true"
-         type="org.connectopensource.interopgui.view.Endpoint" />
+      <comp:attribute name="orgId" required="true" />
       <comp:attribute name="specVersionPrompt" required="true" />
+      <comp:attribute name="specPrompt" required="true" />
       <comp:attribute name="endpointPrompt" required="true" />
-      <comp:attribute name="spec" required="true" />
       <comp:attribute name="required" required="false" default="false" />
-      <comp:attribute name="requiredMessage" required="false"
-         default="Required!" />
+      <comp:attribute name="requiredMessage" required="false" default="Required!" />
    </comp:interface>
    <comp:implementation>
-      <div class="control-group">
-         <label class="control-label" for="specVersion">#{cc.attrs.specVersionPrompt}</label>
-         <div class="controls">
-            <h:selectOneMenu id="specVersion"
-               value="#{cc.attrs.value.specVersion}">
-               <f:selectItems value="#{cc.attrs.value.specVersions}" />
-            </h:selectOneMenu>
-         </div>
+
+    <div id="endpointmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&#215;</button>
+        <h3>Add Endpoint</h3>
       </div>
-      <div class="control-group">
-         <label class="control-label" for="endpoint">#{cc.attrs.endpointPrompt}</label>
-         <div class="controls">
-            <h:inputText value="#{cc.attrs.value.endpoint}"
-               id="endpoint" required="#{cc.attrs.required}"
-               requiredMessage="#{cc.attrs.requiredMessage}" />
-            <h:inputHidden value="#{cc.attrs.value.specification}" />
-         </div>
+
+      <div class="modal-body">
+        <h:panelGroup>
+          <h:inputHidden value="#{register.orgId}" id="orgId" />
+
+          <div class="control-group">
+             <label class="control-label" for="specVersion">#{cc.attrs.specPrompt}</label>
+             <div class="controls">
+                <h:selectOneMenu id="spec"
+                   value="#{register.endpoint.specification}">
+                   <f:selectItems value="#{register.endpoint.specifications}" var="sp"
+                                  itemValue="#{sp}" itemLabel="#{sp.label}" />
+                </h:selectOneMenu>
+             </div>
+          </div>
+          <div class="control-group">
+             <label class="control-label" for="specVersion">#{cc.attrs.specVersionPrompt}</label>
+             <div class="controls">
+                <h:selectOneMenu id="specVersion"
+                   value="#{register.endpoint.specVersion}">
+                   <f:selectItems value="#{register.endpoint.specVersions}" var="sv"
+                                  itemValue="#{sv}" itemLabel="#{sv.label}" />
+                </h:selectOneMenu>
+             </div>
+          </div>
+          <div class="control-group">
+             <label class="control-label" for="endpoint">#{cc.attrs.endpointPrompt}</label>
+             <div class="controls">
+                <h:inputText styleClass="span4" value="#{register.endpoint.endpoint}"
+                   id="endpoint" required="#{cc.attrs.required}"
+                   requiredMessage="#{cc.attrs.requiredMessage}" />
+             </div>
+          </div>
+
+        </h:panelGroup>
+
       </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <h:commandButton value="Submit" action="#{register.addEndpoint()}" styleClass="btn btn-primary" />
+      </div>
+    </div>
+
    </comp:implementation>
 </body>
 </html>

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.connectopensource.interopgui.dataobject;
 
 import org.connectopensource.interopgui.view.Endpoint;
@@ -15,8 +12,19 @@ public class EndpointInfo implements Endpoint {
     private String endpoint;
     private Specification spec;
     
+    /**
+     * {@inheritDoc}
+     */
     public SpecVersion[] getSpecVersions() {
         return SpecVersion.values();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Specification[] getSpecifications() {
+        return Specification.values();
     }
 
     /* (non-Javadoc)

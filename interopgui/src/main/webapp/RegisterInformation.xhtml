@@ -34,17 +34,33 @@
                 <h:inputText id="orgName" value="#{register.orgName}" readonly="#{register.orgId != ''}" />
               </div>
             </div>
+
           <fieldset>
             <legend>Certificate</legend>
             <h:panelGroup layout="block" rendered="#{register.orgId != ''}" >
+
+            <div class="accordion" id="accordion1">
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+                       href="#collapseCert"><h:outputText value="#{register.certificate.certType.label}" /></a>
+                </div>
+                <div id="collapseCert" class="accordion-body collapse">
+                  <div class="accordion-inner">
+
 <!-- This has to be left-justy or whitespace will be rendered -->
 <pre>
 <h:outputText value="#{register.certificate.pemString}" />
 </pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             </h:panelGroup>
             <v:Certificate value="#{register.certificate}" rendered="#{register.orgId == ''}" />
           </fieldset>
-          <H3>Details</H3>
+
           <fieldset>
             <legend>Direct</legend>
             <div class="accordion" id="accordion1">
@@ -128,7 +144,40 @@
                      href="#collapseEndpoints"> Endpoints </a>
                 </div>
                 <div id="collapseEndpoints" class="accordion-body collapse">
-                  <div class="accordion-inner">TODO::List of endpoints...</div>
+                  <div class="accordion-inner">
+
+                    <h:dataTable value="#{register.endpoints}" var="endpoint" class="table table-hover">
+                      <h:column rendered="false">
+                        <f:facet name="header">
+                          <h:outputText value="ID" />
+                        </f:facet>
+                        <h:outputText value="#{endpoint.id}" />
+                      </h:column>
+                      <h:column>
+                        <f:facet name="header">
+                          <h:outputText value="Specification" />
+                        </f:facet>
+                        <h:outputText value="#{endpoint.specification.label}" />
+                      </h:column>
+                      <h:column>
+                        <f:facet name="header">
+                          <h:outputText value="Version" />
+                        </f:facet>
+                        <h:outputText value="#{endpoint.specVersion.label}" />
+                      </h:column>
+
+                      <h:column>
+                        <f:facet name="header">
+                          <h:outputText value="Endpoint" />
+                        </f:facet>
+                        <h:outputText value="#{patient.endpoint}" />
+                      </h:column>
+                    </h:dataTable>
+
+                    <h:panelGroup rendered="#{register.orgId != ''}">
+                      <a href="#endpointmodal" role="button" class="btn" data-toggle="modal">Add Endpoint</a>
+                    </h:panelGroup>
+                  </div>
                 </div>
               </div>
               <div class="accordion-group">
@@ -167,14 +216,16 @@
                             <f:facet name="header">
                                 <h:outputText value="Date of Birth" />
                             </f:facet>
-                            <h:outputText value="#{patient.dateOfBirth}" />
+                            <h:outputText value="#{patient.dateOfBirth}" >
+                                <f:convertDateTime pattern="MM-dd-yyyy" />
+                            </h:outputText>
                         </h:column>
 
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="Gender" />
                             </f:facet>
-                            <h:outputText value="#{patient.gender}" />
+                            <h:outputText value="#{patient.gender.label}" />
                         </h:column>
                       </h:dataTable>
                       <h:panelGroup rendered="#{register.orgId != ''}">
@@ -233,6 +284,7 @@
 
           <v:Patient firstNamePrompt="First Name:" lastNamePrompt="Last Name:" dobPrompt="Date of Birth (MM-DD-YYYY):" genderPrompt="Gender:" orgId="#{register.orgId}"/>
           <v:Document docIdPrompt="Document Id:" documentTypePrompt="Document Type:" commentPrompt="Comment:" orgId="#{register.orgId}"/>
+          <v:Endpoint specVersionPrompt="Version:" endpointPrompt="Endpoint:" specPrompt="Specification:" orgId="#{register.orgId}"/>
 
         </h:form>
       </div>
