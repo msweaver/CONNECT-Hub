@@ -22,12 +22,6 @@
         <h1>CONNECT Hub</h1>
         <p>Welcome to the CONNECT Interoperability Showcase Information Registration Page. Please enter your information below.</p>
         <h:form enctype="multipart/form-data" class="form-horizontal">
-          <div class="control-group">
-            <label class="control-label" for="hcid">HCID:</label>
-            <div class="controls">
-              <h:inputText id="hcid" value="#{register.hcid}" readonly="#{register.orgId != ''}"/>
-            </div>
-          </div>
             <div class="control-group">
               <label class="control-label" for="orgName">Organization Name:</label>
               <div class="controls">
@@ -137,6 +131,14 @@
             </div>
 
             <legend>Exchange</legend>
+            
+            <div class="control-group">
+              <label class="control-label" for="hcid">HCID:</label>
+              <div class="controls">
+                <h:inputText id="hcid" value="#{register.hcid}" readonly="#{register.orgId != ''}"/>
+              </div>
+            </div>
+                    
             <div class="accordion" id="accordion2">
               <div class="accordion-group">
                 <div class="accordion-heading">
