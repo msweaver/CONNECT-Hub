@@ -371,8 +371,7 @@ public class Register {
     public void setDocument(DocumentInfo document) {
         this.document = document;
     }    
-    
-    
+        
     private Map<String, Object> getSessionMap() {
         FacesContext context = FacesContext.getCurrentInstance();
         return context.getExternalContext().getSessionMap();
