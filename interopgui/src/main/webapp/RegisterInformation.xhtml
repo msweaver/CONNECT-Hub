@@ -45,10 +45,10 @@
 
 <!-- This has to be left-justy or whitespace will be rendered -->
             <div class="control-group" hidden="#{register.directCertificate.pemString} != ''}">
-              <label class="control-label" for="pemString">Certificate PEM:</label>
+              <label class="control-label" for="directPemString">Certificate PEM:</label>
               <div class="controls">
 <pre>
-<h:outputText id="pemString" value="#{register.directCertificate.pemString}" />
+<h:outputText id="directPemString" value="#{register.directCertificate.pemString}" />
 </pre>
 </div>
 </div>
@@ -154,6 +154,15 @@
                 </div>
                 <div id="collapseCertificates" class="accordion-body show">
                   <div class="accordion-inner">
+                  <!-- This has to be left-justy or whitespace will be rendered -->
+            <div class="control-group" hidden="#{register.certificate.pemString} != ''}">
+              <label class="control-label" for="exchangePemString">Certificate PEM:</label>
+              <div class="controls">
+<pre>
+<h:outputText id="exchangePemString" value="#{register.certificate.pemString}" />
+</pre>
+</div>
+</div>
                     <v:Certificate value="#{register.certificate}"/>
                   </div>
                 </div>
