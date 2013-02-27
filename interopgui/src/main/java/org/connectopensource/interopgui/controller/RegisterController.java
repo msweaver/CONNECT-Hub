@@ -5,7 +5,9 @@ package org.connectopensource.interopgui.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
@@ -46,7 +48,10 @@ public class RegisterController {
         
         CertificateInfo certInfo = new CertificateInfo(cert);
         CertificateInfo directCertInfo = new CertificateInfo(directCert);
-        OrganizationInfo org = new OrganizationInfo(hcid, orgName, certInfo, directCertInfo);
+        Set<CertificateInfo> certs = new HashSet<CertificateInfo>();
+        certs.add(certInfo);
+        certs.add(directCertInfo);
+        OrganizationInfo org = new OrganizationInfo(hcid, orgName, certs);
 
         certInfo.setOrganizationInfo(org);
         certInfo.setSpecification("exchange");
@@ -153,14 +158,15 @@ public class RegisterController {
         orgView.setOrgName(orgInfo.getOrgName());
         orgView.setOrgId(orgInfo.getId().toString());
         
-        CertificateInfo certInfo = orgInfo.getCertInfo();
-        Certificate cert = new CertificateImpl(certInfo);
-        orgView.setCertificate(cert);
-        
-        CertificateInfo directCertInfo = orgInfo.getDirectCertInfo();
-        System.out.println("trustBundle: " + directCertInfo.getTrustBundleUrl());
-        DirectCertificate directCert = new DirectCertificateImpl(directCertInfo);
-        orgView.setDirectCertificate(directCert);
+        for (CertificateInfo info : orgInfo.getCertificates()) {
+            if ("exchange".equalsIgnoreCase(info.getSpecification())) {
+                Certificate cert = new CertificateImpl(info);
+                orgView.setCertificate(cert);
+            } else {
+                DirectCertificate directCert = new DirectCertificateImpl(info);
+                orgView.setDirectCertificate(directCert);
+            }
+        }
         
         List<PatientInfo> patients = new ArrayList<PatientInfo>(orgInfo.getPatients().size());
         patients.addAll(orgInfo.getPatients());        

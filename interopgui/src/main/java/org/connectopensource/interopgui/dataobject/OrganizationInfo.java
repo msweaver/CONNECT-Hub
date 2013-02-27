@@ -20,7 +20,6 @@ import javax.persistence.Table;
 
 import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
 import org.connectopensource.interopgui.view.impl.EndpointImpl;
-import org.hibernate.annotations.Where;
 
 /**
  * @author msw
@@ -35,9 +34,8 @@ public class OrganizationInfo {
     @Override
     public String toString() {
         return "OrganizationInfo [id=" + id + ", homeCommunityId=" + homeCommunityId + ", orgName=" + orgName
-                + ", patients=" + patients + ", documents=" + documents + ", certInfo=" + certInfo
-                + ", directCertInfo=" + directCertInfo + ", directEndpoints=" + directEndpoints + ", endpoints="
-                + endpoints + "]";
+                + ", patients=" + patients + ", documents=" + documents + ", certInfo=" + certs
+                + ", directEndpoints=" + directEndpoints + ", endpoints=" + endpoints + "]";
     }
 
     Long id;
@@ -45,8 +43,7 @@ public class OrganizationInfo {
     String orgName;
     Set<PatientInfo> patients;
     Set<DocumentInfo> documents;
-    CertificateInfo certInfo;
-    CertificateInfo directCertInfo;
+    Set<CertificateInfo> certs;
     Set<DirectEndpointImpl> directEndpoints;
     Set<EndpointImpl> endpoints;
     
@@ -91,12 +88,11 @@ public class OrganizationInfo {
      * @param orgName
      * @param certInfo
      */
-    public OrganizationInfo(String homeCommunityId, String orgName, CertificateInfo certInfo, CertificateInfo directCertInfo) {
+    public OrganizationInfo(String homeCommunityId, String orgName, Set<CertificateInfo> certs) {
 
         this.homeCommunityId = homeCommunityId;
         this.orgName = orgName;
-        this.certInfo = certInfo;
-        this.directCertInfo = directCertInfo;
+        this.certs = certs;
 
         this.patients = new HashSet<PatientInfo>();
         this.documents = new HashSet<DocumentInfo>();
@@ -105,25 +101,24 @@ public class OrganizationInfo {
     /**
      * @return the directCertInfo
      */
-    @OneToOne(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)
-    @Where(clause = "specification = 'direct'")
-    public CertificateInfo getDirectCertInfo() {
-        return directCertInfo;
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)
+    public Set<CertificateInfo> getCertificates() {
+        return certs;
     }
 
     /**
      * @param directCertInfo the directCertInfo to set
      */
-    public void setDirectCertInfo(CertificateInfo directCertInfo) {
-        this.directCertInfo = directCertInfo;
+    public void setCertificates(Set<CertificateInfo> certs) {
+        this.certs = certs;
     }
 
-    public OrganizationInfo(String homeCommunityId, String orgName, CertificateInfo certInfo,
+    public OrganizationInfo(String homeCommunityId, String orgName, Set<CertificateInfo> certs,
             List<PatientInfo> patients, List<DocumentInfo> documents) {
 
         this.homeCommunityId = homeCommunityId;
         this.orgName = orgName;
-        this.certInfo = certInfo;
+        this.certs = certs;
 
         this.patients = new HashSet<PatientInfo>();
         this.patients.addAll(patients);
@@ -160,22 +155,6 @@ public class OrganizationInfo {
      */
     public void setOrgName(String orgName) {
         this.orgName = orgName;
-    }
-
-    /**
-     * @return the cert
-     */
-    @OneToOne(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)
-    @Where(clause = "specification = 'exchange'")
-    public CertificateInfo getCertInfo() {
-        return certInfo;
-    }
-
-    /**
-     * @param cert the cert to set
-     */
-    public void setCertInfo(CertificateInfo certInfo) {
-        this.certInfo = certInfo;
     }
 
     /**
