@@ -19,8 +19,12 @@
           <h:outputText value="#{register.alert}" />
         </h:panelGroup>
 
-        <h1>CONNECT Hub</h1>
-        <p>Welcome to the CONNECT Interoperability Showcase Information Registration Page. Please enter your information below.</p>
+        <h1>Register</h1>
+        <p>To exchange with others in the HIMSS Interoperability Showcase, please enter your 
+        information below. <b>For Exchange</b>, enter your endpoint information - you can look up
+        information using this web app, or via our UDDI. You can also add your certs or have a
+        cert signed by our CA. <b>For Direct</b>, enter your endpoint information and anchor cert or
+        a link to your trust bundle. And start exchanging!</p>
         <h:form enctype="multipart/form-data" class="form-horizontal">
             <div class="control-group">
               <label class="control-label" for="orgName">Organization Name:</label>
@@ -28,7 +32,7 @@
                 <h:inputText id="orgName" value="#{register.orgName}" readonly="#{register.orgId != ''}" />
               </div>
             </div>
-
+            
           <fieldset>
             <legend>Certificate</legend>
             <h:panelGroup layout="block" rendered="#{register.orgId != ''}" >
@@ -36,7 +40,7 @@
             <div class="accordion" id="accordion1">
               <div class="accordion-group">
                 <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+                    <a class="accordion-toggle" data-toggle="show" data-parent="#accordion2"
                        href="#collapseCert"><h:outputText value="#{register.certificate.certType.label}" /></a>
                 </div>
                 <div id="collapseCert" class="accordion-body collapse">
@@ -61,9 +65,9 @@
             <div class="accordion-group">
                   <div class="accordion-heading">
                       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
-                          href="#collapseDirectEndpoints"> Direct Endpoints </a>
+                          href="#collapseDirectEndpoints"> Direct Endpoints (click to show/hide) </a>
                   </div>
-                  <div id="collapseDirectEndpoints" class="accordion-body collapse">
+                  <div id="collapseDirectEndpoints" class="accordion-body show">
                       <div class="accordion-inner">
                       <h:dataTable value="#{register.directEndpoints}" var="e" class="table table-hover">
                       <h:column rendered="false">
@@ -143,9 +147,9 @@
               <div class="accordion-group">
                 <div class="accordion-heading">
                   <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
-                     href="#collapseEndpoints"> Endpoints </a>
+                     href="#collapseEndpoints"> Endpoints (click to show/hide)</a>
                 </div>
-                <div id="collapseEndpoints" class="accordion-body collapse">
+                <div id="collapseEndpoints" class="accordion-body show">
                   <div class="accordion-inner">
 
                     <h:dataTable value="#{register.endpoints}" var="endpoint" class="table table-hover">
@@ -187,11 +191,11 @@
                   <div class="row">
                     <div class="span2">
                       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
-                         href="#collapsePatients"> Patients </a>
+                         href="#collapsePatients"> Patients (click to show/hide) </a>
                     </div>
                   </div>
                 </div>
-                <div id="collapsePatients" class="accordion-body collapse">
+                <div id="collapsePatients" class="accordion-body show">
                   <div class="accordion-inner">
                     <h:dataTable value="#{register.patients}" var="patient" class="table table-hover">
                       <h:column rendered="false">
@@ -239,9 +243,9 @@
                 <div class="accordion-group">
                   <div class="accordion-heading">
                       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
-                          href="#collapseDocuments"> Documents </a>
+                          href="#collapseDocuments"> Documents (click to show/hide)</a>
                   </div>
-                  <div id="collapseDocuments" class="accordion-body collapse">
+                  <div id="collapseDocuments" class="accordion-body show">
                     <div class="accordion-inner">
                       <h:dataTable value="#{register.documents}" var="document" class="table table-hover">
                         <h:column rendered="false">
