@@ -10,6 +10,7 @@
         <class>org.connectopensource.interopgui.dataobject.PatientInfo</class>
         <class>org.connectopensource.interopgui.dataobject.DocumentInfo</class>
         <class>org.connectopensource.interopgui.view.impl.DirectEndpointImpl</class>
+        <class>org.connectopensource.interopgui.view.impl.EndpointImpl</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
             
         <properties>

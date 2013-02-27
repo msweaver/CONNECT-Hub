@@ -37,8 +37,7 @@ public class OrganizationImpl implements Organization {
      */
     @Override
     public void setEndPoints(List<Endpoint> endpoints) {
-        // TODO Auto-generated method stub
-        
+        this.endpoints = endpoints;
     }
 
     /* (non-Javadoc)
