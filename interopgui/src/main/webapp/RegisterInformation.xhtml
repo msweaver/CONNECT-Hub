@@ -43,23 +43,18 @@
                   <div id="collapseDirectCertificate" class="accordion-body collapse in">
                   <div class="accordion-inner">
 
-<!-- This has to be left-justy or whitespace will be rendered -->
-            <div class="control-group" hidden="#{register.directCertificate.pemString != ''}">
+            <h:panelGroup layout="block" styleClass="control-group" rendered="#{not empty register.directCertificate.pemString}">
               <label class="control-label" for="directPemString">Certificate PEM:</label>
               <div class="controls">
-<pre>
-<h:outputText id="directPemString" value="#{register.directCertificate.pemString}" />
-</pre>
-                  </div>
-                </div>
-            <div class="control-group" hidden="#{register.directCertificate.trustBundleUrl != ''}">
+                    <pre><h:outputText id="directPemString" value="#{register.directCertificate.pemString}" /></pre>
+              </div>
+             </h:panelGroup>
+             <h:panelGroup layout="block" styleClass="control-group" rendered="#{not empty register.directCertificate.trustBundleUrl}">
               <label class="control-label" for="trustBundle">Trust Bundle:</label>
               <div class="controls">
-<pre>
-<h:outputText id="trustBundle" value="#{register.directCertificate.trustBundleUrl}" />
-</pre>
+                    <pre><h:outputText id="trustBundle" value="#{register.directCertificate.trustBundleUrl}" /></pre>
               </div>
-            </div>
+            </h:panelGroup>
                      <v:DirectCertificate value="#{register.directCertificate}" rendered="#{register.orgId == ''}" />
                   </div>
                 </div>
@@ -156,12 +151,12 @@
                 <div id="collapseCertificates" class="accordion-body in">
                   <div class="accordion-inner">
                   <!-- This has to be left-justy or whitespace will be rendered -->
-                    <div class="control-group" >
+                    <h:panelGroup layout="block" styleClass="control-group" rendered="#{not empty register.certificate.pemString}">
                         <label class="control-label" for="exchangePemString">Certificate PEM:</label>
                         <div class="controls">
                             <pre><h:outputText id="exchangePemString" value="#{register.certificate.pemString}" /></pre>
                         </div>
-                    </div>
+                    </h:panelGroup>
                   
                     <v:Certificate value="#{register.certificate}"/>
                   </div>
