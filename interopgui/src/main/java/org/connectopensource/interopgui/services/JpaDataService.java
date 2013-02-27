@@ -99,6 +99,7 @@ public class JpaDataService implements DataService {
                 }            
             };
             List<OrganizationInfo> results = jpa.execute();
+            System.out.println("trustbundle: " + results.get(0).getCertInfo().getTrustBundleUrl());
             
             //there should only be one result
             return results.get(0);

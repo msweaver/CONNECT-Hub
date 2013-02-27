@@ -19,10 +19,12 @@ import org.connectopensource.interopgui.services.JpaDataService;
 import org.connectopensource.interopgui.services.UddiEndpointService;
 import org.connectopensource.interopgui.view.Certificate;
 import org.connectopensource.interopgui.view.Certificate.CertificateType;
+import org.connectopensource.interopgui.view.DirectCertificate;
 import org.connectopensource.interopgui.view.DirectEndpoint;
 import org.connectopensource.interopgui.view.Endpoint;
 import org.connectopensource.interopgui.view.Organization;
 import org.connectopensource.interopgui.view.impl.CertificateImpl;
+import org.connectopensource.interopgui.view.impl.DirectCertificateImpl;
 import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
 import org.connectopensource.interopgui.view.impl.EndpointImpl;
 import org.connectopensource.interopgui.view.impl.OrganizationImpl;
@@ -39,13 +41,18 @@ public class RegisterController {
      * @param cert certificate
      * @return id of the persisted org
      */
-    public Long saveInfo(String hcid, String orgName, Certificate cert) {
+    public Long saveInfo(String hcid, String orgName, Certificate cert, DirectCertificate directCert) {
         
         CertificateInfo certInfo = new CertificateInfo(cert);
-        OrganizationInfo org = new OrganizationInfo(hcid, orgName, certInfo);        
+        CertificateInfo directCertInfo = new CertificateInfo(directCert);
+        OrganizationInfo org = new OrganizationInfo(hcid, orgName, certInfo, directCertInfo);
+
+        certInfo.setOrganizationInfo(org);
+        directCertInfo.setOrganizationInfo(org);
         
         try {
             processCertificate(certInfo);
+            //processDirectCertificate(directCertInfo);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -142,6 +149,11 @@ public class RegisterController {
         CertificateInfo certInfo = orgInfo.getCertInfo();
         Certificate cert = new CertificateImpl(certInfo);
         orgView.setCertificate(cert);
+        
+        CertificateInfo directCertInfo = orgInfo.getDirectCertInfo();
+        System.out.println("trustBundle: " + directCertInfo.getTrustBundleUrl());
+        DirectCertificate directCert = new DirectCertificateImpl(directCertInfo);
+        orgView.setDirectCertificate(directCert);
         
         List<PatientInfo> patients = new ArrayList<PatientInfo>(orgInfo.getPatients().size());
         patients.addAll(orgInfo.getPatients());        

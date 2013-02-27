@@ -35,7 +35,9 @@ public class CertificateImpl implements Certificate {
      */
     public CertificateImpl(CertificateInfo certInfo) {
         alias = certInfo.getAlias();
-        pemString = new String(certInfo.getCertBytes(), Charset.forName("US-ASCII"));
+        if (certInfo.getCertBytes() != null) {
+            pemString = new String(certInfo.getCertBytes(), Charset.forName("US-ASCII"));
+        }
         certType = certInfo.getCertType();
     }
 

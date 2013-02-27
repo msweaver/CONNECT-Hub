@@ -9,13 +9,13 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
@@ -34,13 +34,14 @@ public class OrganizationInfo {
     Set<PatientInfo> patients;
     Set<DocumentInfo> documents;
     CertificateInfo certInfo;
+    CertificateInfo directCertInfo;
     Set<DirectEndpointImpl> directEndpoints;
     Set<EndpointImpl> endpoints;
     
     /**
      * @return the directEndpoints
      */
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)  
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)
     public Set<DirectEndpointImpl> getDirectEndpoints() {
         return directEndpoints;
     }
@@ -78,14 +79,30 @@ public class OrganizationInfo {
      * @param orgName
      * @param certInfo
      */
-    public OrganizationInfo(String homeCommunityId, String orgName, CertificateInfo certInfo) {
+    public OrganizationInfo(String homeCommunityId, String orgName, CertificateInfo certInfo, CertificateInfo directCertInfo) {
 
         this.homeCommunityId = homeCommunityId;
         this.orgName = orgName;
         this.certInfo = certInfo;
+        this.directCertInfo = directCertInfo;
 
         this.patients = new HashSet<PatientInfo>();
         this.documents = new HashSet<DocumentInfo>();
+    }
+
+    /**
+     * @return the directCertInfo
+     */
+    @OneToOne(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)
+    public CertificateInfo getDirectCertInfo() {
+        return directCertInfo;
+    }
+
+    /**
+     * @param directCertInfo the directCertInfo to set
+     */
+    public void setDirectCertInfo(CertificateInfo directCertInfo) {
+        this.directCertInfo = directCertInfo;
     }
 
     public OrganizationInfo(String homeCommunityId, String orgName, CertificateInfo certInfo,
@@ -135,7 +152,7 @@ public class OrganizationInfo {
     /**
      * @return the cert
      */
-    @Embedded
+    @OneToOne(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)
     public CertificateInfo getCertInfo() {
         return certInfo;
     }

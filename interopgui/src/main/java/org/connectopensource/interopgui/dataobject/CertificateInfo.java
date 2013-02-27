@@ -3,25 +3,70 @@ package org.connectopensource.interopgui.dataobject;
 import java.io.IOException;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.connectopensource.interopgui.services.CertificateServiceException;
 import org.connectopensource.interopgui.view.Certificate;
+import org.connectopensource.interopgui.view.DirectCertificate;
 
 /**
  * @author msw
  *
  */
-@Embeddable 
+@Entity
+@Table(name="certs")
 public class CertificateInfo {
     
+    private Long id;
     private Certificate.CertificateType certType;
     private byte[] certBytes;
     private String alias;
+    private String trustBundleUrl;
+    private OrganizationInfo orgInfo;
     
+    /**
+     * @return the orgInfo
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "orginfo_id", nullable = false)
+    public OrganizationInfo getOrganizationInfo() {
+        return orgInfo;
+    }
+
+    /**
+     * @param orgInfo the orgInfo to set
+     */
+    public void setOrganizationInfo(OrganizationInfo orgInfo) {
+        this.orgInfo = orgInfo;
+    }
+
+    /**
+     * @return the id
+     */
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     /**
      * Default constructor specifies a timestamp for an alias.
      */
@@ -32,11 +77,45 @@ public class CertificateInfo {
     public CertificateInfo(Certificate cert) {
         this.alias = String.valueOf(System.currentTimeMillis());
         this.certType = cert.getCertType();
-        try {
-            this.certBytes = cert.getFile().getBytes();
-        } catch (IOException e) { 
-            throw new CertificateServiceException("Error getting bytes from UploadedFile.", e);
+        if (cert.getFile() != null) {
+            try {
+                this.certBytes = cert.getFile().getBytes();
+            } catch (IOException e) {
+                throw new CertificateServiceException("Error getting bytes from UploadedFile.", e);
+            }
         }
+    }
+    
+    /**
+     * @param cert
+     */
+    public CertificateInfo(DirectCertificate cert) {
+        this.trustBundleUrl = cert.getTrustBundleUrl();
+        
+        this.alias = String.valueOf(System.currentTimeMillis());
+        this.certType = cert.getCertType();
+        if (cert.getFile() != null) {
+            try {
+                this.certBytes = cert.getFile().getBytes();
+            } catch (IOException e) {
+                throw new CertificateServiceException("Error getting bytes from UploadedFile.", e);
+            }
+        }
+    }
+
+    /**
+     * @return the trustBundleUrl
+     */
+    @Column(name = "trustBundle")
+    public String getTrustBundleUrl() {
+        return trustBundleUrl;
+    }
+
+    /**
+     * @param trustBundleUrl the trustBundleUrl to set
+     */
+    public void setTrustBundleUrl(String trustBundleUrl) {
+        this.trustBundleUrl = trustBundleUrl;
     }
 
     /**
