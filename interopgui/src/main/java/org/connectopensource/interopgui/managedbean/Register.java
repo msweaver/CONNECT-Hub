@@ -34,7 +34,7 @@ public class Register {
 
     private String alert = StringUtils.EMPTY;
     private String orgId = StringUtils.EMPTY;
-    private String hcid = null;
+    private String hcid = StringUtils.EMPTY;
     private String orgName = null;
 
     private List<Endpoint> endpoints = null;
@@ -112,6 +112,7 @@ public class Register {
      * @param hcid the hcid to set
      */
     public void setHcid(String hcid) {
+        System.out.println("hcid: " + hcid);
         this.hcid = hcid;
     }
 
@@ -201,21 +202,19 @@ public class Register {
     }
 
     public String saveInfo() {
-        try {
-            System.out.println("saveInfo, cert size: " + certificate.getFile());
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
-        RegisterController impl = new RegisterController();
-        Long id = impl.saveInfo(hcid, orgName, certificate);
+        Long id = saveOrgInfo();
 
         getSessionMap().put("organizationId", String.valueOf(id));
 
         // redirect back so we can gather more data from the registration form (endpoints, patients, etc...)
         alert = "Organization information saved. Now add patients, documents, endpoints and direct endpoints.";
         return "RegisterInformation?faces-direct=true";
+    }
+    
+    private Long saveOrgInfo() {
+        RegisterController impl = new RegisterController();
+        return impl.saveInfo(hcid, orgName, certificate);
     }
 
     /**
@@ -224,7 +223,10 @@ public class Register {
      * @return route for screen flow destination
      */
     public String addPatient() {
-
+        if (StringUtils.isBlank(orgId)) {
+            orgId = saveOrgInfo().toString();
+        }
+          
         RegisterController registerController = new RegisterController();
         registerController.savePatient(patient, orgId);
         
@@ -248,7 +250,10 @@ public class Register {
      * @return route for screen flow destination
      */
     public String addDocument() {
-
+        if (StringUtils.isBlank(orgId)) {
+            orgId = saveOrgInfo().toString();
+        }
+        
         RegisterController registerController = new RegisterController();
         registerController.saveDocument(document, orgId);
         
@@ -272,7 +277,10 @@ public class Register {
      * @return route for screen flow destination
      */
     public String addDirectEndpoint() {
-    
+        if (StringUtils.isBlank(orgId)) {
+            orgId = saveOrgInfo().toString();
+        }
+        
         RegisterController registerController = new RegisterController();
         registerController.saveDirectEndpoint(currentDirectEndpoint, orgId);
 
@@ -292,16 +300,6 @@ public class Register {
 
     public String back() {
         return "ListInformation?faces-direct=true";
-    }
-
-    public String submitForm() {
-        directEndpoints.add(currentDirectEndpoint);
-        System.out.println("number of direct endpoints: " + directEndpoints.size());
-        System.out.println("direct endpoint: " + currentDirectEndpoint.getEndpoint());
-        System.out.println("direct endpoint dns add: " + currentDirectEndpoint.getDnsAddressBound());
-        System.out.println("direct endpoint dns domain: " + currentDirectEndpoint.getDnsDomainBound());
-        alert = "Direct Endpoint Added.";
-        return "";
     }
 
     /**
