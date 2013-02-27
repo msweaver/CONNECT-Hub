@@ -1,6 +1,7 @@
 package org.connectopensource.interopgui.dataobject;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +29,15 @@ import org.connectopensource.interopgui.view.DirectCertificate;
 @Table(name="certs")
 public class CertificateInfo {
     
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "CertificateInfo [id=" + id + ", certType=" + certType + ", certBytes=" + Arrays.toString(certBytes)
+                + ", alias=" + alias + ", trustBundleUrl=" + trustBundleUrl + ", orgInfo=" + orgInfo + "]";
+    }
+
     private Long id;
     private Certificate.CertificateType certType;
     private byte[] certBytes;
