@@ -28,17 +28,32 @@
  */
 package org.connectopensource.interopgui.view.impl;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.view.Endpoint;
 
 /**
  * @author bhumphrey
  *
  */
+@Entity
+@Table(name = "endpoint")
 public class EndpointImpl implements Endpoint {
 
     private Specification specification;
     private SpecVersion version;
     private String url;
+    private Long id;
+    private OrganizationInfo orgInfo = null;
            
     /**
      * @param specification
@@ -66,10 +81,32 @@ public class EndpointImpl implements Endpoint {
         return Specification.values();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.connectopensource.interopgui.view.DirectEndpoint#getId()
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.connectopensource.interopgui.view.DirectEndpoint#setId(java.lang.String)
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    
     /* (non-Javadoc)
      * @see org.connectopensource.interopgui.view.Endpoint#getSpecification()
      */
     @Override
+    @Column(name = "specification")
     public Specification getSpecification() {
         return specification;
     }
@@ -87,6 +124,7 @@ public class EndpointImpl implements Endpoint {
      * @see org.connectopensource.interopgui.view.Endpoint#getSpecVersion()
      */
     @Override
+    @Column(name = "version")
     public SpecVersion getSpecVersion() {
         return version;
     }
@@ -103,6 +141,7 @@ public class EndpointImpl implements Endpoint {
      * @see org.connectopensource.interopgui.view.Endpoint#getEndpoint()
      */
     @Override
+    @Column(name = "endpoint")
     public String getEndpoint() {
         return url;
     }
@@ -114,6 +153,28 @@ public class EndpointImpl implements Endpoint {
     public void setEndpoint(String endpoint) {
         this.url = endpoint;
 
+    }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.connectopensource.interopgui.view.DirectEndpoint#getOrganizationInfo()
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "orginfo_id", nullable = false)
+    public OrganizationInfo getOrganizationInfo() {
+        return orgInfo;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.connectopensource.interopgui.view.DirectEndpoint#setOrganizationInfo(org.connectopensource.interopgui.dataobject
+     * .OrganizationInfo)
+     */
+    public void setOrganizationInfo(OrganizationInfo orgInfo) {
+        this.orgInfo = orgInfo;
     }
 
 }

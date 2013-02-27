@@ -88,5 +88,24 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="2" author="bhumphrey">    
+        <createTable tableName="endpoint">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="orginfo_id" type="BIGINT">
+                <constraints references="orginfo(id)" foreignKeyName="endpoint_orginfo_fk" nullable="false"/>
+            </column>
+            <column name="endpoint" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="specification" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+     </changeSet>
 
 </databaseChangeLog>

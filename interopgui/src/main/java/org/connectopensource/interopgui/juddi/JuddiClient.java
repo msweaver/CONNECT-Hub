@@ -84,7 +84,7 @@ public class JuddiClient implements UddiClient {
 
     public JuddiClient() {
         getAuthTokenMyPub = new GetAuthToken();
-        getAuthTokenMyPub.setUserID("hub-publisher");
+        getAuthTokenMyPub.setUserID("hub");
         getAuthTokenMyPub.setCred("");
     }
 
