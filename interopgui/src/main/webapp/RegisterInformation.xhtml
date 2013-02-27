@@ -44,7 +44,7 @@
                   <div class="accordion-inner">
 
 <!-- This has to be left-justy or whitespace will be rendered -->
-            <div class="control-group" hidden="#{register.directCertificate.pemString} != ''}">
+            <div class="control-group" hidden="#{register.directCertificate.pemString != ''}">
               <label class="control-label" for="directPemString">Certificate PEM:</label>
               <div class="controls">
 <pre>
@@ -52,7 +52,7 @@
 </pre>
                   </div>
                 </div>
-            <div class="control-group" hidden="#{register.directCertificate.trustBundleUrl} != ''}">
+            <div class="control-group" hidden="#{register.directCertificate.trustBundleUrl != ''}">
               <label class="control-label" for="trustBundle">Trust Bundle:</label>
               <div class="controls">
 <pre>
@@ -137,6 +137,8 @@
                 </div>
               </div>
             </div>
+</fieldset>
+<fieldset>
             <legend>Exchange</legend>
             <div class="control-group">
               <label class="control-label" for="hcid">HCID:</label>
@@ -151,17 +153,16 @@
                   <a class="accordion-toggle" data-toggle="collapse"
                      href="#collapseCertificates"> Certificates (click to show/hide)</a>
                 </div>
-                <div id="collapseCertificates" class="accordion-body show">
+                <div id="collapseCertificates" class="accordion-body in">
                   <div class="accordion-inner">
                   <!-- This has to be left-justy or whitespace will be rendered -->
-            <div class="control-group" hidden="#{register.certificate.pemString} != ''}">
-              <label class="control-label" for="exchangePemString">Certificate PEM:</label>
-              <div class="controls">
-<pre>
-<h:outputText id="exchangePemString" value="#{register.certificate.pemString}" />
-</pre>
-</div>
-</div>
+                    <div class="control-group" >
+                        <label class="control-label" for="exchangePemString">Certificate PEM:</label>
+                        <div class="controls">
+                            <pre><h:outputText id="exchangePemString" value="#{register.certificate.pemString}" /></pre>
+                        </div>
+                    </div>
+                  
                     <v:Certificate value="#{register.certificate}"/>
                   </div>
                 </div>
