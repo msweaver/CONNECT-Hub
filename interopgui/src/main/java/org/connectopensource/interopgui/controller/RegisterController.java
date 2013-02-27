@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.connectopensource.interopgui.dataobject.CertificateInfo;
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
@@ -50,8 +51,12 @@ public class RegisterController {
         certInfo.setOrganizationInfo(org);
         directCertInfo.setOrganizationInfo(org);
         
+        System.out.println("cert: " + certInfo);
         try {
-            processCertificate(certInfo);
+            if (certInfo.getCertBytes() != null) {
+                processCertificate(certInfo);  
+            }
+            
             //processDirectCertificate(directCertInfo);
         } catch (IOException e) {
             // TODO Auto-generated catch block

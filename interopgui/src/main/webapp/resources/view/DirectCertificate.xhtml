@@ -14,18 +14,18 @@
     </comp:interface>
     <comp:implementation>
         <h:panelGroup>
-            <h:selectOneMenu value="#{cc.attrs.value.certType}">
-                <f:selectItems value="#{cc.attrs.value.certificateTypes}" var="c"
-                               itemValue="#{c}" itemLabel="#{c.label}" />
-            </h:selectOneMenu>
+        <div class="control-group">
+          <label class="control-label" for="certFile">Anchor Certificate:</label>
+          <div class="controls">
             <t:inputFileUpload id="certFile" value="#{cc.attrs.value.file}" styleClass="btn" />
+          </div>
+        </div>
         </h:panelGroup>
         <div class="control-group">
           <label class="control-label" for="trustBundleUrl">Trust Bundle URL:</label>
           <div class="controls">
             <h:inputText styleClass="span4" value="#{cc.attrs.value.trustBundleUrl}"
-                   id="trustBundleUrl" required="#{cc.attrs.required}"
-                   requiredMessage="#{cc.attrs.requiredMessage}" />
+                   id="trustBundleUrl" />
           </div>
         </div>
     </comp:implementation>

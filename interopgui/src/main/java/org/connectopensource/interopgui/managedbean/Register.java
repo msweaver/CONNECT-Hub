@@ -27,7 +27,6 @@ import org.connectopensource.interopgui.view.impl.EndpointImpl;
  * 
  */
 @ManagedBean
-@ViewScoped
 public class Register {
 
     public enum CertificateType {
