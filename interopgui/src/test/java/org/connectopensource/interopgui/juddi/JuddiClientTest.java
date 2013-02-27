@@ -39,6 +39,7 @@ import org.junit.experimental.categories.Category;
 import org.uddi.api_v3.BusinessDetail;
 import org.uddi.api_v3.BusinessEntity;
 import org.uddi.api_v3.BusinessList;
+import org.uddi.api_v3.FindBusiness;
 import org.uddi.api_v3.IdentifierBag;
 import org.uddi.api_v3.KeyedReference;
 import org.uddi.api_v3.Name;
@@ -60,16 +61,20 @@ public class JuddiClientTest {
     }
     
     @Test
-    public void testConstructor() {
+    public void constructor() {
         assertNotNull(client.juddiApi);
         assertNotNull(client.inquiry);
     }
     
     
     @Test
-    public void testPublish() {
+    public void publish() {
         
         BusinessEntity businessEntity = new BusinessEntity();
+        
+        
+        businessEntity.setBusinessKey("uddi:nhincnode:Test");
+        
         Name organizationName = new Name();
         organizationName.setValue("Test");
         businessEntity.getName().add(organizationName);
@@ -90,19 +95,25 @@ public class JuddiClientTest {
     }
 
     
-//    @Test
-//    public void search() {
-//        BusinessList results = client.findBusiness("Test");
-//        assertNotNull(results.getBusinessInfos());
-//        assertFalse(results.getBusinessInfos().getBusinessInfo().isEmpty());
-//        
-//        
-//        BusinessDetail bd = client.getBusinessDetail(results);
-//        assertNotNull(bd);
-//        
-//        assertEquals("Test", bd.getBusinessEntity().get(0).getName().get(0).getValue());
-//        
-//    }
-//    
+    @Test
+    public void search() {
+        FindBusiness fb = new FindBusiness();
+        KeyedReference hcid = new KeyedReference();
+        hcid.setTModelKey("uddi:nhin:nhie:homecommunityid");
+        hcid.setKeyValue("Test");
+        fb.setIdentifierBag(new IdentifierBag());
+        fb.getIdentifierBag().getKeyedReference().add(hcid);
+        BusinessList results = client.findBusiness(fb);
+        assertNotNull(results.getBusinessInfos());
+        assertFalse(results.getBusinessInfos().getBusinessInfo().isEmpty());
+        
+        
+        BusinessDetail bd = client.getBusinessDetail(results);
+        assertNotNull(bd);
+        
+        assertEquals("Test", bd.getBusinessEntity().get(0).getName().get(0).getValue());
+        
+    }
+    
 
 }
