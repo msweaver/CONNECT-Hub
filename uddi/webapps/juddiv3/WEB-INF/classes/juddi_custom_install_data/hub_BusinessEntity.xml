@@ -38,26 +38,23 @@
   
   See below for other fields that you may want to edit...
   -->
-<businessEntity xmlns="urn:uddi-org:api_v3" xmlns:xml="http://www.w3.org/XML/1998/namespace" businessKey="uddi:nhincnode:business-sales-asf">
+<businessEntity xmlns="urn:uddi-org:api_v3" xmlns:xml="http://www.w3.org/XML/1998/namespace" businessKey="uddi:nhincnode:ubr-node">
   <!-- Change the name field to represent the name of your registry -->
-  <name xml:lang="en">An Root Sales jUDDI Node</name>
+  <name xml:lang="en">Hub jUDDI Node</name>
   <!-- Change the description field to provided a brief description of your registry -->
   <description xml:lang="en">This is a UDDI v3 registry node as implemented by Apache jUDDI.</description>
   <discoveryURLs>
     <!-- This discovery URL should point to the home installation URL of jUDDI -->
     <discoveryURL useType="home">${juddi.server.baseurl}/juddiv3</discoveryURL>
   </discoveryURLs>
-  <categoryBag>
-    <keyedReference tModelKey="uddi:uddi.org:categorization:nodes" keyValue="node" />
-  </categoryBag>
   <businessServices>
     <!-- As mentioned above, you may want to provide user-defined keys for these (and the services/bindingTemplates below.  Services that you
     don't intend to support should be removed entirely -->
-    <businessService serviceKey="uddi:juddi.apache.org:services-inquiry" businessKey="uddi:juddi.apache.org:business-sales-asf">
+    <businessService serviceKey="uddi:nhincnode:services-inquiry" businessKey="uddi:nhincnode:ubr-node">
       <name xml:lang="en">UDDI Inquiry Service</name>
       <description xml:lang="en">Web Service supporting UDDI Inquiry API</description>
       <bindingTemplates>
-        <bindingTemplate bindingKey="uddi:juddi.apache.org:servicebindings-inquiry-ws" serviceKey="uddi:juddi.apache.org:services-inquiry">
+        <bindingTemplate bindingKey="uddi:nhincnode:servicebindings-inquiry-ws" serviceKey="uddi:nhincnode:services-inquiry">
           <description>UDDI Inquiry API V3</description>
           <!-- This should be changed to the WSDL URL of the inquiry API.  An access point inside a bindingTemplate will be found for every service
           in this file.  They all must point to their API's WSDL URL -->
@@ -84,11 +81,11 @@
         </bindingTemplate>
       </bindingTemplates>
     </businessService>
-    <businessService serviceKey="uddi:juddi.apache.org:services-publish" businessKey="uddi:juddi.apache.org:business-sales-asf">
+    <businessService serviceKey="uddi:nhincnode:services-publish" businessKey="uddi:nhincnode:ubr-node">
       <name xml:lang="en">UDDI Publish Service</name>
       <description xml:lang="en">Web Service supporting UDDI Publish API</description>
       <bindingTemplates>
-        <bindingTemplate bindingKey="uddi:juddi.apache.org:servicebindings-publish-ws" serviceKey="uddi:juddi.apache.org:services-publish">
+        <bindingTemplate bindingKey="uddi:nhincnode:servicebindings-publish-ws" serviceKey="uddi:nhincnode:services-publish">
           <description>UDDI Publication API V3</description>
           <accessPoint useType="wsdlDeployment">${juddi.server.baseurl}/juddiv3/services/publish?wsdl</accessPoint>
           <tModelInstanceDetails>
@@ -111,11 +108,11 @@
         </bindingTemplate>
       </bindingTemplates>
     </businessService>
-    <businessService serviceKey="uddi:juddi.apache.org:services-security" businessKey="uddi:juddi.apache.org:business-sales-asf">
+    <businessService serviceKey="uddi:nhincnode:services-security" businessKey="uddi:nhincnode:ubr-node">
       <name xml:lang="en">UDDI Security Service</name>
       <description xml:lang="en">Web Service supporting UDDI Security API</description>
       <bindingTemplates>
-        <bindingTemplate bindingKey="uddi:juddi.apache.org:servicebindings-security-ws" serviceKey="uddi:juddi.apache.org:services-security">
+        <bindingTemplate bindingKey="uddi:nhincnode:servicebindings-security-ws" serviceKey="uddi:nhincnode:services-security">
           <description>UDDI Security API V3</description>
           <accessPoint useType="wsdlDeployment">${juddi.server.baseurl}/juddiv3/services/security?wsdl</accessPoint>
           <tModelInstanceDetails>
@@ -127,68 +124,13 @@
         </bindingTemplate>
       </bindingTemplates>
     </businessService>
-    <businessService serviceKey="uddi:juddi.apache.org:services-custodytransfer" businessKey="uddi:juddi.apache.org:business-sales-asf">
-      <name xml:lang="en">UDDI Custody and Ownership Transfer Service</name>
-      <description xml:lang="en">Web Service supporting UDDI Custody and Ownership Transfer API</description>
-      <bindingTemplates>
-        <bindingTemplate bindingKey="uddi:juddi.apache.org:servicebindings-custodytransfer-ws" serviceKey="uddi:juddi.apache.org:services-custodytransfer">
-          <description>UDDI Custody and Ownership Transfer API V3</description>
-          <accessPoint useType="wsdlDeployment">${juddi.server.baseurl}/juddiv3/services/custody-transfer?wsdl</accessPoint>
-          <tModelInstanceDetails>
-            <tModelInstanceInfo tModelKey="uddi:uddi.org:v3_ownership_transfer">
-              <instanceDetails>
-                <instanceParms>
-                <![CDATA[
-                <?xml version="1.0" encoding="utf-8" ?>
-                <UDDIinstanceParmsContainer
-                 xmlns="urn:uddi-org:policy_v3_instanceParms">
-                  <authInfoUse>required</authInfoUse>
-                </UDDIinstanceParmsContainer>
-                ]]>
-                </instanceParms>
-              </instanceDetails>
-            </tModelInstanceInfo>
-          </tModelInstanceDetails>
-          <categoryBag>
-            <keyedReference keyName="uddi-org:types:wsdl" keyValue="wsdlDeployment" tModelKey="uddi:uddi.org:categorization:types"/>
-          </categoryBag>
-        </bindingTemplate>
-      </bindingTemplates>
-    </businessService>
-    <businessService serviceKey="uddi:juddi.apache.org:services-subscription" businessKey="uddi:juddi.apache.org:business-sales-asf">
-      <name xml:lang="en">UDDI Subscription Service</name>
-      <description xml:lang="en">Web Service supporting UDDI Subscription API</description>
-      <bindingTemplates>
-        <bindingTemplate bindingKey="uddi:juddi.apache.org:servicebindings-subscription-ws" serviceKey="uddi:juddi.apache.org:services-subscription">
-          <description>UDDI Subscription API V3</description>
-          <accessPoint useType="wsdlDeployment">${juddi.server.baseurl}/juddiv3/services/subscription?wsdl</accessPoint>
-          <tModelInstanceDetails>
-            <tModelInstanceInfo tModelKey="uddi:uddi.org:v3_subscription">
-              <instanceDetails>
-                <instanceParms>
-                <![CDATA[
-                <?xml version="1.0" encoding="utf-8" ?>
-                <UDDIinstanceParmsContainer
-                xmlns="urn:uddi-org:policy_v3_instanceParms">
-                <authInfoUse>required</authInfoUse>
-                <filterUsingFindAPI>supported</filterUsingFindAPI>
-                </UDDIinstanceParmsContainer>
-                ]]>
-                </instanceParms>
-              </instanceDetails>
-            </tModelInstanceInfo>
-          </tModelInstanceDetails>
-          <categoryBag>
-            <keyedReference keyName="uddi-org:types:wsdl" keyValue="wsdlDeployment" tModelKey="uddi:uddi.org:categorization:types"/>
-          </categoryBag>
-        </bindingTemplate>
-      </bindingTemplates>
-    </businessService>
-     <businessService serviceKey="uddi:juddi.apache.org:services-publisher" businessKey="uddi:juddi.apache.org:business-sales-asf">
+    
+    
+     <businessService serviceKey="uddi:nhincnode:services-publisher" businessKey="uddi:nhincnode:ubr-node">
       <name xml:lang="en">jUDDI Publisher Service</name>
       <description xml:lang="en">Web Service supporting jUDDI specific API</description>
       <bindingTemplates>
-        <bindingTemplate bindingKey="uddi:juddi.apache.org:servicebindings-publisher-ws" serviceKey="uddi:juddi.apache.org:services-publisher">
+        <bindingTemplate bindingKey="uddi:nhincnode:servicebindings-publisher-ws" serviceKey="uddi:nhincnode:services-publisher">
           <description>jUDDI Publisher Service API V3</description>
           <accessPoint useType="wsdlDeployment">${juddi.server.baseurl}/juddiv3/services/publisher?wsdl</accessPoint>
           <categoryBag>
