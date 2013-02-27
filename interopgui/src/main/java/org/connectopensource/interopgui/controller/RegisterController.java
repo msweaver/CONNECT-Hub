@@ -49,7 +49,9 @@ public class RegisterController {
         OrganizationInfo org = new OrganizationInfo(hcid, orgName, certInfo, directCertInfo);
 
         certInfo.setOrganizationInfo(org);
+        certInfo.setSpecification("exchange");
         directCertInfo.setOrganizationInfo(org);
+        directCertInfo.setSpecification("direct");
         
         System.out.println("cert: " + certInfo);
         try {
@@ -188,6 +190,7 @@ public class RegisterController {
         documents.addAll(orgInfo.getDocuments());        
         orgView.setDocuments(documents);
         
+        System.out.println("org view: " + orgView);
         return orgView;
     }
 
@@ -197,7 +200,9 @@ public class RegisterController {
      */
     private OrganizationInfo retrieveOrgInfo(String orgId) {
         DataService service = new JpaDataService();
-        return service.getData(orgId);
+        OrganizationInfo info = service.getData(orgId);
+        System.out.println("Retrieved org info: " + info);
+        return info;
     }
 
     /**

@@ -37,6 +37,9 @@
             <column name="trustBundle" type="varchar(256)">
                 <constraints nullable="true"/>
             </column>
+            <column name="specification" type="varchar(8)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         <createTable tableName="patient">
             <column name="id" type="BIGINT" autoIncrement="true">

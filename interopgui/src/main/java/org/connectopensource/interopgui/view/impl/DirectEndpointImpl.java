@@ -183,6 +183,6 @@ public class DirectEndpointImpl implements DirectEndpoint {
     public String toString() {
         return "DirectEndpointImpl [endpoint=" + endpoint + ", id=" + id + ", dnsDomainBound=" + dnsDomainBound
                 + ", dnsAddressBound=" + dnsAddressBound + ", ldapDomainBound=" + ldapDomainBound
-                + ", ldapAddressBound=" + ldapAddressBound + ", orgInfo=" + orgInfo + "]";
+                + ", ldapAddressBound=" + ldapAddressBound + ", orgInfo=" + orgInfo.getId() + "]";
     }
 }

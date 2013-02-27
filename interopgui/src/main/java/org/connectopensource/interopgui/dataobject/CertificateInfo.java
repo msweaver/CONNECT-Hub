@@ -14,12 +14,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.connectopensource.interopgui.services.CertificateServiceException;
 import org.connectopensource.interopgui.view.Certificate;
 import org.connectopensource.interopgui.view.DirectCertificate;
+import org.connectopensource.interopgui.view.impl.DirectCertificateImpl;
 
 /**
  * @author msw
@@ -28,15 +28,6 @@ import org.connectopensource.interopgui.view.DirectCertificate;
 @Entity
 @Table(name="certs")
 public class CertificateInfo {
-    
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "CertificateInfo [id=" + id + ", certType=" + certType + ", certBytes=" + Arrays.toString(certBytes)
-                + ", alias=" + alias + ", trustBundleUrl=" + trustBundleUrl + ", orgInfo=" + orgInfo + "]";
-    }
 
     private Long id;
     private Certificate.CertificateType certType;
@@ -44,6 +35,7 @@ public class CertificateInfo {
     private String alias;
     private String trustBundleUrl;
     private OrganizationInfo orgInfo;
+    private String specification = "exchange";
     
     /**
      * @return the orgInfo
@@ -175,4 +167,27 @@ public class CertificateInfo {
         this.certType = certType;
     }
 
+    /**
+     * @return the specification
+     */
+    @Column(name="specification")
+    public String getSpecification() {
+        return specification;
+    }
+
+    /**
+     * @param specification the specification to set
+     */
+    public void setSpecification(String specification) {
+        this.specification = specification;
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "CertificateInfo [id=" + id + ", certType=" + certType + ", certBytes=" + Arrays.toString(certBytes)
+                + ", alias=" + alias + ", trustBundleUrl=" + trustBundleUrl + ", orgInfo=" + orgInfo.getId() + "]";
+    }
 }

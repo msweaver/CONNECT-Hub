@@ -134,7 +134,7 @@ public class PatientInfo implements Patient {
     @Override
     public String toString() {
         return "PatientInfo [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth="
-                + dateOfBirth + ", gender=" + gender + ", organizationInfo=" + organizationInfo.orgName + "]";
+                + dateOfBirth + ", gender=" + gender + ", organizationInfo=" + organizationInfo.getId() + "]";
     }
     
     

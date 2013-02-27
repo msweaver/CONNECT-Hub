@@ -101,5 +101,14 @@ public class CertificateImpl implements Certificate {
     @Override
     public void setPemString(String pemString) {
         this.pemString = pemString;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "CertificateImpl [certType=" + certType + ", file=" + file + ", alias=" + alias + ", pemString="
+                + pemString + "]";
     }   
 }
