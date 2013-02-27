@@ -16,6 +16,11 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <truststore.path>/path/to/truststore.jks</truststore.path>
+        <truststore.pass>changeit</truststore.pass>
+        <truststore.type>JKS</truststore.type>
+        <privkeypem.path>/path/to/cakey-nopass.pem</privkeypem.path>
+        <cacertpem.path>/path/to/cacert.pem</cacertpem.path>
     </properties>
 
     <dependencies>
@@ -111,6 +116,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -184,6 +195,7 @@
                 <database.password>interopguipass</database.password>
             </properties>
         </profile>
+        
         <profile>
             <id>integration</id>
             <build>
