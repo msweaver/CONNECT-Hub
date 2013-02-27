@@ -10,7 +10,6 @@
   <ui:composition template="/resources/template/layout.xhtml">
   <ui:define name="title">CA Cert</ui:define>
   <ui:define name="content">
-  <f:event listener="#{register.loadDetail}" type="preRenderView" />
 
   <div class="container">
         <h1>CONNECT Hub CA Certificate</h1>
@@ -18,8 +17,14 @@
         Exchanges (using NwHIN Exchange messages).</p>
         <p>After you've registered your cert request, download the cert below. Place it in your trust store, and you'll be able to exchange
         with any other Showcase participant who have registered with the CA.</p>
-        
-		<p>Put cert here.</p>
+
+		<p>
+      <!-- This has to be left-justy or whitespace will be rendered -->
+<pre>
+<h:outputText value="#{caCert.pemString}" />
+</pre>
+
+    </p>
 
 
    </div>
