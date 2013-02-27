@@ -26,12 +26,6 @@
         cert signed by our CA. <b>For Direct</b>, enter your endpoint information and anchor cert or
         a link to your trust bundle. And start exchanging!</p>
         <h:form enctype="multipart/form-data" class="form-horizontal">
-          <div class="control-group">
-            <label class="control-label" for="hcid">HCID:</label>
-            <div class="controls">
-              <h:inputText id="hcid" value="#{register.hcid}" readonly="#{register.orgId != ''}"/>
-            </div>
-          </div>
             <div class="control-group">
               <label class="control-label" for="orgName">Organization Name:</label>
               <div class="controls">
@@ -121,7 +115,7 @@
                             </h:panelGroup>
                         </h:column>
                       </h:dataTable>
-                      <a href="#directEndpointModal" role="button" class="btn" data-toggle="modal">Add</a>
+                      <a href="#directEndpointModal" role="button" class="btn" data-toggle="modal">Add Direct Endpoint</a>
                       <div id="directEndpointModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
@@ -131,7 +125,7 @@
                         <v:DirectEndpoint value="#{register.directEndpoint}"/>
                         </div>
                         <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <h:commandButton value="Save" action="#{register.addDirectEndpoint}" class="btn btn-primary" />
                       </div>
                   </div>
@@ -141,6 +135,13 @@
             </div>
 
             <legend>Exchange</legend>
+            <div class="control-group">
+              <label class="control-label" for="hcid">HCID:</label>
+              <div class="controls">
+                <h:inputText id="hcid" value="#{register.hcid}" readonly="#{register.hcid != ''}"/>
+              </div>
+            </div>
+                    
             <div class="accordion" id="accordion-endpoints">
               <div class="accordion-group">
                 <div class="accordion-heading">
