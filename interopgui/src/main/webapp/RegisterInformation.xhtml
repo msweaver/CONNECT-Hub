@@ -34,14 +34,14 @@
             </div>
           <fieldset>
             <legend>Direct</legend>
-            <div class="accordion" id="accordion1">
-            <div class="accordion-group">
-                  <div class="accordion-heading">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+            <div class="accordion" id="accordion-directcert">
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                      <a class="accordion-toggle" data-toggle="collapse"
                           href="#collapseDirectCertificate"> Direct Certificate (click to show/hide) </a>
-                  </div>
-                  <div id="collapseDirectCertificate" class="accordion-body show">
-                    <div class="accordion-inner">
+                </div>
+                  <div id="collapseDirectCertificate" class="accordion-body collapse in">
+                  <div class="accordion-inner">
 
 <!-- This has to be left-justy or whitespace will be rendered -->
             <div class="control-group" hidden="#{register.directCertificate.pemString} != ''}">
@@ -50,30 +50,30 @@
 <pre>
 <h:outputText id="directPemString" value="#{register.directCertificate.pemString}" />
 </pre>
-</div>
-</div>
+                  </div>
+                </div>
             <div class="control-group" hidden="#{register.directCertificate.trustBundleUrl} != ''}">
               <label class="control-label" for="trustBundle">Trust Bundle:</label>
               <div class="controls">
 <pre>
 <h:outputText id="trustBundle" value="#{register.directCertificate.trustBundleUrl}" />
 </pre>
-</div>
-</div>
+              </div>
+            </div>
                      <v:DirectCertificate value="#{register.directCertificate}" rendered="#{register.orgId == ''}" />
                   </div>
                 </div>
               </div>
-
-            
-            <div class="accordion-group">
+            </div>
+            <div class="accordion" id="accordion-directendpoints">
+                <div class="accordion-group">
                   <div class="accordion-heading">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+                      <a class="accordion-toggle" data-toggle="collapse"
                           href="#collapseDirectEndpoints"> Direct Endpoints (click to show/hide) </a>
                   </div>
-                  <div id="collapseDirectEndpoints" class="accordion-body show">
+                  <div id="collapseDirectEndpoints" class="accordion-body collapse in">
                       <div class="accordion-inner">
-                      <h:dataTable value="#{register.directEndpoints}" var="e" class="table table-hover">
+                      <h:dataTable value="#{register.directEndpoints}" var="e" class="table table-hover" rendered="#{not empty register.directEndpoints}">
                       <h:column rendered="false">
                             <f:facet name="header">
                                 <h:outputText value="ID" />
@@ -132,12 +132,11 @@
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <h:commandButton value="Save" action="#{register.addDirectEndpoint}" class="btn btn-primary" />
                       </div>
+                    </div>
                   </div>
                 </div>
-                </div>
-                </div>
+              </div>
             </div>
-
             <legend>Exchange</legend>
             <div class="control-group">
               <label class="control-label" for="hcid">HCID:</label>
@@ -149,7 +148,7 @@
             <div class="accordion" id="accordion-certificate">
               <div class="accordion-group">
                 <div class="accordion-heading">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-certificate"
+                  <a class="accordion-toggle" data-toggle="collapse"
                      href="#collapseCertificates"> Certificates (click to show/hide)</a>
                 </div>
                 <div id="collapseCertificates" class="accordion-body show">
@@ -167,17 +166,17 @@
                   </div>
                 </div>
               </div>
-            </div>      
+            </div>
             <div class="accordion" id="accordion-endpoints">
               <div class="accordion-group">
                 <div class="accordion-heading">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-endpoints"
+                  <a class="accordion-toggle" data-toggle="collapse"
                      href="#collapseEndpoints"> Endpoints (click to show/hide)</a>
                 </div>
-                <div id="collapseEndpoints" class="accordion-body show">
+                <div id="collapseEndpoints" class="accordion-body collapse in">
                   <div class="accordion-inner">
 
-                    <h:dataTable value="#{register.endpoints}" var="endpoint" class="table table-hover">
+                    <h:dataTable value="#{register.endpoints}" var="endpoint" class="table table-hover"  rendered="#{not empty register.endpoints}">
                       <h:column rendered="false">
                         <f:facet name="header">
                           <h:outputText value="ID" />
@@ -205,7 +204,7 @@
                       </h:column>
                     </h:dataTable>
 
-                    <h:panelGroup rendered="#{register.orgId != ''}">
+                    <h:panelGroup>
                       <a href="#endpointmodal" role="button" class="btn" data-toggle="modal">Add Endpoint</a>
                     </h:panelGroup>
                   </div>
@@ -217,14 +216,14 @@
                 <div class="accordion-heading">
                   <div class="row">
                     <div class="span4">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-patients"
+                      <a class="accordion-toggle" data-toggle="collapse"
                          href="#collapsePatients"> Patients (click to show/hide) </a>
                     </div>
                   </div>
                 </div>
-                <div id="collapsePatients" class="accordion-body show">
+                <div id="collapsePatients" class="accordion-body collapse in">
                   <div class="accordion-inner">
-                    <h:dataTable value="#{register.patients}" var="patient" class="table table-hover">
+                    <h:dataTable value="#{register.patients}" var="patient" class="table table-hover" rendered="#{not empty register.patients}">
                       <h:column rendered="false">
                         <f:facet name="header">
                           <h:outputText value="ID" />
@@ -261,7 +260,7 @@
                             <h:outputText value="#{patient.gender.label}" />
                         </h:column>
                       </h:dataTable>
-                      <h:panelGroup rendered="#{register.orgId != ''}">
+                      <h:panelGroup>
                         <a href="#patientmodal" role="button" class="btn" data-toggle="modal">Add Patient</a>
                       </h:panelGroup>
                     </div>
@@ -271,12 +270,12 @@
             <div class="accordion" id="accordion-docs">
                 <div class="accordion-group">
                   <div class="accordion-heading">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-docs"
+                      <a class="accordion-toggle" data-toggle="collapse"
                           href="#collapseDocuments"> Documents (click to show/hide)</a>
                   </div>
-                  <div id="collapseDocuments" class="accordion-body show">
+                  <div id="collapseDocuments" class="accordion-body collapse in">
                     <div class="accordion-inner">
-                      <h:dataTable value="#{register.documents}" var="document" class="table table-hover">
+                      <h:dataTable value="#{register.documents}" var="document" class="table table-hover" rendered="#{not empty register.documents}">
                         <h:column rendered="false">
                             <f:facet name="header">
                                 <h:outputText value="ID" />
@@ -305,7 +304,7 @@
                             <h:outputText value="#{document.comment}" />
                         </h:column>
                       </h:dataTable>
-                      <h:panelGroup rendered="#{register.orgId != ''}">
+                      <h:panelGroup>
                         <a href="#documentmodal" role="button" class="btn" data-toggle="modal">Add Document</a>
                       </h:panelGroup>
                     </div>
@@ -314,8 +313,7 @@
               </div>
             </fieldset>
 
-          <h:commandButton value="Back" action="#{register.back}" styleClass="btn" rendered="#{register.orgId != ''}" />
-          <h:commandButton value="Submit" action="#{register.saveInfo}" styleClass="btn btn-primary" rendered="#{register.orgId == ''}" />
+          <h:commandButton value="Save" action="#{register.saveInfo}" styleClass="btn btn-primary" />
 
           <v:Patient firstNamePrompt="First Name:" lastNamePrompt="Last Name:" dobPrompt="Date of Birth (MM-DD-YYYY):" genderPrompt="Gender:" orgId="#{register.orgId}"/>
           <v:Document docIdPrompt="Document Id:" documentTypePrompt="Document Type:" commentPrompt="Comment:" orgId="#{register.orgId}"/>
