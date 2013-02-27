@@ -13,10 +13,12 @@ import org.connectopensource.interopgui.controller.RegisterController;
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.view.Certificate;
+import org.connectopensource.interopgui.view.DirectCertificate;
 import org.connectopensource.interopgui.view.DirectEndpoint;
 import org.connectopensource.interopgui.view.Endpoint;
 import org.connectopensource.interopgui.view.Organization;
 import org.connectopensource.interopgui.view.impl.CertificateImpl;
+import org.connectopensource.interopgui.view.impl.DirectCertificateImpl;
 import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
 import org.connectopensource.interopgui.view.impl.EndpointImpl;
 
@@ -43,6 +45,7 @@ public class Register {
     private List<DirectEndpoint> directEndpoints = null;
 
     private Certificate certificate = null;
+    private DirectCertificate directCertificate = null;
     private PatientInfo patient = null;
     private DocumentInfo document = null;
     private EndpointImpl endpoint = null;
@@ -50,7 +53,8 @@ public class Register {
     
     public Register() {        
         endpoints = new ArrayList<Endpoint>();        
-        certificate = new CertificateImpl();        
+        certificate = new CertificateImpl();
+        directCertificate = new DirectCertificateImpl();
         patients = new ArrayList<PatientInfo>();
         documents = new ArrayList<DocumentInfo>();
         directEndpoints = new ArrayList<DirectEndpoint>();        
@@ -95,7 +99,9 @@ public class Register {
         orgName = org.getOrgName();
         
         endpoints = org.getEndpoints();       
-        certificate = org.getCertificate();        
+        certificate = org.getCertificate();
+        directCertificate = org.getDirectCertificate();
+        System.out.println("trust bundle:" + directCertificate.getTrustBundleUrl());
         patients = org.getPatients();
         documents = org.getDocuments();
         directEndpoints = org.getDirectEndpoints();
@@ -157,6 +163,20 @@ public class Register {
     public void setCertificate(Certificate certificate) {
         this.certificate = certificate;
     }
+    
+    /**
+     * @return the direct certificate
+     */
+    public DirectCertificate getDirectCertificate() {
+        return directCertificate;
+    }
+
+    /**
+     * @param certificate the direct certificate to set
+     */
+    public void setCertificate(DirectCertificate directCertificate) {
+        this.directCertificate = directCertificate;
+    }
 
     /**
      * @return the patients
@@ -214,7 +234,7 @@ public class Register {
     
     private Long saveOrgInfo() {
         RegisterController impl = new RegisterController();
-        return impl.saveInfo(hcid, orgName, certificate);
+        return impl.saveInfo(hcid, orgName, certificate, directCertificate);
     }
 
     /**

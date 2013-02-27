@@ -93,4 +93,14 @@ public interface Organization {
      * @return
      */
     public void setDirectEndpoints(List<DirectEndpoint> directEndpoints);
+
+    /**
+     * @return
+     */
+    public DirectCertificate getDirectCertificate();
+    
+    /**
+     * @param directCert
+     */
+    public void setDirectCertificate(DirectCertificate directCert);
 }

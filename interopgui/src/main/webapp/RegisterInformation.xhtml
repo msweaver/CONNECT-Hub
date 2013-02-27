@@ -32,36 +32,40 @@
                 <h:inputText id="orgName" value="#{register.orgName}" readonly="#{register.orgId != ''}" />
               </div>
             </div>
-
-          <fieldset>
-            <legend>Certificate</legend>
-            <h:panelGroup layout="block" rendered="#{register.orgId != ''}" >
-
-            <div class="accordion" id="accordion1">
-              <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="show" data-parent="#accordion2"
-                       href="#collapseCert"><h:outputText value="#{register.certificate.certType.label}" /></a>
-                </div>
-                <div id="collapseCert" class="accordion-body collapse">
-                  <div class="accordion-inner">
-
-<!-- This has to be left-justy or whitespace will be rendered -->
-<pre>
-<h:outputText value="#{register.certificate.pemString}" />
-</pre>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            </h:panelGroup>
-            <v:Certificate value="#{register.certificate}" rendered="#{register.orgId == ''}" />
-          </fieldset>
-
           <fieldset>
             <legend>Direct</legend>
             <div class="accordion" id="accordion1">
+            <div class="accordion-group">
+                  <div class="accordion-heading">
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+                          href="#collapseDirectCertificate"> Direct Certificate (click to show/hide) </a>
+                  </div>
+                  <div id="collapseDirectCertificate" class="accordion-body show">
+                    <div class="accordion-inner">
+
+<!-- This has to be left-justy or whitespace will be rendered -->
+            <div class="control-group" hidden="#{register.directCertificate.pemString} != ''}">
+              <label class="control-label" for="pemString">Certificate PEM:</label>
+              <div class="controls">
+<pre>
+<h:outputText id="pemString" value="#{register.directCertificate.pemString}" />
+</pre>
+</div>
+</div>
+            <div class="control-group" hidden="#{register.directCertificate.trustBundleUrl} != ''}">
+              <label class="control-label" for="trustBundle">Trust Bundle:</label>
+              <div class="controls">
+<pre>
+<h:outputText id="trustBundle" value="#{register.directCertificate.trustBundleUrl}" />
+</pre>
+</div>
+</div>
+                     <v:DirectCertificate value="#{register.directCertificate}" rendered="#{register.orgId == ''}" />
+                  </div>
+                </div>
+              </div>
+
+            
             <div class="accordion-group">
                   <div class="accordion-heading">
                       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"

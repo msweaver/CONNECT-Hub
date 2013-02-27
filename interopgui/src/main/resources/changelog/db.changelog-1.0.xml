@@ -17,14 +17,25 @@
             <column name="hcid" type="varchar(32)">
                 <constraints nullable="false"/>
             </column>
+        </createTable>
+        <createTable tableName="certs">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="orginfo_id" type="BIGINT">
+                <constraints references="orginfo(id)" foreignKeyName="certs_orginfo_fk" nullable="false"/>
+            </column>
             <column name="cert" type="BLOB">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="certtype" type="varchar(32)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="alias" type="varchar(128)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
+            </column>
+            <column name="trustBundle" type="varchar(256)">
+                <constraints nullable="true"/>
             </column>
         </createTable>
         <createTable tableName="patient">

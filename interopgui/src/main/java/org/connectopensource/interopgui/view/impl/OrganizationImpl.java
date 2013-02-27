@@ -5,6 +5,7 @@ import java.util.List;
 import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.view.Certificate;
+import org.connectopensource.interopgui.view.DirectCertificate;
 import org.connectopensource.interopgui.view.DirectEndpoint;
 import org.connectopensource.interopgui.view.Endpoint;
 import org.connectopensource.interopgui.view.Organization;
@@ -20,6 +21,7 @@ public class OrganizationImpl implements Organization {
     private List<DocumentInfo> documents = null;
     private List<DirectEndpoint> directEndpoints = null;
     private Certificate cert = null;
+    private DirectCertificate directCert = null;
     private String orgName = null;
     private String hcid = null;
     private String orgId = null;
@@ -150,6 +152,22 @@ public class OrganizationImpl implements Organization {
     @Override
     public void setDirectEndpoints(List<DirectEndpoint> directEndpoints) {
         this.directEndpoints = directEndpoints;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Organization#getDirectCertificate()
+     */
+    @Override
+    public DirectCertificate getDirectCertificate() {
+        return directCert;
+    }
+
+    /* (non-Javadoc)
+     * @see org.connectopensource.interopgui.view.Organization#setDirectCertificate(org.connectopensource.interopgui.view.Certificate)
+     */
+    @Override
+    public void setDirectCertificate(DirectCertificate directCert) {
+        this.directCert = directCert;
     }
 
     
