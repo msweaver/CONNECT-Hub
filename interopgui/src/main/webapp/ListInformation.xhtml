@@ -13,8 +13,9 @@
 
             <div class="container">
 
-                <h1>CONNECT Hub</h1>
-                <p>Welcome to the CONNECT Interoperability Showcase Information Display Page.</p>
+                <h1>CONNECT Hub Showcase Participant List</h1>
+                <p>This list shows all Interoperability Showcase participants who are game for doing
+                cross-kiosk exchanges. Click "Details" to get more information.</p>
                 <h:form class="form-horizontal">
                     <h:dataTable value="#{listBean.orgSummaries}" var="org" class="table table-hover">
                         <h:column rendered="false">
@@ -26,13 +27,6 @@
 
                         <h:column>
                             <f:facet name="header">
-                                <h:outputText value="HCID" />
-                            </f:facet>
-                            <h:outputText value="#{org.hcid}" />
-                        </h:column>
-
-                        <h:column>
-                            <f:facet name="header">
                                 <h:outputText value="Org Name" />
                             </f:facet>
                             <h:outputText value="#{org.organizationName}" />
@@ -40,14 +34,9 @@
 
                         <h:column>
                             <f:facet name="header">
-                                <h:outputText value="Trusted By CONNECT CA?" />
+                                <h:outputText value="Direct Endpoints" />
                             </f:facet>
-                            <h:panelGroup rendered="#{org.hasSignedCert}">
-                                <i class="icon-ok" />
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{!org.hasSignedCert}">
-                                <i class="icon-remove" />
-                            </h:panelGroup>
+                            <h:outputText value="#{org.countDirectEndpoints}" />
                         </h:column>
 
                         <h:column>
@@ -57,11 +46,12 @@
                             <h:outputText value="#{org.countExchangeEndpoints}" />
                         </h:column>
 
+
                         <h:column>
                             <f:facet name="header">
-                                <h:outputText value="Direct Endpoints" />
+                                <h:outputText value="HCID" />
                             </f:facet>
-                            <h:outputText value="#{org.countDirectEndpoints}" />
+                            <h:outputText value="#{org.hcid}" />
                         </h:column>
 
                         <h:column>
