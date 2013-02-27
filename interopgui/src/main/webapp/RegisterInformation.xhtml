@@ -20,7 +20,7 @@
         </h:panelGroup>
 
         <h1>Register</h1>
-        <p>To exchange with others in the HIMSS Interoperability Showcase, please enter your 
+        <p>To exchange with others in the HIMSS Interoperability Showcase, please enter your
         information below. <b>For Exchange</b>, enter your endpoint information - you can look up
         information using this web app, or via our UDDI. You can also add your certs or have a
         cert signed by our CA. <b>For Direct</b>, enter your endpoint information and anchor cert or
@@ -32,7 +32,7 @@
                 <h:inputText id="orgName" value="#{register.orgName}" readonly="#{register.orgId != ''}" />
               </div>
             </div>
-            
+
           <fieldset>
             <legend>Certificate</legend>
             <h:panelGroup layout="block" rendered="#{register.orgId != ''}" >
@@ -141,7 +141,7 @@
                 <h:inputText id="hcid" value="#{register.hcid}" readonly="#{register.hcid != ''}"/>
               </div>
             </div>
-                    
+
             <div class="accordion" id="accordion-endpoints">
               <div class="accordion-group">
                 <div class="accordion-heading">
@@ -175,7 +175,7 @@
                         <f:facet name="header">
                           <h:outputText value="Endpoint" />
                         </f:facet>
-                        <h:outputText value="#{patient.endpoint}" />
+                        <h:outputText value="#{endpoint.endpoint}" />
                       </h:column>
                     </h:dataTable>
 

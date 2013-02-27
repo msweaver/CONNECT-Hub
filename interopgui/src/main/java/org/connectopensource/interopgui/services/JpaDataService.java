@@ -37,6 +37,7 @@ import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.jpa.AbstractJpaTemplate;
 import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
+import org.connectopensource.interopgui.view.impl.EndpointImpl;
 
 /**
  * JPA Implementation of {@link DataService}.
@@ -134,10 +135,38 @@ public class JpaDataService implements DataService {
                 }            
             }.execute().get(0);        
         } catch (Exception e) {
-            throw new DataServiceException("Error while persisting org info.", e);
+            throw new DataServiceException("Error while persisting patient info.", e);
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.connectopensource.interopgui.services.DataService#addDirectEndpoint(org.connectopensource.interopgui.view
+     * .DirectEndpoint, java.lang.String)
+     */
+    @Override
+    public EndpointImpl addEndpoint(final EndpointImpl endpoint, final String orgId) {
+        final Long lid = Long.valueOf(orgId);
+        try {
+            return new AbstractJpaTemplate<EndpointImpl>() {
+                @Override
+                protected List<EndpointImpl> execute(EntityManager entityManager) {
+                    TypedQuery<OrganizationInfo> query = entityManager.createQuery("from OrganizationInfo where id = :id", OrganizationInfo.class);
+                    query.setParameter("id", lid);
+                    OrganizationInfo orgInfo = query.getResultList().get(0);
+                    endpoint.setOrganizationInfo(orgInfo);
+                    orgInfo.getEndpoints().add(endpoint);
+                    return Collections.singletonList(endpoint); 
+                }            
+            }.execute().get(0);        
+        } catch (Exception e) {
+            throw new DataServiceException("Error while persisting endpoint info.", e);
+        }
+    }
+
+    
     /*
      * (non-Javadoc)
      * 
@@ -161,7 +190,7 @@ public class JpaDataService implements DataService {
                 }            
             }.execute().get(0);        
         } catch (Exception e) {
-            throw new DataServiceException("Error while persisting org info.", e);
+            throw new DataServiceException("Error while persisting direct endpoint info.", e);
         }
     }
     
@@ -184,7 +213,7 @@ public class JpaDataService implements DataService {
                 }            
             }.execute().get(0);        
         } catch (Exception e) {
-            throw new DataServiceException("Error while persisting org info.", e);
+            throw new DataServiceException("Error while persisting document info.", e);
         }
     }
     

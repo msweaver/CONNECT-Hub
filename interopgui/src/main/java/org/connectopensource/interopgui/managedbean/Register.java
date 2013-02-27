@@ -45,7 +45,7 @@ public class Register {
     private Certificate certificate = null;
     private PatientInfo patient = null;
     private DocumentInfo document = null;
-    private Endpoint endpoint = null;
+    private EndpointImpl endpoint = null;
     private DirectEndpoint currentDirectEndpoint = null;
     
     public Register() {        
@@ -140,7 +140,7 @@ public class Register {
     /**
      * @param endpoint to be set
      */
-    public void setEndpoint(Endpoint endpoint) {
+    public void setEndpoint(EndpointImpl endpoint) {
         this.endpoint = endpoint ;
     }
 
@@ -249,6 +249,28 @@ public class Register {
      * 
      * @return route for screen flow destination
      */
+    public String addEndpoint() {
+
+        RegisterController registerController = new RegisterController();
+        registerController.saveEndpoint(endpoint, orgId);
+        try {
+            System.out.println("saving endpoint: " + endpoint);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        getSessionMap().put("organizationId", String.valueOf(orgId));
+
+        alert = "Endpoint added.";
+        return "RegisterInformation?faces-direct=true";        
+    }
+
+    /**
+     * Add a document.
+     * 
+     * @return route for screen flow destination
+     */
     public String addDocument() {
         if (StringUtils.isBlank(orgId)) {
             orgId = saveOrgInfo().toString();
@@ -270,7 +292,6 @@ public class Register {
         return "RegisterInformation?faces-direct=true";
         
     }
-
     /*
      * Add a patient.
      * 

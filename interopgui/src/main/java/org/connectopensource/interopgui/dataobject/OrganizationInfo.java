@@ -18,7 +18,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.connectopensource.interopgui.view.DirectEndpoint;
 import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
 import org.connectopensource.interopgui.view.impl.EndpointImpl;
 

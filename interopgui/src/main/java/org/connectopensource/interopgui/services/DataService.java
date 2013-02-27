@@ -9,6 +9,7 @@ import org.connectopensource.interopgui.dataobject.DocumentInfo;
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.dataobject.PatientInfo;
 import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
+import org.connectopensource.interopgui.view.impl.EndpointImpl;
 
 /**
  * @author msw
@@ -59,4 +60,11 @@ public interface DataService {
      */
     public DirectEndpointImpl addDirectEndpoint(DirectEndpointImpl directEndpoint, String orgId);
 
+    /**
+     * @param endpoint implementation
+     * @param orgId org id
+     * @return endpoint impl
+     */
+    public EndpointImpl addEndpoint(EndpointImpl endpoint, String orgId);    
+    
 }

@@ -30,6 +30,8 @@ package org.connectopensource.interopgui.view.impl;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,6 +39,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.connectopensource.interopgui.dataobject.OrganizationInfo;
 import org.connectopensource.interopgui.view.Endpoint;
@@ -53,8 +56,15 @@ public class EndpointImpl implements Endpoint {
     private SpecVersion version;
     private String url;
     private Long id;
-    private OrganizationInfo orgInfo = null;
-           
+    private OrganizationInfo orgInfo = null;           
+        
+    /**
+     * Needed by JPA.
+     */
+    public EndpointImpl() {
+        // default needed by JPA.
+    }
+
     /**
      * @param specification
      * @param version
@@ -69,6 +79,7 @@ public class EndpointImpl implements Endpoint {
     /**
      * {@inheritDoc}
      */
+    @Transient
     public SpecVersion[] getSpecVersions() {
         return SpecVersion.values();
     }
@@ -77,6 +88,7 @@ public class EndpointImpl implements Endpoint {
      * {@inheritDoc}
      */
     @Override
+    @Transient
     public Specification[] getSpecifications() {
         return Specification.values();
     }
@@ -107,6 +119,7 @@ public class EndpointImpl implements Endpoint {
      */
     @Override
     @Column(name = "specification")
+    @Enumerated(EnumType.STRING)
     public Specification getSpecification() {
         return specification;
     }
@@ -125,6 +138,7 @@ public class EndpointImpl implements Endpoint {
      */
     @Override
     @Column(name = "version")
+    @Enumerated(EnumType.STRING)
     public SpecVersion getSpecVersion() {
         return version;
     }

@@ -24,6 +24,7 @@ import org.connectopensource.interopgui.view.Endpoint;
 import org.connectopensource.interopgui.view.Organization;
 import org.connectopensource.interopgui.view.impl.CertificateImpl;
 import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
+import org.connectopensource.interopgui.view.impl.EndpointImpl;
 import org.connectopensource.interopgui.view.impl.OrganizationImpl;
 
 /**
@@ -78,17 +79,25 @@ public class RegisterController {
      * @param document information to be persisted
      * @param orgId organization parent for this patient
      */
-    public void saveEndpoint(Endpoint endpoint, String orgId)  {
+    public void saveEndpoint(EndpointImpl endpoint, String orgId)  {
 
-        EndpointService endpointService = new UddiEndpointService();        
+        try {
+            EndpointService endpointService = new UddiEndpointService();
 
-        OrganizationInfo orgInfo = retrieveOrgInfo(orgId);        
-        Organization orgView = new OrganizationImpl();
-        orgView.setHCID(orgInfo.getHomeCommunityId());
-        orgView.setOrgName(orgInfo.getOrgName());
-        orgView.setOrgId(orgInfo.getId().toString());
+            OrganizationInfo orgInfo = retrieveOrgInfo(orgId);
+            Organization orgView = new OrganizationImpl();
+            orgView.setHCID(orgInfo.getHomeCommunityId());
+            orgView.setOrgName(orgInfo.getOrgName());
+            orgView.setOrgId(orgInfo.getId().toString());
 
-        endpointService.saveEndpoint(orgView, endpoint);
+            endpointService.saveEndpoint(orgView, endpoint);
+        } catch (Exception e) {
+            System.out.println("Could not save endpoint to uddi." + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        DataService service = new JpaDataService();        
+        service.addEndpoint(endpoint, orgId);        
     }
     
     /**
@@ -138,10 +147,21 @@ public class RegisterController {
         patients.addAll(orgInfo.getPatients());        
         orgView.setPatients(patients);
         
-//        EndpointService endpointService = new UddiEndpointService();
-//        orgView.setEndPoints(endpointService.getEndpoints(orgInfo.getHomeCommunityId()));
-
-        // TODO: populate endpoints
+        try {
+            EndpointService endpointService = new UddiEndpointService();
+            List<Endpoint> list = endpointService.getEndpoints(orgInfo.getHomeCommunityId());
+            if (list != null) {
+                orgView.setEndPoints(list);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            System.out.println("Defaulting uddi data from db");
+            List<Endpoint> endpoints = new ArrayList<Endpoint>(orgInfo.getEndpoints().size());
+            endpoints.addAll(orgInfo.getEndpoints());
+            orgView.setEndPoints(endpoints);
+        }
+        
         List<DirectEndpoint> directEndpoints = new ArrayList<DirectEndpoint>(orgInfo.getDirectEndpoints().size());
         directEndpoints.addAll(orgInfo.getDirectEndpoints());
         orgView.setDirectEndpoints(directEndpoints);
