@@ -20,6 +20,7 @@ import javax.persistence.Table;
 
 import org.connectopensource.interopgui.view.DirectEndpoint;
 import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
+import org.connectopensource.interopgui.view.impl.EndpointImpl;
 
 /**
  * @author msw
@@ -35,6 +36,7 @@ public class OrganizationInfo {
     Set<DocumentInfo> documents;
     CertificateInfo certInfo;
     Set<DirectEndpointImpl> directEndpoints;
+    Set<EndpointImpl> endpoints;
     
     /**
      * @return the directEndpoints
@@ -175,5 +177,21 @@ public class OrganizationInfo {
     public void setDocuments(Set<DocumentInfo> documents) {
         this.documents = documents;
     }
+    
+    /**
+     * @return the endpoints
+     */
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)  
+    public Set<EndpointImpl> getEndpoints() {
+        return endpoints;
+    }
+
+    /**
+     * @param endpoints the endpoints to set
+     */
+    public void setEndpoints(Set<EndpointImpl> endpoints) {
+        this.endpoints = endpoints;
+    }
+
 
 }
