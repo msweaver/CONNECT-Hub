@@ -62,8 +62,8 @@ public class RegisterController {
         org.updateDirectCert(directCertInfo);
 
         try {
-            if (certInfo.getCertBytes() != null) {
-                processCertificate(certInfo);
+            if (org.getExchangeCert().getCertBytes() != null) {
+                processCertificate(org.getExchangeCert());
             }
 
             // processDirectCertificate(directCertInfo);
@@ -71,6 +71,7 @@ public class RegisterController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        System.out.println("cert after processed: " + org.getExchangeCert());
         return saveOrganization(org);
     }
 
