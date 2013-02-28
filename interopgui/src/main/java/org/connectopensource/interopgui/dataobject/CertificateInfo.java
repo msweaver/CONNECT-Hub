@@ -187,7 +187,7 @@ public class CertificateInfo {
     @Override
     public String toString() {
         String orgId = null;
-        if (orgInfo != null) {
+        if (orgInfo != null && orgInfo.getId() != null) {
             orgId = orgInfo.getId().toString();
         }
         return "CertificateInfo [id=" + id + ", certType=" + certType + ", certBytes=" + Arrays.toString(certBytes)
