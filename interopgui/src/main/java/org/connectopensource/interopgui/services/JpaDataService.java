@@ -49,19 +49,28 @@ public class JpaDataService implements DataService {
      */
     @Override
     public Long saveData(final OrganizationInfo org) {
-                
         try {
-            new AbstractJpaTemplate<OrganizationInfo>() {
-                @Override
-                protected List<OrganizationInfo> execute(EntityManager entityManager) {
-                    entityManager.merge(org);                
-                    return Collections.singletonList(org);
-                }            
-            }.execute();        
+            if (org.getId() == null) {
+                new AbstractJpaTemplate<OrganizationInfo>() {
+                    @Override
+                    protected List<OrganizationInfo> execute(EntityManager entityManager) {
+                        entityManager.persist(org);                
+                        return Collections.singletonList(org);
+                    }            
+                }.execute();   
+            } else {
+                new AbstractJpaTemplate<OrganizationInfo>() {
+                    @Override
+                    protected List<OrganizationInfo> execute(EntityManager entityManager) {
+                        entityManager.merge(org);                
+                        return Collections.singletonList(org);
+                    }            
+                }.execute();  
+            }
+      
         } catch (Exception e) {
             throw new DataServiceException("Error while persisting org info.", e);
         }
-        
         return org.getId();
     }
 
