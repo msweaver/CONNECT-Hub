@@ -19,7 +19,6 @@ import javax.persistence.Table;
 import org.connectopensource.interopgui.services.CertificateServiceException;
 import org.connectopensource.interopgui.view.Certificate;
 import org.connectopensource.interopgui.view.DirectCertificate;
-import org.connectopensource.interopgui.view.impl.DirectCertificateImpl;
 
 /**
  * @author msw

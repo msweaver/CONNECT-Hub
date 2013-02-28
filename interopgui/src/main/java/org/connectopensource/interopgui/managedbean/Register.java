@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.StringUtils;
@@ -233,7 +232,7 @@ public class Register {
     
     private Long saveOrgInfo() {
         RegisterController impl = new RegisterController();
-        return impl.saveInfo(hcid, orgName, certificate, directCertificate);
+        return impl.saveInfo(orgId, hcid, orgName, certificate, directCertificate);
     }
 
     /**
@@ -317,9 +316,9 @@ public class Register {
      * @return route for screen flow destination
      */
     public String addDirectEndpoint() {
-        if (StringUtils.isBlank(orgId)) {
+        //if (StringUtils.isBlank(orgId)) {
             orgId = saveOrgInfo().toString();
-        }
+        //}
         
         RegisterController registerController = new RegisterController();
         registerController.saveDirectEndpoint(currentDirectEndpoint, orgId);

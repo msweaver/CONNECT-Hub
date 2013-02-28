@@ -15,9 +15,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.apache.commons.lang.StringUtils;
 import org.connectopensource.interopgui.view.impl.DirectEndpointImpl;
 import org.connectopensource.interopgui.view.impl.EndpointImpl;
 
@@ -88,12 +89,12 @@ public class OrganizationInfo {
      * @param orgName
      * @param certInfo
      */
-    public OrganizationInfo(String homeCommunityId, String orgName, Set<CertificateInfo> certs) {
+    public OrganizationInfo(String homeCommunityId, String orgName) {
 
         this.homeCommunityId = homeCommunityId;
         this.orgName = orgName;
-        this.certs = certs;
-
+        
+        this.certs = new HashSet<CertificateInfo>();
         this.patients = new HashSet<PatientInfo>();
         this.documents = new HashSet<DocumentInfo>();
     }
@@ -101,8 +102,8 @@ public class OrganizationInfo {
     /**
      * @return the directCertInfo
      */
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="organizationInfo", fetch = FetchType.EAGER)
-    public Set<CertificateInfo> getCertificates() {
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy="organizationInfo", fetch = FetchType.EAGER)
+    private Set<CertificateInfo> getCertificates() {
         return certs;
     }
 
@@ -202,5 +203,69 @@ public class OrganizationInfo {
         this.endpoints = endpoints;
     }
 
+    public void updateExchangeCert(CertificateInfo update) {
+        CertificateInfo certInfo = getExchangeCert();
+        if (certInfo == null) {
+            update.setOrganizationInfo(this);
+            update.setSpecification("exchange");
+            certs.add(update);
+        } else {
+            // update existing
+            byte[] cert = update.getCertBytes();
+            if (cert != null) {
+                certInfo.setCertBytes(cert);
+                certInfo.setCertType(update.getCertType());
+            }
+            
+            String alias = update.getAlias();
+            if (!StringUtils.isBlank(alias)) {
+                certInfo.setAlias(alias);
+            }
+        }
+    }
+    
+    @Transient
+    public CertificateInfo getExchangeCert() {
+        return getCertByType("exchange");
+    }
 
+    public void updateDirectCert(CertificateInfo update) {
+        CertificateInfo certInfo = getDirectCert();
+        if (certInfo == null) {
+            update.setOrganizationInfo(this);
+            update.setSpecification("direct");
+            certs.add(update);
+        } else {
+            // update existing
+            byte[] cert = update.getCertBytes();
+            if (cert != null) {
+                certInfo.setCertBytes(cert);
+            }
+            
+            String alias = update.getAlias();
+            if (!StringUtils.isBlank(alias)) {
+                certInfo.setAlias(alias);
+            }
+            
+            String trustBundle = update.getTrustBundleUrl();
+            System.out.println("new trustbundle:" + trustBundle);
+            if (!StringUtils.isBlank(trustBundle)) {
+                certInfo.setTrustBundleUrl(trustBundle);
+            }
+        }
+    }
+    
+    @Transient
+    public CertificateInfo getDirectCert() {
+        return getCertByType("direct");
+    }
+    
+    private CertificateInfo getCertByType(String type) {
+        for (CertificateInfo info : certs) {
+            if (type.equalsIgnoreCase(info.getSpecification())) {
+                return info;
+            }
+        }
+        return null;
+    }
 }
