@@ -45,6 +45,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.ssl.PEMItem;
 import org.apache.commons.ssl.PEMUtil;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
@@ -139,7 +140,8 @@ public class JceCertificateService implements CertificateService {
         final PEMItem csrPemFormat = getPemItem(certRequest);
 
         // Verify the type.
-        if (!"CERTIFICATE REQUEST".equals(csrPemFormat.pemType)) {
+        System.out.println("csrPemFormat.pemType:" + csrPemFormat.pemType);
+        if (!StringUtils.contains(csrPemFormat.pemType, "CERTIFICATE REQUEST")) {
             throw new CertificateServiceException("pem does not appear to contain a CSR.");
         }
 
