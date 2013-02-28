@@ -54,7 +54,7 @@ public class JpaDataService implements DataService {
             new AbstractJpaTemplate<OrganizationInfo>() {
                 @Override
                 protected List<OrganizationInfo> execute(EntityManager entityManager) {
-                    entityManager.persist(org);                
+                    entityManager.merge(org);                
                     return Collections.singletonList(org);
                 }            
             }.execute();        
