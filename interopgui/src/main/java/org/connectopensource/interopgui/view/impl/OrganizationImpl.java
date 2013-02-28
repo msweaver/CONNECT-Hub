@@ -170,5 +170,16 @@ public class OrganizationImpl implements Organization {
         this.directCert = directCert;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "OrganizationImpl [endpoints=" + endpoints + ", patients=" + patients + ", documents=" + documents
+                + ", directEndpoints=" + directEndpoints + ", cert=" + cert + ", directCert=" + directCert
+                + ", orgName=" + orgName + ", hcid=" + hcid + ", orgId=" + orgId + "]";
+    }
+
+    
     
 }

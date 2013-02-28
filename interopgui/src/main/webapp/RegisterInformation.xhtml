@@ -150,14 +150,12 @@
                 </div>
                 <div id="collapseCertificates" class="accordion-body in">
                   <div class="accordion-inner">
-                  <!-- This has to be left-justy or whitespace will be rendered -->
                     <h:panelGroup layout="block" styleClass="control-group" rendered="#{not empty register.certificate.pemString}">
                         <label class="control-label" for="exchangePemString">Certificate PEM:</label>
                         <div class="controls">
                             <pre><h:outputText id="exchangePemString" value="#{register.certificate.pemString}" /></pre>
                         </div>
                     </h:panelGroup>
-                  
                     <v:Certificate value="#{register.certificate}"/>
                   </div>
                 </div>

@@ -77,7 +77,6 @@ public class ListController {
             summary.setCountDocuments(String.valueOf(orgInfo.getDocuments().size()));
             summary.setCountPatients(String.valueOf(orgInfo.getPatients().size()));
             summary.setHcid(orgInfo.getHomeCommunityId());
-            summary.setHasSignedCert(orgInfo.getCertInfo().getCertType() == CertificateType.CERT_REQ);
             summary.setId(orgInfo.getId());
             summary.setOrganizationName(orgInfo.getOrgName());
             summaries.add(summary);
