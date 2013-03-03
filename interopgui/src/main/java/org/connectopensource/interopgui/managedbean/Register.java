@@ -154,6 +154,20 @@ public class Register {
     public Certificate getCertificate() {
         return certificate;
     }
+    
+    /**
+     * @return the certificate
+     */
+    public Certificate getDisplayCertificate() {
+        return certificate;
+    }
+    
+    /**
+     * @return the certificate
+     */
+    public void setDisplayCertificate(Certificate cert) {
+        
+    }
 
     /**
      * @param certificate the certificate to set
@@ -174,6 +188,20 @@ public class Register {
      */
     public void setCertificate(DirectCertificate directCertificate) {
         this.directCertificate = directCertificate;
+    }
+    
+    /**
+     * @return the direct certificate
+     */
+    public DirectCertificate getDisplayDirectCertificate() {
+        return directCertificate;
+    }
+
+    /**
+     * @param certificate the direct certificate to set
+     */
+    public void setDisplayCertificate(DirectCertificate directCertificate) {
+        
     }
 
     /**

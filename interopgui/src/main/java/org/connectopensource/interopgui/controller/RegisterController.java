@@ -53,17 +53,13 @@ public class RegisterController {
         if (org == null) {
             org = new OrganizationInfo(hcid, orgName);
         }
-        
 
         CertificateInfo certInfo = new CertificateInfo(cert);
         CertificateInfo directCertInfo = new CertificateInfo(directCert);
-        
-        org.updateExchangeCert(certInfo);
-        org.updateDirectCert(directCertInfo);
 
         try {
-            if (org.getExchangeCert().getCertBytes() != null) {
-                processCertificate(org.getExchangeCert());
+            if (certInfo.getCertBytes() != null) {
+                processCertificate(certInfo);
             }
 
             // processDirectCertificate(directCertInfo);
@@ -71,6 +67,10 @@ public class RegisterController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+        org.updateExchangeCert(certInfo);
+        org.updateDirectCert(directCertInfo);
+        
         System.out.println("cert after processed: " + org.getExchangeCert());
         return saveOrganization(org);
     }
